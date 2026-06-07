@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>221 — Urgence Nationale Sénégal</title>
+<meta name="description" content="221 — Numéro d'Urgence National Unique du Sénégal. SOS géolocalisé, carte des services, volontaires, refus de soins.">
+<meta name="theme-color" content="#006633">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--g:#006633;--r:#CC0000;--b:#1A4A8A;--amb:#B8860B;--pur:#534AB7;--teal:#0F6E56}
+html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.phone{max-width:430px;margin:0 auto;background:#f0f2f5;min-height:100vh;min-height:100dvh;position:relative}
+.screen{display:none;flex-direction:column;min-height:100vh;min-height:100dvh;animation:fadeIn .22s ease}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.sb{background:var(--g);padding:10px 20px 6px;display:flex;justify-content:space-between}
+.sb span{color:#fff;font-size:12px;font-weight:500}
+.navbar{background:var(--g);padding:12px 20px 16px;color:#fff}
+.navbar h1{font-size:20px;font-weight:700}
+.navbar p{font-size:12px;opacity:.85;margin-top:2px}
+.nsub{background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;padding:10px 16px;gap:10px;position:sticky;top:0;z-index:10}
+.nsub button{background:none;border:none;padding:4px;cursor:pointer;color:var(--g);font-size:20px}
+.nsub h2{font-size:15px;font-weight:600;color:#1a1a1a;flex:1}
+.bnav{background:#fff;border-top:1px solid #e8e8e8;display:flex;margin-top:auto;position:sticky;bottom:0;z-index:10}
+.bni{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 2px 11px;cursor:pointer;gap:2px;border:none;background:none}
+.bni i{font-size:20px;color:#999}
+.bni span{font-size:9px;color:#999;font-weight:500}
+.bni.active i,.bni.active span{color:var(--g)}
+.beta{position:fixed;top:52px;right:8px;background:var(--amb);color:#fff;font-size:9px;font-weight:700;padding:3px 7px;border-radius:10px;z-index:50;letter-spacing:.5px}
+/* HOME */
+.sos-zone{background:var(--g);padding:20px 20px 24px;display:flex;flex-direction:column;align-items:center;gap:11px}
+.lang-bar{display:flex;gap:7px}
+.lang-btn{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:20px;color:#fff;font-size:11px;font-weight:600;padding:4px 12px;cursor:pointer;transition:background .15s}
+.lang-btn.active{background:rgba(255,255,255,.38)}
+.sos-btn{width:148px;height:148px;border-radius:50%;background:#CC0000;border:6px solid rgba(255,255,255,.35);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform .1s;box-shadow:0 0 0 10px rgba(204,0,0,.2)}
+.sos-btn:active{transform:scale(.93)}
+.sos-btn i{font-size:46px;color:#fff}
+.sos-btn span{color:#fff;font-size:12px;font-weight:700;margin-top:3px}
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 10px 4px}
+.qcard{background:#fff;border-radius:12px;padding:11px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;cursor:pointer;border:1px solid #eee;transition:transform .1s,box-shadow .1s}
+.qcard:active{transform:scale(.96)}
+.qcard i{font-size:22px}
+.qcard span{font-size:11px;font-weight:600;color:#1a1a1a;line-height:1.2}
+.qcard small{font-size:10px;color:#888}
+.qcard.red i{color:#CC0000}.qcard.green i{color:var(--g)}.qcard.blue i{color:#1A4A8A}
+.qcard.amber i{color:#B8860B}.qcard.purple i{color:#534AB7}.qcard.teal i{color:#0F6E56}
+/* MODALS */
+.overlay{position:relative;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;min-height:440px}
+.modal{background:#fff;border-radius:20px 20px 0 0;padding:18px 16px 26px;width:100%}
+.modal h3{font-size:16px;font-weight:700;margin-bottom:3px;color:#1a1a1a}
+.modal p{font-size:12px;color:#666;margin-bottom:13px}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:13px}
+.tbtn{padding:9px 5px;border-radius:9px;border:2px solid #eee;background:#fafafa;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-family:inherit;transition:all .15s}
+.tbtn i{font-size:21px}
+.tbtn span{font-size:10px;font-weight:600;color:#333}
+.tbtn.sel{border-color:var(--r);background:#fff5f5}
+.btn-p{width:100%;padding:13px;background:var(--r);color:#fff;border:none;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit}
+.btn-p:disabled{opacity:.45;cursor:not-allowed}
+.btn-s{width:100%;padding:11px;background:#f5f5f5;color:#333;border:none;border-radius:11px;font-size:13px;font-weight:600;cursor:pointer;margin-top:6px;font-family:inherit}
+.btn-b{width:100%;padding:11px;background:var(--b);color:#fff;border:none;border-radius:11px;font-size:13px;font-weight:600;cursor:pointer;margin-top:6px;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px}
+.btn-g{width:100%;padding:13px;background:var(--g);color:#fff;border:none;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px}
+/* FORMS */
+.fsec{padding:11px 13px 0}
+.flbl{font-size:11px;font-weight:700;color:#555;margin-bottom:4px;display:block;text-transform:uppercase;letter-spacing:.5px}
+.finp{width:100%;padding:10px 12px;border:1.5px solid #e0e0e0;border-radius:9px;font-size:13px;color:#1a1a1a;background:#fff;outline:none;font-family:inherit;margin-bottom:9px;transition:border-color .15s}
+.finp:focus{border-color:var(--g)}
+.fsel{width:100%;padding:10px 12px;border:1.5px solid #e0e0e0;border-radius:9px;font-size:13px;color:#1a1a1a;background:#fff;font-family:inherit;margin-bottom:9px;outline:none}
+.ftxt{width:100%;padding:10px 12px;border:1.5px solid #e0e0e0;border-radius:9px;font-size:13px;color:#1a1a1a;background:#fff;font-family:inherit;margin-bottom:9px;outline:none;resize:none;height:80px}
+.ibox{background:#f0f4ff;border-radius:9px;padding:10px;border-left:3px solid var(--b);margin-bottom:10px}
+.ibox p{font-size:11px;color:var(--b);line-height:1.5}
+.wbox{background:#fff8e6;border-radius:9px;padding:10px;border-left:3px solid var(--amb);margin-bottom:10px;display:flex;gap:7px}
+.wbox i{color:var(--amb);font-size:15px;flex-shrink:0;margin-top:1px}
+.wbox p{font-size:11px;color:#6b5200;line-height:1.5}
+.abox{background:#fff0f0;border-radius:9px;padding:10px;border-left:3px solid var(--r);margin-bottom:10px}
+.abox p{font-size:11px;color:#8b0000;line-height:1.5}
+/* REFUS */
+.refus-hero{background:var(--r);padding:18px 20px;color:#fff;display:flex;gap:12px;align-items:flex-start}
+.refus-hero i{font-size:36px;opacity:.9;flex-shrink:0}
+.rstep{background:#fff;border-radius:10px;padding:11px;border:1px solid #eee;display:flex;gap:10px;align-items:flex-start;margin-bottom:7px}
+.rnum{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+/* CARTE */
+.filter-bar{display:flex;gap:6px;padding:9px 11px 5px;overflow-x:auto;scrollbar-width:none;background:#fff;border-bottom:0.5px solid #eee;position:sticky;top:0;z-index:5}
+.filter-bar::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:5px 9px;border-radius:20px;border:1.5px solid #e0e0e0;background:#fafafa;font-size:10px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:3px;color:#555;transition:all .15s}
+.chip.active{border-color:var(--g);background:#f0fff5;color:var(--g)}
+.mapbox{height:260px;background:#d4e8d4;position:relative;overflow:hidden}
+.mpin{position:absolute;display:flex;flex-direction:column;align-items:center;cursor:pointer;transform:translate(-50%,-100%);z-index:5;transition:transform .15s}
+.mpin:active{transform:translate(-50%,-100%) scale(1.2)}
+.mpin-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.mpin-lbl{font-size:7px;font-weight:700;background:#fff;padding:1px 3px;border-radius:3px;margin-top:1px;white-space:nowrap;border:0.5px solid #ddd}
+.muser{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10}
+.mdot{width:14px;height:14px;border-radius:50%;background:var(--b);border:3px solid #fff;box-shadow:0 0 0 5px rgba(26,74,138,.15)}
+.mpopup{position:absolute;background:#fff;border-radius:9px;padding:9px 11px;z-index:20;min-width:155px;border:0.5px solid #ddd;display:none;top:8px;left:50%;transform:translateX(-50%);box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.mpopup h4{font-size:11px;font-weight:700;color:#1a1a1a;margin-bottom:2px}
+.mpopup p{font-size:9px;color:#666;margin-bottom:1px}
+.nlist{padding:8px 11px;display:flex;flex-direction:column;gap:6px;overflow-y:auto}
+.nitem{background:#fff;border-radius:9px;padding:9px;display:flex;align-items:center;gap:9px;border:1px solid #eee;cursor:pointer;transition:background .1s}
+.nitem:active{background:#f9f9f9}
+.nicon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ninfo{flex:1;min-width:0}
+.ninfo h4{font-size:11px;font-weight:600;color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ninfo p{font-size:9px;color:#888;margin-top:1px}
+.ninfo .op{font-size:9px;font-weight:600;color:var(--g)}
+.ninfo .cl{font-size:9px;font-weight:600;color:var(--r)}
+.ninfo .nm{font-size:9px;color:var(--b);font-weight:600}
+/* NUMÉROS */
+.numsec{padding:9px 11px 0}
+.numsec h3{font-size:10px;font-weight:700;color:#888;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px}
+.numcard{background:#fff;border-radius:9px;padding:10px 11px;margin-bottom:6px;border:1px solid #eee;display:flex;align-items:center;gap:9px}
+.numbadge{font-size:16px;font-weight:900;width:44px;text-align:center;flex-shrink:0}
+.numinfo{flex:1}
+.numinfo h4{font-size:11px;font-weight:700;color:#1a1a1a}
+.numinfo p{font-size:9px;color:#888;margin-top:1px}
+.ncall{color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit}
+/* CATBTN */
+.catgrid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px}
+.catbtn{padding:8px 5px;border-radius:7px;border:1.5px solid #e0e0e0;background:#fafafa;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:#444;font-family:inherit;transition:all .15s}
+.catbtn i{font-size:15px;color:#888}
+.catbtn.sel{border-color:var(--g);background:#f0fff5;color:var(--g)}
+.catbtn.sel i{color:var(--g)}
+/* GUIDE */
+.gtabs{display:flex;background:#fff;border-bottom:1px solid #eee;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:5}
+.gtabs::-webkit-scrollbar{display:none}
+.gtab{flex-shrink:0;padding:10px 13px;font-size:11px;font-weight:600;color:#888;border-bottom:2.5px solid transparent;cursor:pointer;border:none;background:none;font-family:inherit;white-space:nowrap;transition:color .15s}
+.gtab.active{color:var(--r);border-bottom-color:var(--r)}
+.gstep{background:#fff;border-radius:10px;padding:11px;margin-bottom:7px;border:1px solid #eee;display:flex;gap:9px}
+.gnum{width:26px;height:26px;border-radius:50%;background:var(--r);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.gnum.g{background:var(--g)}.gnum.b{background:var(--b)}
+/* TRAJET SÉCURISÉ */
+.cihero{background:var(--pur);padding:16px 20px;color:#fff;display:flex;gap:11px;align-items:center}
+.ciactive{background:#fff;border-radius:11px;margin:11px;padding:13px;border:2px solid var(--pur)}
+.citimer{font-size:30px;font-weight:700;color:var(--pur);text-align:center;margin:7px 0}
+/* VOLONTAIRES */
+.volhero{background:var(--g);padding:16px 20px;color:#fff;display:flex;gap:11px;align-items:center}
+/* ENVOI */
+.sending{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:32px 20px;text-align:center;gap:12px}
+.pulse{width:108px;height:108px;border-radius:50%;background:#CC0000;display:flex;align-items:center;justify-content:center;animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(204,0,0,.4)}70%{box-shadow:0 0 0 24px rgba(204,0,0,0)}}
+.pulse i{font-size:42px;color:#fff}
+.locbadge{background:#E8F5EE;border-radius:8px;padding:7px 12px;display:flex;align-items:center;gap:5px;font-size:12px;color:var(--g);font-weight:500}
+/* SPLASH */
+#splash{position:fixed;inset:0;background:var(--g);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:999;transition:opacity .5s}
+#splash.hide{opacity:0;pointer-events:none}
+.sring{width:128px;height:128px;border-radius:50%;border:4px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;animation:spl 1.5s ease-in-out 3}
+@keyframes spl{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div class="sring"><span style="font-size:64px;font-weight:900;color:#fff">221</span></div>
+  <p style="color:rgba(255,255,255,.8);font-size:14px">Numéro d'Urgence National Unique</p>
+  <p style="color:rgba(255,255,255,.55);font-size:12px;margin-top:4px">ام نيور بي · Emergency for all</p>
+  <p style="color:rgba(255,255,255,.4);font-size:10px;position:absolute;bottom:28px">Bêta v3 · Sénégal 🇸🇳</p>
+</div>
+
+<div class="phone" id="app" style="display:none">
+<div class="beta">BÊTA v3</div>
+
+<!-- HOME -->
+<div class="screen active" id="scr-home">
+  <div class="sb"><span>9:41</span><span>Orange SN 🇸🇳</span></div>
+  <div class="navbar"><h1>🇸🇳 221</h1><p id="nav-sub">Numéro d'Urgence National Unique</p></div>
+  <div class="sos-zone">
+    <div class="lang-bar">
+      <button class="lang-btn active" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" onclick="setLang('wo')">WO</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="sos-btn" onclick="goTo('scr-sos')" aria-label="Appeler le 221">
+      <i class="ti ti-urgent"></i>
+      <span id="sos-lbl">APPELER 221</span>
+    </button>
+    <p style="color:rgba(255,255,255,.72);font-size:11px;text-align:center" id="sos-sub">Appuyez en cas d'urgence · 25 FCFA</p>
+  </div>
+  <div class="qgrid">
+    <div class="qcard red" onclick="goTo('scr-silent')"><i class="ti ti-eye-off"></i><span id="q1">Alerte Silencieuse</span><small id="q1s">SOS discret</small></div>
+    <div class="qcard teal" onclick="goTo('scr-witness')"><i class="ti ti-eye"></i><span id="q2">Mode Témoin</span><small id="q2s">Je vois une urgence</small></div>
+    <div class="qcard purple" onclick="goTo('scr-checkin')"><i class="ti ti-route"></i><span id="q3">Trajet Sécurisé</span><small id="q3s">Alerte si je ne reviens pas</small></div>
+    <div class="qcard green" onclick="goTo('scr-map')"><i class="ti ti-map-pin"></i><span id="q4">Carte</span><small id="q4s">Services proches</small></div>
+    <div class="qcard blue" onclick="goTo('scr-vol')"><i class="ti ti-users"></i><span id="q5">Volontaire 221</span><small id="q5s">Rejoindre</small></div>
+    <div class="qcard amber" onclick="goTo('scr-guide')"><i class="ti ti-heart-rate-monitor"></i><span id="q6">Premiers Secours</span><small id="q6s">Guides</small></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 10px 8px">
+    <div style="background:#fff;border-radius:10px;padding:10px;border:1px solid #eee;cursor:pointer" onclick="goTo('scr-numeros')">
+      <div style="display:flex;align-items:center;gap:7px">
+        <i class="ti ti-phone-check" style="font-size:17px;color:var(--b)"></i>
+        <div><p style="font-size:11px;font-weight:600;color:#1a1a1a" id="q7">Numéros d'urgence</p><p style="font-size:9px;color:#888" id="q7s">17 · 18 · 1515 · Gendarmerie...</p></div>
+      </div>
+    </div>
+    <div style="background:#fff0f0;border-radius:10px;padding:10px;border:1px solid #ffd0d0;cursor:pointer" onclick="goTo('scr-refus')">
+      <div style="display:flex;align-items:center;gap:7px">
+        <i class="ti ti-building-hospital" style="font-size:17px;color:var(--r)"></i>
+        <div><p style="font-size:11px;font-weight:600;color:var(--r)" id="q8">Refus de soins</p><p style="font-size:9px;color:#888" id="q8s">Signaler un refus</p></div>
+      </div>
+    </div>
+  </div>
+  <div style="margin:0 10px 10px;background:#fff;border-radius:9px;padding:9px 11px;border:1px solid #eee;display:flex;align-items:center;gap:7px">
+    <div style="width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:pulse2 2s infinite"></div>
+    <p style="font-size:11px;color:#555" id="st-txt">Centre 221 opérationnel · 47 opérateurs</p>
+  </div>
+  <style>@keyframes pulse2{0%,100%{opacity:1}50%{opacity:.4}}</style>
+  <div class="bnav">
+    <button class="bni active" onclick="goTo('scr-home')"><i class="ti ti-home"></i><span id="n1">Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')"><i class="ti ti-map"></i><span id="n2">Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')"><i class="ti ti-phone"></i><span id="n3">Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')"><i class="ti ti-users"></i><span id="n4">Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')"><i class="ti ti-heart-rate-monitor"></i><span id="n5">Secours</span></button>
+  </div>
+</div>
+
+<!-- SOS -->
+<div class="screen" id="scr-sos">
+  <div class="overlay">
+    <div class="modal">
+      <h3 id="sos-title">Type d'urgence</h3>
+      <p id="sos-desc">Sélectionnez pour un dispatch prioritaire</p>
+      <div class="tgrid">
+        <button class="tbtn" onclick="selSOS(this,'Urgence médicale → SAMU')"><i class="ti ti-ambulance" style="color:var(--r)"></i><span id="tt1">Médical</span></button>
+        <button class="tbtn" onclick="selSOS(this,'Incendie → Pompiers')"><i class="ti ti-flame" style="color:#ff6b00"></i><span id="tt2">Incendie</span></button>
+        <button class="tbtn" onclick="selSOS(this,'Sécurité → Police')"><i class="ti ti-shield-lock" style="color:var(--b)"></i><span id="tt3">Sécurité</span></button>
+        <button class="tbtn" onclick="selSOS(this,'Accident → Pompiers + SAMU')"><i class="ti ti-car-crash" style="color:var(--amb)"></i><span id="tt4">Accident</span></button>
+        <button class="tbtn" onclick="selSOS(this,'Inondation → Protection Civile')"><i class="ti ti-droplet" style="color:var(--g)"></i><span id="tt5">Inondation</span></button>
+        <button class="tbtn" onclick="selSOS(this,'Urgence → CNRD-221')"><i class="ti ti-urgent" style="color:#666"></i><span id="tt6">Autre</span></button>
+      </div>
+      <button class="btn-p" id="btn-sos-send" disabled onclick="goTo('scr-sending')"><i class="ti ti-phone-call"></i><span id="sos-send-lbl">Sélectionner un type</span></button>
+      <button class="btn-b" onclick="goTo('scr-silent')"><i class="ti ti-eye-off"></i> <span id="btn-sil-lbl">Alerte silencieuse</span></button>
+      <button class="btn-s" onclick="goTo('scr-home')" id="btn-cancel">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- ALERTE SILENCIEUSE -->
+<div class="screen" id="scr-silent">
+  <div class="overlay">
+    <div class="modal">
+      <h3 id="sil-title">🤫 Alerte Silencieuse</h3>
+      <p id="sil-desc">Impossible de parler. Position GPS transmise automatiquement au CNRD-221.</p>
+      <div class="tgrid">
+        <button class="tbtn" onclick="selSOS(this,'Urgence médicale')"><i class="ti ti-ambulance" style="color:var(--r)"></i><span id="st1">Médical</span></button>
+        <button class="tbtn" onclick="selSOS(this,'Agression')"><i class="ti ti-alert-triangle" style="color:var(--r)"></i><span id="st2">Agression</span></button>
+        <button class="tbtn" onclick="selSOS(this,'Violence domestique')"><i class="ti ti-home-off" style="color:var(--pur)"></i><span id="st3">Violence dom.</span></button>
+        <button class="tbtn" onclick="selSOS(this,'Autre urgence')"><i class="ti ti-urgent" style="color:#666"></i><span id="st4">Autre</span></button>
+      </div>
+      <button class="btn-p" id="btn-sil-send" disabled onclick="goTo('scr-sending')" style="background:var(--b)"><i class="ti ti-eye-off"></i><span id="sil-send-lbl">Sélectionner un type</span></button>
+      <button class="btn-s" onclick="goTo('scr-home')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODE TÉMOIN -->
+<div class="screen" id="scr-witness">
+  <div class="sb"><span>9:41</span><span>Orange SN</span></div>
+  <div class="nsub"><button onclick="goTo('scr-home')"><i class="ti ti-arrow-left"></i></button><h2 id="wit-title">Mode Témoin</h2></div>
+  <div style="overflow-y:auto;flex:1">
+    <div style="display:flex;border-bottom:1px solid #eee;background:#fff;position:sticky;top:42px;z-index:5">
+      <button style="flex:1;padding:10px 4px;font-size:11px;font-weight:600;border:none;background:none;font-family:inherit;cursor:pointer;color:var(--r);border-bottom:2.5px solid var(--r)" id="wt-tab1" onclick="setWtab('rep',this)" id="wt-btn1">Signaler</button>
+      <button style="flex:1;padding:10px 4px;font-size:11px;font-weight:600;border:none;background:none;font-family:inherit;cursor:pointer;color:#888;border-bottom:2.5px solid transparent" id="wt-tab2" onclick="setWtab('act',this)">En attendant</button>
+    </div>
+    <div id="wt-rep">
+      <div class="fsec">
+        <div class="ibox"><p id="wit-info">Vous êtes témoin d'une urgence. Ce formulaire aide le CNRD-221 à dispatcher les bons secours.</p></div>
+        <label class="flbl" id="wit-lbl1">Type d'urgence observée</label>
+        <div class="tgrid" style="margin-bottom:9px">
+          <button class="tbtn" onclick="selWType(this)"><i class="ti ti-ambulance" style="color:var(--r)"></i><span>Médical</span></button>
+          <button class="tbtn" onclick="selWType(this)"><i class="ti ti-flame" style="color:#ff6b00"></i><span>Incendie</span></button>
+          <button class="tbtn" onclick="selWType(this)"><i class="ti ti-car-crash" style="color:var(--amb)"></i><span>Accident</span></button>
+          <button class="tbtn" onclick="selWType(this)"><i class="ti ti-shield-lock" style="color:var(--b)"></i><span>Agression</span></button>
+          <button class="tbtn" onclick="selWType(this)"><i class="ti ti-droplet" style="color:var(--g)"></i><span>Inondation</span></button>
+          <button class="tbtn" onclick="selWType(this)"><i class="ti ti-urgent" style="color:#666"></i><span>Autre</span></button>
+        </div>
+        <label class="flbl">Nombre de victimes</label>
+        <select class="fsel"><option>1 personne</option><option>2 à 5</option><option>Plus de 5</option><option>Inconnu</option></select>
+        <label class="flbl">État apparent</label>
+        <select class="fsel"><option>Conscient(e)</option><option>Inconscient(e)</option><option>Ne respire pas</option><option>Blessures visibles</option><option>Impossible à évaluer</option></select>
+        <input class="finp" type="text" placeholder="Informations complémentaires...">
+        <button class="btn-p" onclick="goTo('scr-sending')"><i class="ti ti-phone-call"></i> Alerter le 221</button>
+        <p style="font-size:10px;color:#999;text-align:center;margin:6px 0 14px">Position GPS transmise automatiquement</p>
+      </div>
+    </div>
+    <div id="wt-act" style="display:none;padding:11px 11px 0">
+      <div class="wbox"><i class="ti ti-alert-triangle"></i><p>Appelez d'abord le 221. Ces conseils s'appliquent uniquement en attendant les secours.</p></div>
+      <div class="gstep"><div class="gnum">1</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a">Sécurisez la zone</p><p style="font-size:10px;color:#666;margin-top:2px">Ne déplacez pas les victimes. Éloignez les badauds.</p></div></div>
+      <div class="gstep"><div class="gnum g">2</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a">Parlez à la victime</p><p style="font-size:10px;color:#666;margin-top:2px">"Vous m'entendez ?" Rassurez. Ne laissez pas seule.</p></div></div>
+      <div class="gstep"><div class="gnum b">3</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a">Contrôlez le saignement</p><p style="font-size:10px;color:#666;margin-top:2px">Comprimez fort avec tissu propre jusqu'aux secours.</p></div></div>
+      <div class="gstep"><div class="gnum">4</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a">Guidez les secours</p><p style="font-size:10px;color:#666;margin-top:2px">Restez visible. Faites signe pour guider l'ambulance.</p></div></div>
+    </div>
+  </div>
+  <div class="bnav">
+    <button class="bni" onclick="goTo('scr-home')"><i class="ti ti-home"></i><span>Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')"><i class="ti ti-map"></i><span>Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')"><i class="ti ti-phone"></i><span>Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')"><i class="ti ti-users"></i><span>Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')"><i class="ti ti-heart-rate-monitor"></i><span>Secours</span></button>
+  </div>
+</div>
+
+<!-- TRAJET SÉCURISÉ -->
+<div class="screen" id="scr-checkin">
+  <div class="sb"><span>9:41</span><span>Orange SN</span></div>
+  <div class="nsub"><button onclick="goTo('scr-home')"><i class="ti ti-arrow-left"></i></button><h2 id="ci-title">Trajet Sécurisé</h2></div>
+  <div style="overflow-y:auto;flex:1">
+    <div class="cihero">
+      <i class="ti ti-route" style="font-size:38px;flex-shrink:0"></i>
+      <div>
+        <p style="font-size:14px;font-weight:700" id="ci-hero-t">Alerte si je ne reviens pas</p>
+        <p style="font-size:11px;opacity:.85;margin-top:3px;line-height:1.4" id="ci-hero-s">Activez avant un trajet ou une zone à risque. Si vous ne désactivez pas dans le délai, une alerte est envoyée automatiquement.</p>
+      </div>
+    </div>
+    <div id="ci-form">
+      <div class="fsec">
+        <label class="flbl" id="ci-lbl1">Type de situation</label>
+        <div class="catgrid">
+          <button class="catbtn" onclick="this.classList.toggle('sel')"><i class="ti ti-moon"></i><span id="cit1">Trajet nocturne</span></button>
+          <button class="catbtn" onclick="this.classList.toggle('sel')"><i class="ti ti-droplet"></i><span id="cit2">Zone inondable</span></button>
+          <button class="catbtn" onclick="this.classList.toggle('sel')"><i class="ti ti-building-factory"></i><span id="cit3">Chantier / usine</span></button>
+          <button class="catbtn" onclick="this.classList.toggle('sel')"><i class="ti ti-trees"></i><span id="cit4">Zone isolée</span></button>
+          <button class="catbtn" onclick="this.classList.toggle('sel')"><i class="ti ti-swim"></i><span id="cit5">Baignade</span></button>
+          <button class="catbtn" onclick="this.classList.toggle('sel')"><i class="ti ti-dots"></i><span id="cit6">Autre</span></button>
+        </div>
+        <label class="flbl" id="ci-lbl2">Contact de confiance à alerter</label>
+        <input class="finp" type="tel" placeholder="+221 7X XXX XX XX" id="ci-contact">
+        <label class="flbl" id="ci-lbl3">Durée avant alerte automatique</label>
+        <select class="fsel" id="ci-dur">
+          <option value="15">15 minutes</option>
+          <option value="30" selected>30 minutes</option>
+          <option value="60">1 heure</option>
+          <option value="120">2 heures</option>
+          <option value="240">4 heures</option>
+        </select>
+        <div class="ibox"><p id="ci-info">Si vous ne désactivez pas manuellement dans le délai, votre contact reçoit votre position GPS et une alerte est transmise au CNRD-221.</p></div>
+        <button style="width:100%;padding:12px;background:var(--pur);color:#fff;border:none;border-radius:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px" onclick="startCI()" id="btn-ci">
+          <i class="ti ti-route"></i> <span id="btn-ci-txt">Activer Trajet Sécurisé</span>
+        </button>
+        <p style="font-size:10px;color:#999;text-align:center;margin:8px 0 16px" id="ci-note">Position GPS enregistrée à l'activation</p>
+      </div>
+    </div>
+    <div id="ci-active" style="display:none;padding:11px">
+      <div class="ciactive">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:7px">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--pur);animation:pulse2 1s infinite"></div>
+          <p style="font-size:12px;font-weight:700;color:var(--pur)" id="ci-active-lbl">TRAJET SÉCURISÉ ACTIF</p>
+        </div>
+        <p style="font-size:10px;color:#888;margin-bottom:5px" id="ci-timer-lbl">Temps restant avant alerte automatique</p>
+        <div class="citimer" id="ci-timer">30:00</div>
+        <p style="font-size:10px;color:#888;text-align:center;margin-bottom:10px" id="ci-pos-txt">Position GPS enregistrée · Dakar, Sénégal</p>
+        <button onclick="cancelCI()" style="width:100%;padding:11px;background:#fff;color:var(--pur);border:2px solid var(--pur);border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:6px" id="btn-ci-cancel">✅ Désactiver — Tout va bien</button>
+        <button onclick="goTo('scr-sos')" style="width:100%;padding:11px;background:var(--r);color:#fff;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🆘 SOS — J'ai besoin d'aide</button>
+      </div>
+    </div>
+  </div>
+  <div class="bnav">
+    <button class="bni" onclick="goTo('scr-home')"><i class="ti ti-home"></i><span>Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')"><i class="ti ti-map"></i><span>Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')"><i class="ti ti-phone"></i><span>Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')"><i class="ti ti-users"></i><span>Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')"><i class="ti ti-heart-rate-monitor"></i><span>Secours</span></button>
+  </div>
+</div>
+
+<!-- CARTE -->
+<div class="screen" id="scr-map">
+  <div class="sb"><span>9:41</span><span>Orange SN</span></div>
+  <div class="nsub"><button onclick="goTo('scr-home')"><i class="ti ti-arrow-left"></i></button><h2>Services à proximité</h2></div>
+  <div class="filter-bar">
+    <button class="chip active" onclick="filterMap('all',this)"><i class="ti ti-adjustments-horizontal"></i>Tout</button>
+    <button class="chip" onclick="filterMap('police',this)"><i class="ti ti-building-police"></i>Police</button>
+    <button class="chip" onclick="filterMap('pompiers',this)"><i class="ti ti-firetruck"></i>Pompiers</button>
+    <button class="chip" onclick="filterMap('hopital',this)"><i class="ti ti-building-hospital"></i>Hôpitaux</button>
+    <button class="chip" onclick="filterMap('sante',this)"><i class="ti ti-stethoscope"></i>Santé</button>
+    <button class="chip" onclick="filterMap('pharmacie',this)"><i class="ti ti-pill"></i>Pharmacies</button>
+    <button class="chip" onclick="filterMap('gendarmerie',this)"><i class="ti ti-shield"></i>Gendarmerie</button>
+  </div>
+  <div class="mapbox" id="map-view">
+    <svg width="100%" height="260" viewBox="0 0 390 260" role="img" aria-label="Carte de Dakar">
+      <rect width="390" height="260" fill="#d4e8d4"/>
+      <rect x="0" y="75" width="390" height="17" fill="#c8dfc8" opacity=".6"/>
+      <rect x="0" y="152" width="390" height="13" fill="#c8dfc8" opacity=".6"/>
+      <rect x="58" y="0" width="15" height="260" fill="#c8dfc8" opacity=".6"/>
+      <rect x="178" y="0" width="19" height="260" fill="#bdd8bd" opacity=".7"/>
+      <rect x="298" y="0" width="13" height="260" fill="#c8dfc8" opacity=".6"/>
+      <text x="188" y="88" text-anchor="middle" font-family="Arial" font-size="7" fill="#8aaa8a" font-weight="700">AV. CHEIKH ANTA DIOP</text>
+      <text x="188" y="163" text-anchor="middle" font-family="Arial" font-size="7" fill="#8aaa8a" font-weight="700">AV. L. S. SENGHOR</text>
+    </svg>
+    <div class="muser"><div class="mdot"></div></div>
+    <div id="mpopup" class="mpopup">
+      <h4 id="pp-n"></h4><p id="pp-t"></p>
+      <p id="pp-nm" style="color:var(--b);font-weight:600;font-size:9px;margin-bottom:1px"></p>
+      <p id="pp-s" style="font-size:9px;font-weight:600;margin-bottom:4px"></p>
+      <button onclick="document.getElementById('mpopup').style.display='none'" style="width:100%;background:var(--r);color:#fff;border:none;border-radius:5px;padding:4px 8px;font-size:9px;font-weight:700;cursor:pointer">Appeler via 221</button>
+    </div>
+    <div id="map-pins"></div>
+  </div>
+  <div class="nlist" id="nlist" style="max-height:220px"></div>
+  <div class="bnav">
+    <button class="bni" onclick="goTo('scr-home')"><i class="ti ti-home"></i><span>Accueil</span></button>
+    <button class="bni active"><i class="ti ti-map"></i><span>Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')"><i class="ti ti-phone"></i><span>Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')"><i class="ti ti-users"></i><span>Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')"><i class="ti ti-heart-rate-monitor"></i><span>Secours</span></button>
+  </div>
+</div>
+
+<!-- NUMÉROS -->
+<div class="screen" id="scr-numeros">
+  <div class="sb"><span>9:41</span><span>Orange SN</span></div>
+  <div class="nsub"><button onclick="goTo('scr-home')"><i class="ti ti-arrow-left"></i></button><h2>Numéros d'urgence</h2></div>
+  <div style="overflow-y:auto;flex:1;padding-bottom:14px">
+    <div style="background:#fff5f5;padding:9px 13px;border-bottom:1px solid #ffd0d0;display:flex;align-items:center;gap:7px">
+      <i class="ti ti-info-circle" style="font-size:14px;color:var(--r)"></i>
+      <p style="font-size:11px;color:#8b1515;line-height:1.4">Le 221 connecte tous ces services. Un seul réflexe, tous les secours.</p>
+    </div>
+    <div class="numsec"><h3>Sécurité</h3>
+      <div class="numcard"><span class="numbadge" style="color:var(--b)">17</span><div class="numinfo"><h4>Police Secours</h4><p>Police Nationale · zones urbaines</p></div><button class="ncall" style="background:var(--b)">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--pur);font-size:12px">800</span><div class="numinfo"><h4>Gendarmerie Nationale</h4><p>800 00 20 20 · zones rurales</p></div><button class="ncall" style="background:var(--pur)">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:#444">112</span><div class="numinfo"><h4>Numéro européen</h4><p>Accessible depuis tout réseau</p></div><button class="ncall" style="background:#444">Appel</button></div>
+    </div>
+    <div class="numsec"><h3>Pompiers</h3>
+      <div class="numcard"><span class="numbadge" style="color:var(--r)">18</span><div class="numinfo"><h4>Pompiers (BNSP)</h4><p>Brigade Nationale · 6 groupements</p></div><button class="ncall">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--r);font-size:10px">33823</span><div class="numinfo"><h4>Caserne Centrale Dakar</h4><p>33 823 10 14 · Plateau</p></div><button class="ncall">Appel</button></div>
+    </div>
+    <div class="numsec"><h3>Urgences médicales</h3>
+      <div class="numcard"><span class="numbadge" style="color:var(--g)">1515</span><div class="numinfo"><h4>SAMU National</h4><p>Gratuit · régulation 24h/24</p></div><button class="ncall" style="background:var(--g)">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--teal);font-size:10px">33839</span><div class="numinfo"><h4>CHU Le Dantec</h4><p>33 839 50 00 · Dakar</p></div><button class="ncall" style="background:var(--teal)">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--teal);font-size:10px">33860</span><div class="numinfo"><h4>Hôpital Principal</h4><p>33 860 00 00 · Dakar</p></div><button class="ncall" style="background:var(--teal)">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--teal);font-size:10px">33889</span><div class="numinfo"><h4>CHU de Fann</h4><p>33 889 10 00 · Dakar</p></div><button class="ncall" style="background:var(--teal)">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--teal);font-size:10px">33827</span><div class="numinfo"><h4>HOGGY</h4><p>33 827 93 37 · Grand Yoff</p></div><button class="ncall" style="background:var(--teal)">Appel</button></div>
+    </div>
+    <div class="numsec" style="padding-bottom:6px"><h3>Autres</h3>
+      <div class="numcard"><span class="numbadge" style="color:var(--amb);font-size:10px">800</span><div class="numinfo"><h4>SENELEC</h4><p>800 00 00 04 · panne électrique</p></div><button class="ncall" style="background:var(--amb)">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:#888">116</span><div class="numinfo"><h4>Enfance en danger</h4><p>116 · gratuit</p></div><button class="ncall" style="background:#888">Appel</button></div>
+    </div>
+    <div style="margin:8px 11px 4px;background:#fff0f0;border-radius:10px;padding:10px 11px;border:1px solid #ffd0d0;cursor:pointer;display:flex;align-items:center;gap:9px" onclick="goTo('scr-refus')">
+      <i class="ti ti-building-hospital" style="font-size:20px;color:var(--r)"></i>
+      <div><p style="font-size:12px;font-weight:700;color:var(--r)">Signaler un refus de soins</p><p style="font-size:10px;color:#888">Un hôpital refuse une urgence ? Agissez maintenant.</p></div>
+      <i class="ti ti-chevron-right" style="font-size:14px;color:#ccc;margin-left:auto"></i>
+    </div>
+  </div>
+  <div class="bnav">
+    <button class="bni" onclick="goTo('scr-home')"><i class="ti ti-home"></i><span>Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')"><i class="ti ti-map"></i><span>Carte</span></button>
+    <button class="bni active"><i class="ti ti-phone"></i><span>Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')"><i class="ti ti-users"></i><span>Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')"><i class="ti ti-heart-rate-monitor"></i><span>Secours</span></button>
+  </div>
+</div>
+
+<!-- REFUS DE SOINS -->
+<div class="screen" id="scr-refus">
+  <div class="sb"><span>9:41</span><span>Orange SN</span></div>
+  <div class="nsub"><button onclick="goTo('scr-home')"><i class="ti ti-arrow-left"></i></button><h2>Refus de soins</h2></div>
+  <div style="overflow-y:auto;flex:1">
+    <div class="refus-hero">
+      <i class="ti ti-building-hospital"></i>
+      <div><p style="font-size:14px;font-weight:700">Refus de prise en charge</p><p style="font-size:11px;opacity:.85;margin-top:3px;line-height:1.4">Signalement transmis au CNRD-221, au Ministère de la Santé et à l'Ordre des Médecins.</p></div>
+    </div>
+    <div style="background:#fff5f5;padding:9px 13px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #ffd0d0">
+      <i class="ti ti-info-circle" style="font-size:14px;color:var(--r)"></i>
+      <p style="font-size:11px;color:#8b1515;line-height:1.4">En cas d'urgence vitale, appelez <strong>le 221 en premier</strong>.</p>
+    </div>
+    <div style="padding:10px 11px">
+      <p style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px">Que faire maintenant</p>
+      <div class="rstep"><div class="rnum" style="background:var(--r)">1</div><div><h4 style="font-size:11px;font-weight:700;color:#1a1a1a">Appelez le 221 maintenant</h4><p style="font-size:10px;color:#666;margin-top:2px">L'opérateur cherche une structure disponible immédiatement.</p></div></div>
+      <div class="rstep"><div class="rnum" style="background:#D44000">2</div><div><h4 style="font-size:11px;font-weight:700;color:#1a1a1a">Documentez le refus</h4><p style="font-size:10px;color:#666;margin-top:2px">Heure, nom de l'établissement, motif allégué. Photo si possible.</p></div></div>
+      <div class="rstep"><div class="rnum" style="background:var(--g)">3</div><div><h4 style="font-size:11px;font-weight:700;color:#1a1a1a">Signalez via ce formulaire</h4><p style="font-size:10px;color:#666;margin-top:2px">Signalement horodaté et géolocalisé transmis aux autorités.</p></div></div>
+    </div>
+    <div class="fsec">
+      <label class="flbl">Établissement concerné</label>
+      <select class="fsel" id="ref-etab">
+        <option value="">-- Sélectionner --</option>
+        <option>CHU Le Dantec · Dakar</option><option>Hôpital Principal · Dakar</option>
+        <option>Hôpital de Fann · Dakar</option><option>HOGGY · Grand Yoff</option>
+        <option>Hôpital Militaire de Ouakam</option><option>Centre de Santé Gueule Tapée</option>
+        <option>Centre de Santé Médina</option><option>Clinique privée (préciser)</option>
+        <option>Autre (préciser ci-dessous)</option>
+      </select>
+      <label class="flbl">Précision (si autre)</label>
+      <input class="finp" type="text" placeholder="Nom et adresse de l'établissement" id="ref-nom">
+      <label class="flbl">Nature de l'urgence</label>
+      <select class="fsel" id="ref-urg">
+        <option value="">-- Sélectionner --</option>
+        <option>Urgence médicale (malaise, douleur intense)</option>
+        <option>Accident de la route / traumatisme</option>
+        <option>Urgence obstétricale / accouchement</option>
+        <option>Tentative de suicide / pendaison</option>
+        <option>AVC / infarctus</option>
+        <option>Enfant en détresse</option>
+        <option>Autre urgence vitale</option>
+      </select>
+      <label class="flbl">Motif du refus allégué</label>
+      <div class="catgrid">
+        <button class="catbtn" onclick="selMotif(this)"><span>💰 Financier</span></button>
+        <button class="catbtn" onclick="selMotif(this)"><span>📋 Administratif</span></button>
+        <button class="catbtn" onclick="selMotif(this)"><span>🏥 Saturé</span></button>
+        <button class="catbtn" onclick="selMotif(this)"><span>❓ Sans motif</span></button>
+      </div>
+      <label class="flbl">Description (facultatif)</label>
+      <textarea class="ftxt" placeholder="Décrivez ce qui s'est passé : heure, interlocuteur, propos tenus..."></textarea>
+      <div class="abox"><p>Ce signalement est horodaté, géolocalisé et transmis simultanément au <strong>CNRD-221</strong>, au <strong>Ministère de la Santé</strong> et à l'<strong>Ordre des Médecins</strong>. Un accusé de réception vous sera envoyé par SMS.</p></div>
+      <button class="btn-p" onclick="submitRefus()"><i class="ti ti-send"></i> Envoyer le signalement</button>
+      <p style="font-size:10px;color:#999;text-align:center;margin:7px 0 16px">Position GPS et heure enregistrées automatiquement</p>
+    </div>
+  </div>
+  <div class="bnav">
+    <button class="bni" onclick="goTo('scr-home')"><i class="ti ti-home"></i><span>Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')"><i class="ti ti-map"></i><span>Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')"><i class="ti ti-phone"></i><span>Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')"><i class="ti ti-users"></i><span>Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')"><i class="ti ti-heart-rate-monitor"></i><span>Secours</span></button>
+  </div>
+</div>
+
+<!-- CONFIRMATION REFUS -->
+<div class="screen" id="scr-refus-ok">
+  <div class="sb"><span>9:41</span><span>Orange SN</span></div>
+  <div class="nsub"><button onclick="goTo('scr-home')"><i class="ti ti-arrow-left"></i></button><h2>Signalement envoyé</h2></div>
+  <div style="overflow-y:auto;flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:28px 20px;gap:12px">
+    <div style="width:72px;height:72px;border-radius:50%;background:#fff0f0;display:flex;align-items:center;justify-content:center;margin:0 auto"><i class="ti ti-circle-check" style="font-size:40px;color:var(--r)"></i></div>
+    <h3 style="font-size:17px;font-weight:700;color:#1a1a1a">Signalement reçu</h3>
+    <p style="font-size:13px;color:#666;line-height:1.6">Votre signalement a été transmis. Un SMS de confirmation avec votre numéro de dossier vous sera envoyé dans les prochaines minutes.</p>
+    <div style="background:#f5f5f5;border-radius:10px;padding:13px;width:100%;text-align:left">
+      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:6px;text-transform:uppercase">Destinataires</p>
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><i class="ti ti-urgent" style="font-size:14px;color:var(--r)"></i><p style="font-size:12px;color:#333">CNRD-221 — Dispatch immédiat</p></div>
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><i class="ti ti-building-hospital" style="font-size:14px;color:var(--g)"></i><p style="font-size:12px;color:#333">Ministère de la Santé</p></div>
+      <div style="display:flex;align-items:center;gap:7px"><i class="ti ti-stethoscope" style="font-size:14px;color:var(--b)"></i><p style="font-size:12px;color:#333">Ordre des Médecins du Sénégal</p></div>
+    </div>
+    <button class="btn-g" onclick="goTo('scr-home')" style="width:100%">Retour à l'accueil</button>
+    <button class="btn-p" onclick="goTo('scr-sos')" style="width:100%;margin-top:0">Appeler le 221</button>
+  </div>
+</div>
+
+<!-- VOLONTAIRES -->
+<div class="screen" id="scr-vol">
+  <div class="sb"><span>9:41</span><span>Orange SN</span></div>
+  <div class="nsub"><button onclick="goTo('scr-home')"><i class="ti ti-arrow-left"></i></button><h2>Devenir Volontaire 221</h2></div>
+  <div style="overflow-y:auto;flex:1">
+    <div class="volhero"><i class="ti ti-shield-heart" style="font-size:38px;opacity:.9;flex-shrink:0"></i><div><p style="font-size:14px;font-weight:700">Réseau 221 Volontaires</p><p style="font-size:11px;opacity:.85;margin-top:3px;line-height:1.4">Intervenez en premier. Chaque minute compte.</p></div></div>
+    <div class="fsec">
+      <label class="flbl">Prénom et Nom</label><input class="finp" type="text" placeholder="Aminata Diallo" id="v-nom">
+      <label class="flbl">Téléphone</label><input class="finp" type="tel" placeholder="+221 7X XXX XX XX">
+      <label class="flbl">Catégorie</label>
+      <div class="catgrid">
+        <button class="catbtn" onclick="this.classList.toggle('sel')"><i class="ti ti-first-aid-kit"></i><span>Secouriste</span></button>
+        <button class="catbtn" onclick="this.classList.toggle('sel')"><i class="ti ti-stethoscope"></i><span>Médecin/Infirmier</span></button>
+        <button class="catbtn" onclick="this.classList.toggle('sel')"><i class="ti ti-firetruck"></i><span>Pompier vol.</span></button>
+        <button class="catbtn" onclick="this.classList.toggle('sel')"><i class="ti ti-car"></i><span>Logisticien</span></button>
+        <button class="catbtn" onclick="this.classList.toggle('sel')"><i class="ti ti-heart-handshake"></i><span>Psychologue</span></button>
+        <button class="catbtn" onclick="this.classList.toggle('sel')"><i class="ti ti-dots"></i><span>Autre</span></button>
+      </div>
+      <label class="flbl">Diplôme / Certification</label>
+      <select class="fsel"><option>-- Sélectionner --</option><option>PSC1 / PSC2</option><option>AFGSU</option><option>Diplôme médical</option><option>Certification BNSP</option><option>Autre</option></select>
+      <button class="btn-g" onclick="submitVol()"><i class="ti ti-shield-check" style="margin-right:5px"></i>S'inscrire comme Volontaire</button>
+      <p style="font-size:10px;color:#999;text-align:center;margin:7px 0 14px">Vérification par le CNRD-221 sous 5–10 jours</p>
+    </div>
+  </div>
+  <div class="bnav">
+    <button class="bni" onclick="goTo('scr-home')"><i class="ti ti-home"></i><span>Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')"><i class="ti ti-map"></i><span>Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')"><i class="ti ti-phone"></i><span>Numéros</span></button>
+    <button class="bni active"><i class="ti ti-users"></i><span>Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')"><i class="ti ti-heart-rate-monitor"></i><span>Secours</span></button>
+  </div>
+</div>
+
+<!-- GUIDE -->
+<div class="screen" id="scr-guide">
+  <div class="sb"><span>9:41</span><span>Orange SN</span></div>
+  <div class="nsub"><button onclick="goTo('scr-home')"><i class="ti ti-arrow-left"></i></button><h2>Guide Premiers Secours</h2></div>
+  <div class="gtabs">
+    <button class="gtab active" onclick="setGuide('cardiac',this)">Arrêt cardiaque</button>
+    <button class="gtab" onclick="setGuide('noyade',this)">Noyade</button>
+    <button class="gtab" onclick="setGuide('accident',this)">Accident</button>
+    <button class="gtab" onclick="setGuide('incendie',this)">Incendie</button>
+    <button class="gtab" onclick="setGuide('pendaison',this)">Pendaison</button>
+  </div>
+  <div style="padding:10px;overflow-y:auto;flex:1" id="guide-body"></div>
+  <div class="bnav">
+    <button class="bni" onclick="goTo('scr-home')"><i class="ti ti-home"></i><span>Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')"><i class="ti ti-map"></i><span>Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')"><i class="ti ti-phone"></i><span>Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')"><i class="ti ti-users"></i><span>Volontaires</span></button>
+    <button class="bni active"><i class="ti ti-heart-rate-monitor"></i><span>Secours</span></button>
+  </div>
+</div>
+
+<!-- ENVOI -->
+<div class="screen" id="scr-sending">
+  <div class="sb"><span>9:41</span><span>Orange SN</span></div>
+  <div class="sending">
+    <div class="pulse"><i class="ti ti-phone-call"></i></div>
+    <div style="font-size:32px;font-weight:700;color:var(--r)" id="send-timer">3</div>
+    <h3 style="font-size:17px;font-weight:700;color:#1a1a1a">Connexion au CNRD-221</h3>
+    <p style="font-size:12px;color:#666;line-height:1.5">Votre alerte est transmise. Un opérateur vous prend en charge.</p>
+    <div class="locbadge"><i class="ti ti-map-pin"></i><span>Position GPS transmise · Dakar</span></div>
+    <div style="background:#fff;border-radius:10px;padding:11px;width:100%;border:1px solid #eee">
+      <p style="font-size:9px;color:#888;margin-bottom:3px">DISPATCH EN COURS</p>
+      <p style="font-size:12px;font-weight:600;color:#1a1a1a" id="dispatch-lbl">Urgence médicale → SAMU National</p>
+      <p style="font-size:10px;color:#888;margin-top:2px">Arrivée estimée : &lt; 8 min</p>
+    </div>
+    <button onclick="goTo('scr-home')" style="background:none;border:1px solid #ddd;border-radius:9px;padding:8px 16px;font-size:12px;cursor:pointer;font-family:inherit;color:#666">Terminer la simulation</button>
+  </div>
+</div>
+
+</div><!-- /phone -->
+
+<script>
+const PINS=[
+  {id:'s1',cat:'police',x:22,y:37,name:'Commissariat Plateau',type:'Police Nationale',num:'17',status:'Ouvert 24h/24',color:'#1A4A8A',icon:'ti-building-police'},
+  {id:'s2',cat:'police',x:72,y:61,name:'Commissariat Médina',type:'Police Nationale',num:'17',status:'Ouvert 24h/24',color:'#1A4A8A',icon:'ti-building-police'},
+  {id:'s3',cat:'gendarmerie',x:14,y:71,name:'Brigade Gendarmerie',type:'Gendarmerie Nat.',num:'800 00 20 20',status:'Ouvert 24h/24',color:'#534AB7',icon:'ti-shield'},
+  {id:'s4',cat:'pompiers',x:68,y:27,name:'Caserne Dieuppeul',type:'Pompiers BNSP',num:'18',status:'Ouvert 24h/24',color:'#CC0000',icon:'ti-firetruck'},
+  {id:'s5',cat:'pompiers',x:28,y:61,name:'Caserne Médina',type:'Pompiers BNSP',num:'18',status:'Ouvert 24h/24',color:'#CC0000',icon:'ti-firetruck'},
+  {id:'s6',cat:'hopital',x:80,y:49,name:'CHU Le Dantec',type:'CHU · Urgences 24h/24',num:'33 839 50 00',status:'Urgences 24h/24',color:'#006633',icon:'ti-building-hospital'},
+  {id:'s7',cat:'hopital',x:60,y:74,name:'Hôpital de Fann',type:'CHU · Urgences',num:'33 889 10 00',status:'Urgences 24h/24',color:'#006633',icon:'ti-building-hospital'},
+  {id:'s8',cat:'hopital',x:18,y:21,name:'Hôpital Principal',type:'Hôpital · Urgences',num:'33 860 00 00',status:'Urgences 24h/24',color:'#006633',icon:'ti-building-hospital'},
+  {id:'s9',cat:'hopital',x:78,y:19,name:'HOGGY',type:'Hôpital Grand Yoff',num:'33 827 93 37',status:'Urgences 24h/24',color:'#006633',icon:'ti-building-hospital'},
+  {id:'s10',cat:'sante',x:40,y:19,name:'CS Gueule Tapée',type:'Centre de santé',num:'1515',status:'7h–20h',color:'#0F6E56',icon:'ti-stethoscope'},
+  {id:'s11',cat:'sante',x:55,y:59,name:'CS Médina',type:'Centre de santé',num:'1515',status:'7h–20h',color:'#0F6E56',icon:'ti-stethoscope'},
+  {id:'s12',cat:'pharmacie',x:35,y:44,name:'Pharmacie Plateau',type:'Pharmacie de garde',num:'33 821 xx xx',status:'Garde cette nuit',color:'#B8860B',icon:'ti-pill'},
+  {id:'s13',cat:'pharmacie',x:62,y:39,name:'Pharmacie Colobane',type:'Pharmacie',num:'33 824 xx xx',status:'Fermé',color:'#B8860B',icon:'ti-pill'},
+];
+
+let activeFilter='all',timerInt=null,ciInt=null,ciSecs=0;
+
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='scr-sending')startSendTimer();
+}
+function setLang(l){
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`).classList.add('active');
+}
+function filterMap(cat,btn){
+  document.querySelectorAll('.chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');activeFilter=cat;renderPins();renderNearby();
+}
+function renderPins(){
+  const c=document.getElementById('map-pins');c.innerHTML='';
+  (activeFilter==='all'?PINS:PINS.filter(p=>p.cat===activeFilter)).forEach(p=>{
+    const el=document.createElement('div');el.className='mpin';
+    el.style.cssText=`left:${p.x}%;top:${p.y}%;`;
+    el.innerHTML=`<div class="mpin-icon" style="background:${p.color}22;border-color:${p.color}"><i class="ti ${p.icon}" style="color:${p.color};font-size:12px"></i></div><span class="mpin-lbl" style="color:${p.color}">${p.name.split(' ').slice(0,2).join(' ')}</span>`;
+    el.onclick=()=>showPin(p);c.appendChild(el);
+  });
+}
+function showPin(p){
+  document.getElementById('pp-n').textContent=p.name;
+  document.getElementById('pp-t').textContent=p.type;
+  document.getElementById('pp-nm').textContent=p.num;
+  const st=document.getElementById('pp-s');st.textContent=p.status;
+  st.style.color=p.status.includes('Fermé')?'#CC0000':'#006633';
+  const pop=document.getElementById('mpopup');pop.style.display='block';
+  setTimeout(()=>pop.style.display='none',3000);
+}
+function renderNearby(){
+  document.getElementById('nlist').innerHTML=
+    (activeFilter==='all'?PINS:PINS.filter(p=>p.cat===activeFilter)).map(p=>`
+    <div class="nitem" onclick="showPin(PINS.find(x=>x.id==='${p.id}'))">
+      <div class="nicon" style="background:${p.color}18"><i class="ti ${p.icon}" style="color:${p.color};font-size:16px"></i></div>
+      <div class="ninfo"><h4>${p.name}</h4><p>${p.type}</p>
+        <p class="${p.status.includes('Fermé')?'cl':'op'}">${p.status}</p>
+        <p class="nm">${p.num}</p></div>
+    </div>`).join('');
+}
+function selSOS(btn,dispatch){
+  document.querySelectorAll('#scr-sos .tbtn,#scr-silent .tbtn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  const s=document.getElementById('btn-sos-send'),l=document.getElementById('sos-send-lbl');
+  const ss=document.getElementById('btn-sil-send'),sl=document.getElementById('sil-send-lbl');
+  if(s){s.disabled=false;l.textContent='Appeler 221 · '+dispatch;}
+  if(ss){ss.disabled=false;sl.textContent='Envoyer · '+dispatch;}
+  document.getElementById('dispatch-lbl').textContent=dispatch;
+}
+function selWType(btn){document.querySelectorAll('#wt-rep .tbtn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
+function setWtab(tab,btn){
+  document.querySelectorAll('#scr-witness button[id^="wt-tab"]').forEach(b=>{
+    b.style.color='#888';b.style.borderBottomColor='transparent';
+  });
+  btn.style.color='var(--r)';btn.style.borderBottomColor='var(--r)';
+  document.getElementById('wt-rep').style.display=tab==='rep'?'block':'none';
+  document.getElementById('wt-act').style.display=tab==='act'?'block':'none';
+}
+function selMotif(btn){document.querySelectorAll('#scr-refus .catbtn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
+function submitRefus(){
+  if(!document.getElementById('ref-etab').value||!document.getElementById('ref-urg').value){
+    alert('Merci de renseigner l\'établissement et la nature de l\'urgence.');return;
+  }
+  goTo('scr-refus-ok');
+}
+function startCI(){
+  const dur=parseInt(document.getElementById('ci-dur').value)||30;
+  document.getElementById('ci-form').style.display='none';
+  document.getElementById('ci-active').style.display='block';
+  ciSecs=dur*60;updateCI();
+  if(ciInt)clearInterval(ciInt);
+  ciInt=setInterval(()=>{ciSecs--;updateCI();
+    if(ciSecs<=0){clearInterval(ciInt);alert('⚠️ Trajet Sécurisé — Délai écoulé. Alerte transmise au CNRD-221 !');}
+  },1000);
+}
+function updateCI(){
+  const m=Math.floor(ciSecs/60),s=ciSecs%60;
+  document.getElementById('ci-timer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+function cancelCI(){
+  if(ciInt)clearInterval(ciInt);
+  document.getElementById('ci-form').style.display='block';
+  document.getElementById('ci-active').style.display='none';
+}
+function startSendTimer(){
+  let n=3;document.getElementById('send-timer').textContent=n;
+  if(timerInt)clearInterval(timerInt);
+  timerInt=setInterval(()=>{n--;document.getElementById('send-timer').textContent=n;if(n<=0)clearInterval(timerInt);},1000);
+}
+function submitVol(){
+  if(!document.getElementById('v-nom').value.trim()){alert('Veuillez entrer votre nom.');return;}
+  alert('✅ Inscription envoyée !\nBadge numérique 221 Volontaire activé sous 5–10 jours.');
+  goTo('scr-home');
+}
+const GUIDES={
+  cardiac:[{t:'Appelez le 221 immédiatement',c:'Dites "arrêt cardiaque", donnez votre position. Ne raccrochez pas.',g:''},{t:'Vérifiez la conscience',c:'Appelez, secouez doucement. Pas de réponse → étape suivante.',g:'g'},{t:'Libérez les voies aériennes',c:'Tête en arrière, menton soulevé. Regardez, écoutez, sentez.',g:'b'},{t:'Compressions cardiaques',c:'30 compressions, 5–6 cm, 100–120/min. Puis 2 insufflations. Répétez.',g:''},{t:'Utilisez le défibrillateur (DEA)',c:'Suivez les instructions. N\'arrêtez pas sauf pour le choc.',g:'g'}],
+  noyade:[{t:'N\'entrez pas sans équipement',c:'Corde, bouée ou perche. Votre sécurité d\'abord.',g:''},{t:'Appelez le 221',c:'Signalez la noyade et la position exacte.',g:'g'},{t:'Sortez la victime de l\'eau',c:'Sur le dos sur surface ferme. Attention à la colonne.',g:'b'},{t:'Vérifiez la respiration',c:'Si elle ne respire pas : 30 compressions + 2 insufflations.',g:''},{t:'Position latérale (PLS)',c:'Si elle respire mais inconsciente, jusqu\'aux secours.',g:'g'}],
+  accident:[{t:'Sécurisez la zone',c:'Ne bougez pas les victimes. Warnings, triangles à 50m.',g:''},{t:'Appelez le 221',c:'Route, véhicules, nombre de victimes, personnes coincées.',g:'g'},{t:'Évaluez les victimes',c:'Parlez à chacune. Rassurez. Ne déplacez pas sans nécessité.',g:'b'},{t:'Contrôlez les hémorragies',c:'Comprimez fort avec tissu propre. Maintenez sans relâcher.',g:''},{t:'Ne donnez rien à boire',c:'Risque chirurgical même si la victime demande.',g:'g'}],
+  incendie:[{t:'Alertez et évacuez',c:'Criez "AU FEU !". Déclenchez l\'alarme. Évacuez avant tout.',g:''},{t:'Appelez le 221',c:'Adresse, type de bâtiment, personnes bloquées.',g:'g'},{t:'Pas d\'ascenseur',c:'Fermez les portes derrière vous. Escaliers uniquement.',g:'b'},{t:'Si vous êtes bloqué',c:'Colmatez avec tissus humides. Signalez-vous à la fenêtre.',g:''},{t:'Point de rassemblement',c:'Ne retournez jamais dans un bâtiment en feu.',g:'g'}],
+  pendaison:[{t:'Appelez le 221 immédiatement',c:'Dites "tentative de pendaison", donnez la position.',g:''},{t:'Décrochez en soutenant le corps',c:'Soutenez le corps AVANT de couper le lien. Allongez doucement.',g:'g'},{t:'Vérifiez la respiration',c:'Oreille près de la bouche. Regardez si la poitrine se soulève.',g:'b'},{t:'Si elle ne respire pas : RCP',c:'30 compressions + 2 insufflations. Continuez jusqu\'aux secours.',g:''},{t:'Si elle respire : PLS',c:'Desserrez tout vêtement autour du cou. Surveillez.',g:'g'}],
+};
+function setGuide(key,tab){
+  document.querySelectorAll('.gtab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');
+  let h=`<div class="wbox"><i class="ti ti-alert-triangle"></i><p>Appelez le 221 en premier. Ces gestes s'appliquent en attendant les secours professionnels.</p></div>`;
+  (GUIDES[key]||GUIDES.cardiac).forEach((s,i)=>{
+    h+=`<div class="gstep"><div class="gnum ${s.g}">${i+1}</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a">${s.t}</p><p style="font-size:10px;color:#666;margin-top:2px;line-height:1.5">${s.c}</p></div></div>`;
+  });
+  document.getElementById('guide-body').innerHTML=h;
+}
+
+// Init
+setTimeout(()=>{
+  document.getElementById('splash').classList.add('hide');
+  setTimeout(()=>{
+    document.getElementById('splash').style.display='none';
+    document.getElementById('app').style.display='block';
+    renderPins();renderNearby();setGuide('cardiac',document.querySelector('.gtab'));
+  },500);
+},2800);
+</script>
+</body>
+</html>
