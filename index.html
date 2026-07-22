@@ -201,6 +201,11 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
       </div>
     </div>
   </div>
+  <div style="margin:0 10px 8px;background:#EEF2FF;border-radius:10px;padding:10px 11px;border:1px solid #d6d2f5;cursor:pointer;display:flex;align-items:center;gap:9px" onclick="goTo('scr-cyber')" role="button" tabindex="0" aria-label="Cyber-Urgences — Signaler une arnaque, un piratage, une usurpation d'identité ou un contenu illicite">
+    <i class="ti ti-shield-lock" style="font-size:20px;color:var(--pur)" aria-hidden="true"></i>
+    <div><p style="font-size:12px;font-weight:700;color:var(--pur)" id="q9">Cyber-Urgences</p><p style="font-size:10px;color:#888" id="q9s">Arnaque, piratage, sextorsion...</p></div>
+    <i class="ti ti-chevron-right" style="font-size:14px;color:#b7b0ea;margin-left:auto" aria-hidden="true"></i>
+  </div>
   <div style="margin:0 10px 10px;background:#fff;border-radius:9px;padding:9px 11px;border:1px solid #eee;display:flex;align-items:center;gap:7px" role="status" aria-live="polite">
     <div style="width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:pulse2 2s infinite" aria-hidden="true"></div>
     <p style="font-size:11px;color:#555" id="st-txt">Centre 221 opérationnel · 47 opérateurs</p>
@@ -459,6 +464,11 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
       <div><p style="font-size:12px;font-weight:700;color:var(--r)">Signaler un refus de soins</p><p style="font-size:10px;color:#888">Un hôpital refuse une urgence ? Agissez maintenant.</p></div>
       <i class="ti ti-chevron-right" style="font-size:14px;color:#ccc;margin-left:auto" aria-hidden="true"></i>
     </div>
+    <div style="margin:8px 11px 4px;background:#EEF2FF;border-radius:10px;padding:10px 11px;border:1px solid #d6d2f5;cursor:pointer;display:flex;align-items:center;gap:9px" onclick="goTo('scr-cyber')" role="button" tabindex="0" aria-label="Cyber-Urgences — Signaler une arnaque, un piratage ou un contenu illicite">
+      <i class="ti ti-shield-lock" style="font-size:20px;color:var(--pur)" aria-hidden="true"></i>
+      <div><p style="font-size:12px;font-weight:700;color:var(--pur)">Cyber-Urgences</p><p style="font-size:10px;color:#888">Arnaque, piratage, sextorsion, contenu illicite</p></div>
+      <i class="ti ti-chevron-right" style="font-size:14px;color:#b7b0ea;margin-left:auto" aria-hidden="true"></i>
+    </div>
   </div>
   <nav class="bnav" aria-label="Navigation principale">
     <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
@@ -556,6 +566,111 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
     </div>
     <button class="btn-g" onclick="goTo('scr-home')" style="width:100%" aria-label="Retour à l'accueil de l'application 221">Retour à l'accueil</button>
     <button class="btn-p" onclick="goTo('scr-sos')" style="width:100%;margin-top:0" aria-label="Appeler le 221 — déclencher une alerte d'urgence">Appeler le 221</button>
+  </div>
+</div>
+
+<!-- CYBER-URGENCES -->
+<div class="screen" id="scr-cyber">
+  <div class="sb"><span id="sb-clock-cyber" aria-hidden="true"></span></div>
+  <div class="nsub">
+    <button onclick="goTo('scr-home')" aria-label="Retour à l'accueil"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
+    <h2>Cyber-Urgences</h2>
+  </div>
+  <div style="overflow-y:auto;flex:1">
+    <div class="cihero" role="banner">
+      <i class="ti ti-shield-lock" style="font-size:38px;flex-shrink:0" aria-hidden="true"></i>
+      <div>
+        <p style="font-size:14px;font-weight:700">Signalement Cyber</p>
+        <p style="font-size:11px;opacity:.85;margin-top:3px;line-height:1.4">Extension numérique du CNRD-221, en partenariat avec l'ENCVR (École Nationale de Cybersécurité à Vocation Régionale). Documentez la menace : nous orientons vers l'unité compétente.</p>
+      </div>
+    </div>
+    <div class="fsec">
+      <div class="ibox" role="note"><p><strong>En cas de danger physique immédiat, appelez le 221.</strong> Pour les cas urgents (sextorsion active, menace physique en ligne), activez le bouton « Cas urgent » ci-dessous : une intervention en temps réel est déclenchée.</p></div>
+
+      <label class="flbl" id="cy-lbl1">Type de cybermenace</label>
+      <div class="tgrid" role="group" aria-label="Type de cybermenace">
+        <button class="tbtn" onclick="selCyber(this,'arnaques')" aria-label="Arnaques en ligne — escroqueries SMS, WhatsApp, réseaux sociaux, faux sites marchands, faux investissements"><i class="ti ti-wallet" style="color:var(--amb)" aria-hidden="true"></i><span>Arnaques en ligne</span></button>
+        <button class="tbtn" onclick="selCyber(this,'harcelement')" aria-label="Cyberharcèlement — menaces, intimidations numériques, cyberbullying scolaire"><i class="ti ti-message-2" style="color:var(--b)" aria-hidden="true"></i><span>Cyberharcèlement</span></button>
+        <button class="tbtn" onclick="selCyber(this,'violences')" aria-label="Cyberviolences — sextorsion, diffusion non consentie d'images intimes"><i class="ti ti-alert-triangle" style="color:var(--r)" aria-hidden="true"></i><span>Cyberviolences</span></button>
+        <button class="tbtn" onclick="selCyber(this,'usurpation')" aria-label="Usurpation d'identité — vol de comptes, faux profils, fraude à l'identité numérique"><i class="ti ti-user-x" style="color:var(--r)" aria-hidden="true"></i><span>Usurpation d'identité</span></button>
+        <button class="tbtn" onclick="selCyber(this,'cyberattaque')" aria-label="Cyberattaque critique contre une infrastructure numérique nationale ou un service public"><i class="ti ti-lock" style="color:var(--pur)" aria-hidden="true"></i><span>Cyberattaque critique</span></button>
+        <button class="tbtn" onclick="selCyber(this,'escroquerie_tel')" aria-label="Escroquerie téléphonique — faux opérateur, faux agent bancaire, sim swapping"><i class="ti ti-phone-off" style="color:#666" aria-hidden="true"></i><span>Escroquerie tél.</span></button>
+      </div>
+      <div id="cy-service-preview" style="display:none;margin:-4px 0 10px;font-size:11px;color:var(--pur);font-weight:600" aria-live="polite"></div>
+
+      <label class="flbl" for="cy-plateforme">Plateforme concernée</label>
+      <select class="fsel" id="cy-plateforme" aria-label="Plateforme concernée par l'incident">
+        <option value="">-- Sélectionner --</option>
+        <option>WhatsApp</option><option>Facebook</option><option>Instagram</option>
+        <option>TikTok</option><option>SMS</option><option>Appel téléphonique</option>
+        <option>Orange Money / Wave / Free Money</option><option>Site web</option><option>Autre</option>
+      </select>
+      <label class="flbl" for="cy-prejudice">Préjudice subi</label>
+      <select class="fsel" id="cy-prejudice" aria-label="Préjudice subi">
+        <option value="">-- Sélectionner --</option>
+        <option>Perte financière</option>
+        <option>Perte d'accès à un compte</option>
+        <option>Atteinte à la réputation / à l'image</option>
+        <option>Détresse psychologique</option>
+        <option>Aucun préjudice à ce stade</option>
+        <option>Autre</option>
+      </select>
+      <label class="flbl" for="cy-auteur">Identité de l'auteur, si connue</label>
+      <input class="finp" type="text" id="cy-auteur" placeholder="Nom, pseudo, numéro de téléphone... (facultatif)" aria-label="Identité de l'auteur si connue, facultatif">
+      <label class="flbl" for="cy-desc">Chronologie des faits</label>
+      <textarea class="ftxt" id="cy-desc" placeholder="Décrivez les faits dans l'ordre : ce qui s'est passé, quand, montants éventuels..." aria-label="Chronologie des faits"></textarea>
+      <label class="flbl" for="cy-preuves">Preuves disponibles</label>
+      <input class="finp" type="file" id="cy-preuves" multiple accept="image/*,.pdf" aria-label="Joindre des preuves : captures d'écran, pièces jointes">
+      <button class="catbtn" id="cy-urgent-toggle" onclick="toggleCyberUrgent(this)" aria-pressed="false" style="width:100%;justify-content:center;margin-bottom:9px">
+        <i class="ti ti-alert-triangle" aria-hidden="true"></i><span>Cas urgent — sextorsion active / menace physique</span>
+      </button>
+      <div class="wbox"><i class="ti ti-alert-triangle" aria-hidden="true"></i><p>Ne partagez jamais vos mots de passe, codes OTP ou numéros de carte, même avec le 221. Aucun agent légitime ne vous les demandera.</p></div>
+      <div class="wbox"><i class="ti ti-alert-triangle" aria-hidden="true"></i><p>Victime d'une arnaque Mobile Money ? Bloquez votre compte immédiatement auprès de votre opérateur, en plus de ce signalement.</p></div>
+      <div class="abox" role="note"><p>Si un enfant est concerné (contenu, sextorsion, sollicitation), signalez-le également au <strong>116 — Centre Ginddi, Protection de l'enfance</strong>, gratuit et disponible 24h/24.</p></div>
+      <button class="btn-p" id="btn-cyber-send" disabled onclick="submitCyber()" style="background:var(--pur)"
+        aria-label="Envoyer le signalement cyber — bouton désactivé jusqu'à la sélection du type de cybermenace" aria-disabled="true">
+        <i class="ti ti-send" aria-hidden="true"></i><span id="cyber-send-lbl">Sélectionner un type</span>
+      </button>
+      <button class="btn-s" onclick="goTo('scr-home')" aria-label="Annuler et retourner à l'accueil">Annuler</button>
+      <p style="font-size:10px;color:#999;text-align:center;margin:8px 0 4px" aria-live="polite">Qualification guidée par un agent certifié ENCVR · dossier suivi, rappel automatique sous 48h</p>
+    </div>
+    <div class="numsec" style="padding-bottom:14px"><h3>Numéros et ressources utiles</h3>
+      <div class="numcard"><span class="numbadge" style="color:var(--g)" aria-hidden="true">221</span><div class="numinfo"><h4>CNRD-221</h4><p>Réception, qualification et orientation d'urgence</p></div><button class="ncall" style="background:var(--g)" onclick="goTo('scr-sos')" aria-label="Appeler le 221 pour une orientation d'urgence">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--pur);font-size:9px" aria-hidden="true">DSC</span><div class="numinfo"><h4>Division Spéciale Cybercriminalité</h4><p>Police nationale · signalementcyber.dgpn.sn</p></div></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--pur);font-size:9px" aria-hidden="true">ENCVR</span><div class="numinfo"><h4>École Nat. de Cybersécurité (ENCVR)</h4><p>Cyberattaques critiques · rattachée à la Présidence</p></div></div>
+      <div class="numcard"><span class="numbadge" style="color:#888" aria-hidden="true">116</span><div class="numinfo"><h4>Centre Ginddi — Enfance en danger</h4><p>116 · gratuit · contenu ou sollicitation visant un enfant</p></div><button class="ncall" style="background:#888" aria-label="Appeler le 116 — Enfance en danger, gratuit">Appel</button></div>
+    </div>
+  </div>
+  <nav class="bnav" aria-label="Navigation principale">
+    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span>Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span>Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span>Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span>Secours</span></button>
+  </nav>
+</div>
+
+<!-- CONFIRMATION CYBER -->
+<div class="screen" id="scr-cyber-ok" role="status" aria-live="polite">
+  <div class="sb"><span id="sb-clock-cyber-ok" aria-hidden="true"></span></div>
+  <div class="nsub">
+    <button onclick="goTo('scr-home')" aria-label="Retour à l'accueil"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
+    <h2>Dossier créé</h2>
+  </div>
+  <div style="overflow-y:auto;flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:28px 20px;gap:12px">
+    <div style="width:72px;height:72px;border-radius:50%;background:#EEF2FF;display:flex;align-items:center;justify-content:center;margin:0 auto" aria-hidden="true"><i class="ti ti-circle-check" style="font-size:40px;color:var(--pur)"></i></div>
+    <h3 style="font-size:17px;font-weight:700;color:#1a1a1a">Signalement qualifié et transmis</h3>
+    <p style="font-size:13px;color:#666;line-height:1.6">Votre dossier a été créé. Un rappel automatique sera effectué sous <strong>48 heures</strong> pour vérifier votre prise en charge.</p>
+    <div style="background:#f5f5f5;border-radius:10px;padding:13px;width:100%;text-align:left" role="list" aria-label="Détails du dossier">
+      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:6px;text-transform:uppercase">Numéro de dossier</p>
+      <p style="font-size:15px;font-weight:700;color:var(--pur);margin-bottom:10px" id="cy-dossier-num">CYBER-000000</p>
+      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:4px;text-transform:uppercase">Catégorie</p>
+      <p style="font-size:12px;color:#333;margin-bottom:10px" id="cy-dossier-cat">—</p>
+      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:4px;text-transform:uppercase">Service orienté</p>
+      <p style="font-size:12px;color:#333" id="cy-dossier-service">—</p>
+    </div>
+    <button class="btn-g" onclick="goTo('scr-home')" style="width:100%" aria-label="Retour à l'accueil de l'application 221">Retour à l'accueil</button>
+    <button class="btn-p" onclick="goTo('scr-sos')" style="width:100%;margin-top:0;background:var(--pur)" aria-label="Appeler le 221 — déclencher une alerte d'urgence">Appeler le 221</button>
   </div>
 </div>
 
@@ -3315,7 +3430,7 @@ let activeFilter='all', timerInt=null, ciInt=null, ciSecs=0;
 // ── HORLOGE TEMPS RÉEL ─────────────────────────────────────────────────────────
 const CLOCK_IDS = ['sb-clock','sb-clock-witness','sb-clock-checkin','sb-clock-map',
   'sb-clock-numeros','sb-clock-refus','sb-clock-refus-ok','sb-clock-vol',
-  'sb-clock-guide','sb-clock-sending'];
+  'sb-clock-guide','sb-clock-sending','sb-clock-cyber','sb-clock-cyber-ok'];
 
 function updateClock() {
   const now = new Date();
@@ -3772,6 +3887,56 @@ function submitRefus(){
     alert('Merci de renseigner l\'établissement et la nature de l\'urgence.'); return;
   }
   goTo('scr-refus-ok');
+}
+
+// ── CYBER-URGENCES ─────────────────────────────────────────────────────────────
+// Taxonomie et orientation conformes au dossier projet v10.6 (partenariat ENCVR)
+const CYBER_CATEGORIES = {
+  arnaques:        { label: 'Arnaques en ligne',                service: 'DSC Police / Gendarmerie' },
+  harcelement:      { label: 'Cyberharcèlement',                 service: 'DSC Police / ENCVR' },
+  violences:        { label: 'Cyberviolences (sextorsion)',      service: 'DSC Police / Parquet' },
+  usurpation:       { label: "Usurpation d'identité",            service: 'DSC Police / Gendarmerie' },
+  cyberattaque:     { label: 'Cyberattaque critique',            service: 'ENCVR / ADIE' },
+  escroquerie_tel:  { label: 'Escroquerie téléphonique',         service: 'DSC Police / Opérateurs télécom' },
+};
+let cyberCategory = null;
+let cyberUrgent = false;
+
+function selCyber(btn, key){
+  document.querySelectorAll('#scr-cyber .tbtn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  cyberCategory = key;
+  const info = CYBER_CATEGORIES[key];
+  const prev = document.getElementById('cy-service-preview');
+  prev.style.display = 'block';
+  prev.textContent = 'Orientation prévue : ' + info.service;
+  const s=document.getElementById('btn-cyber-send'), l=document.getElementById('cyber-send-lbl');
+  s.disabled=false; s.setAttribute('aria-disabled','false');
+  s.setAttribute('aria-label',`Envoyer le signalement cyber — ${info.label}, orientation vers ${info.service}`);
+  l.textContent = 'Envoyer le signalement';
+}
+
+function toggleCyberUrgent(btn){
+  cyberUrgent = !cyberUrgent;
+  btn.classList.toggle('sel', cyberUrgent);
+  btn.setAttribute('aria-pressed', cyberUrgent ? 'true' : 'false');
+}
+
+function submitCyber(){
+  if(!cyberCategory) return;
+  const info = CYBER_CATEGORIES[cyberCategory];
+  if(cyberUrgent){
+    // Cas urgent (sextorsion active, menace physique en ligne) → intervention en temps réel
+    document.getElementById('dispatch-lbl').textContent = info.label + ' (urgent) → ' + info.service;
+    goTo('scr-sending');
+    return;
+  }
+  // Cas standard → dossier documenté + suivi avec rappel automatique sous 48h
+  const num = 'CYBER-' + Math.floor(100000 + Math.random()*900000);
+  document.getElementById('cy-dossier-num').textContent = num;
+  document.getElementById('cy-dossier-cat').textContent = info.label;
+  document.getElementById('cy-dossier-service').textContent = info.service;
+  goTo('scr-cyber-ok');
 }
 
 // ── TRAJET SÉCURISÉ ────────────────────────────────────────────────────────────
