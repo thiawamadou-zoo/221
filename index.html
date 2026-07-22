@@ -147,6 +147,19 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
 #splash.hide{opacity:0;pointer-events:none}
 .sring{width:128px;height:128px;border-radius:50%;border:4px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;animation:spl 1.5s ease-in-out 3}
 @keyframes spl{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+/* AUDIO FAB */
+.audio-fab{position:fixed;left:50%;transform:translateX(calc(-215px + 16px));bottom:78px;width:56px;height:56px;border-radius:50%;background:var(--pur);border:none;box-shadow:0 4px 14px rgba(83,74,183,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:60;transition:transform .15s}
+.audio-fab:active{transform:translateX(calc(-215px + 16px)) scale(.92)}
+.audio-fab i{font-size:26px;color:#fff}
+.audio-fab-ring{position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(83,74,183,.35);animation:pulse2 2s infinite}
+@media (max-width:462px){.audio-fab{left:auto;right:16px;transform:none}.audio-fab:active{transform:scale(.92)}}
+.rec-dot{width:12px;height:12px;border-radius:50%;background:var(--r);animation:pulse2 1s infinite}
+.rec-wave{width:100%;height:56px;display:flex;align-items:center;justify-content:center;gap:4px;margin:14px 0}
+.rec-wave span{width:4px;border-radius:2px;background:var(--pur);animation:wavebar 1s ease-in-out infinite}
+@keyframes wavebar{0%,100%{height:8px}50%{height:36px}}
+.rec-timer{font-size:34px;font-weight:700;color:#1a1a1a;text-align:center;font-variant-numeric:tabular-nums}
+.rec-btn-row{display:flex;gap:8px;margin-top:6px}
+.rec-round{width:64px;height:64px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -762,2653 +775,282 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   </div>
 </div>
 
+<!-- MESSAGE VOCAL (nouveau — accessibilité pour les personnes ne sachant pas lire/écrire) -->
+<div class="screen" id="scr-audio" role="dialog" aria-modal="true" aria-labelledby="audio-title">
+  <div class="overlay">
+    <div class="modal">
+      <h3 id="audio-title">🎙️ Message vocal au 221</h3>
+      <p id="audio-desc">Parlez, on vous écoute. Aucune lecture ni écriture nécessaire.</p>
+
+      <div id="audio-step-record">
+        <div class="wbox"><i class="ti ti-info-circle" aria-hidden="true"></i><p id="audio-hint">Appuyez sur le micro et décrivez votre urgence : quoi, où, qui. Votre position GPS est jointe automatiquement.</p></div>
+        <div class="rec-wave" id="rec-wave" aria-hidden="true" style="display:none">
+          <span style="animation-delay:0s"></span><span style="animation-delay:.1s"></span><span style="animation-delay:.2s"></span>
+          <span style="animation-delay:.3s"></span><span style="animation-delay:.4s"></span><span style="animation-delay:.3s"></span>
+          <span style="animation-delay:.2s"></span><span style="animation-delay:.1s"></span><span style="animation-delay:0s"></span>
+        </div>
+        <div class="rec-timer" id="audio-timer" aria-live="polite">00:00</div>
+        <div style="display:flex;justify-content:center;margin:10px 0 6px">
+          <button id="btn-audio-rec" class="rec-round" style="background:var(--r)" onclick="toggleAudioRecording()"
+            aria-label="Appuyez pour commencer l'enregistrement de votre message vocal d'urgence">
+            <i class="ti ti-microphone" style="font-size:28px;color:#fff" aria-hidden="true"></i>
+          </button>
+        </div>
+        <p id="audio-status" style="font-size:11px;color:#888;text-align:center" aria-live="polite">Appuyez pour enregistrer</p>
+      </div>
+
+      <div id="audio-step-review" style="display:none">
+        <div class="ibox" role="note"><p id="audio-review-txt">Message enregistré. Écoutez-le avant de l'envoyer, ou recommencez.</p></div>
+        <audio id="audio-playback" controls style="width:100%;margin-bottom:12px" aria-label="Écouter votre message vocal enregistré"></audio>
+        <button class="btn-p" id="btn-audio-send" onclick="sendAudioMessage()" style="background:var(--pur)"
+          aria-label="Envoyer ce message vocal au CNRD-221">
+          <i class="ti ti-send" aria-hidden="true"></i> Envoyer au 221
+        </button>
+        <button class="btn-b" onclick="resetAudioRecording()" aria-label="Recommencer l'enregistrement">
+          <i class="ti ti-repeat" aria-hidden="true"></i> Recommencer
+        </button>
+      </div>
+
+      <button class="btn-s" onclick="closeAudioModal()" aria-label="Annuler et retourner à l'écran précédent">Annuler</button>
+    </div>
+  </div>
+</div>
+
 </div><!-- /phone -->
+
+<!-- BOUTON FLOTTANT MESSAGE VOCAL — accessible sans lecture/écriture, visible sur tous les écrans -->
+<button class="audio-fab" id="audio-fab" onclick="openAudioModal()" style="display:none"
+  aria-label="Envoyer un message vocal d'urgence au 221 — pas besoin d'écrire, parlez simplement">
+  <span class="audio-fab-ring" aria-hidden="true"></span>
+  <i class="ti ti-microphone" aria-hidden="true"></i>
+</button>
 
 <script>
 // ── DONNÉES ────────────────────────────────────────────────────────────────────
 const PDF_PINS = [
-  {
-    "id": "pdf1",
-    "cat": "pharmacie",
-    "lat": 14.71064,
-    "lng": -17.47065,
-    "name": "PHARMACIE DE L'EMMANUEL",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf2",
-    "cat": "pharmacie",
-    "lat": 14.68205,
-    "lng": -17.44946,
-    "name": "PHARMACIE DU BOULEVARD",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf3",
-    "cat": "pharmacie",
-    "lat": 14.75702,
-    "lng": -17.39234,
-    "name": "PHARMACIE PRINCIPALE PIKINE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf4",
-    "cat": "pharmacie",
-    "lat": 14.77015,
-    "lng": -17.44478,
-    "name": "PHARMACIE DABAKH MALICK GUEDIAWAYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf5",
-    "cat": "pharmacie",
-    "lat": 14.69233,
-    "lng": -17.44952,
-    "name": "PHARMACIE NDOSS",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf6",
-    "cat": "pharmacie",
-    "lat": 14.69111,
-    "lng": -17.44667,
-    "name": "PHARMACIE LAT DIOR",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf7",
-    "cat": "pharmacie",
-    "lat": 14.66516,
-    "lng": -17.43611,
-    "name": "PHARMACIE GAMBETTA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf8",
-    "cat": "pharmacie",
-    "lat": 14.6937,
-    "lng": -17.44643,
-    "name": "PHARMACIE NGOR OASIS",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf9",
-    "cat": "pharmacie",
-    "lat": 14.68172,
-    "lng": -17.44726,
-    "name": "PHARMACIE FATIM ZAHRA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf10",
-    "cat": "pharmacie",
-    "lat": 14.75526,
-    "lng": -17.40076,
-    "name": "PHARMACIE SOTIBA PIKINE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf11",
-    "cat": "pharmacie",
-    "lat": 14.77523,
-    "lng": -17.36221,
-    "name": "PHARMACIE DES TRANSMISSIONS",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf12",
-    "cat": "pharmacie",
-    "lat": 14.71244,
-    "lng": -17.45877,
-    "name": "PHARMACIE DIARAF MBOR NDOYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf13",
-    "cat": "pharmacie",
-    "lat": 14.73394,
-    "lng": -17.49108,
-    "name": "PHARMACIE KEUR DAMEL",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf14",
-    "cat": "pharmacie",
-    "lat": 14.72876,
-    "lng": -17.43362,
-    "name": "PHARMACIE MABOUSSO THIAM",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf15",
-    "cat": "pharmacie",
-    "lat": 14.69488,
-    "lng": -17.44608,
-    "name": "PHARMACIE AHMET BATHILY",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf16",
-    "cat": "pharmacie",
-    "lat": 14.69964,
-    "lng": -17.45092,
-    "name": "PHARMACIE BIRAGO DIOP",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf17",
-    "cat": "pharmacie",
-    "lat": 14.74582,
-    "lng": -17.44946,
-    "name": "PHARMACIE BARAKA PARCELLES",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf18",
-    "cat": "pharmacie",
-    "lat": 14.71267,
-    "lng": -17.45639,
-    "name": "PHARMACIE TERMINUS LIBERTE 5",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf19",
-    "cat": "pharmacie",
-    "lat": 14.71538,
-    "lng": -17.45599,
-    "name": "PHARMACIE NASSOU KEITA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf20",
-    "cat": "pharmacie",
-    "lat": 14.75777,
-    "lng": -17.39294,
-    "name": "PHARMACIE KHADIJA BA PIKINE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf21",
-    "cat": "pharmacie",
-    "lat": 14.77463,
-    "lng": -17.36613,
-    "name": "PHARMACIE BIRANE LY KEUR MASSAR",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf22",
-    "cat": "pharmacie",
-    "lat": 14.69117,
-    "lng": -17.44796,
-    "name": "PHARMACIE SONATEL1",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf23",
-    "cat": "pharmacie",
-    "lat": 14.73218,
-    "lng": -17.32768,
-    "name": "PHARMACIE ALHAMDOULILAH MBAO",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf24",
-    "cat": "pharmacie",
-    "lat": 14.68101,
-    "lng": -17.44913,
-    "name": "PHARMACIE MEDINA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf25",
-    "cat": "pharmacie",
-    "lat": 14.71641,
-    "lng": -17.47201,
-    "name": "PHARMACIE DAYA SICAP",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf26",
-    "cat": "pharmacie",
-    "lat": 14.69202,
-    "lng": -17.44844,
-    "name": "PHARMACIE REPUBLIQUE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf27",
-    "cat": "pharmacie",
-    "lat": 14.6914,
-    "lng": -17.44408,
-    "name": "LA GRANDE PHARMACIE DAKAROISE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf28",
-    "cat": "pharmacie",
-    "lat": 14.73979,
-    "lng": -17.45165,
-    "name": "PHARMACIE MOUNA GRAND YOFF",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf29",
-    "cat": "pharmacie",
-    "lat": 14.71363,
-    "lng": -17.46983,
-    "name": "PHARMACIE NOUVELLE SICAP",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf30",
-    "cat": "pharmacie",
-    "lat": 14.73358,
-    "lng": -17.50192,
-    "name": "PHARMACIE SALSY",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf31",
-    "cat": "pharmacie",
-    "lat": 14.69574,
-    "lng": -17.44586,
-    "name": "PHARMACIE DE L'AEROPORT",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf32",
-    "cat": "pharmacie",
-    "lat": 14.73594,
-    "lng": -17.50009,
-    "name": "PHARMACIE SABARA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf33",
-    "cat": "pharmacie",
-    "lat": 14.67006,
-    "lng": -17.43264,
-    "name": "PHARMACIE GUIGON",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf34",
-    "cat": "pharmacie",
-    "lat": 14.69117,
-    "lng": -17.44951,
-    "name": "PHARMACIE MAMADOU RACINE SY",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf35",
-    "cat": "pharmacie",
-    "lat": 14.74779,
-    "lng": -17.52259,
-    "name": "PHARMACIE DES ALMADIES NGOR",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf36",
-    "cat": "pharmacie",
-    "lat": 14.77167,
-    "lng": -17.36074,
-    "name": "PHARMACIE ADJA KHOUDIA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf37",
-    "cat": "pharmacie",
-    "lat": 14.74786,
-    "lng": -17.33231,
-    "name": "PHARMACIE EL HADJ MEDOUNE SEYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf38",
-    "cat": "pharmacie",
-    "lat": 14.69373,
-    "lng": -17.44733,
-    "name": "PHARMACIE RAHMANE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf39",
-    "cat": "pharmacie",
-    "lat": 14.69529,
-    "lng": -17.44695,
-    "name": "PHARMACIE KERMEL",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf40",
-    "cat": "pharmacie",
-    "lat": 14.76309,
-    "lng": -17.44492,
-    "name": "PHARMACIE DU LYS",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf41",
-    "cat": "pharmacie",
-    "lat": 14.72377,
-    "lng": -17.48372,
-    "name": "PHARMACIE OCEAN MERMOZ",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf42",
-    "cat": "pharmacie",
-    "lat": 14.73611,
-    "lng": -17.49881,
-    "name": "PHARMACIE XANDAR",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf43",
-    "cat": "pharmacie",
-    "lat": 14.6922,
-    "lng": -17.44838,
-    "name": "PHARMACIE HANN PECHEURS",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf44",
-    "cat": "pharmacie",
-    "lat": 14.69579,
-    "lng": -17.44664,
-    "name": "PHARMACIE AVICENNE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf45",
-    "cat": "pharmacie",
-    "lat": 14.66555,
-    "lng": -17.43702,
-    "name": "PHARMACIE DRUGSTORE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf46",
-    "cat": "pharmacie",
-    "lat": 14.71886,
-    "lng": -17.18704,
-    "name": "PHARMACIE GALLAS DIAMNIADIO",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf47",
-    "cat": "pharmacie",
-    "lat": 14.74735,
-    "lng": -17.33167,
-    "name": "PHARMACIE TAWFEEX THIAROYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf48",
-    "cat": "pharmacie",
-    "lat": 14.69968,
-    "lng": -17.46191,
-    "name": "PHARMACIE SALAM DIEUPPEUL",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf49",
-    "cat": "pharmacie",
-    "lat": 14.77078,
-    "lng": -17.44213,
-    "name": "PHARMACIE NDINGALA GUEDIAWAYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf50",
-    "cat": "pharmacie",
-    "lat": 14.74733,
-    "lng": -17.31794,
-    "name": "PHARMACIE OUMY NDIAYE MBAO",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf51",
-    "cat": "pharmacie",
-    "lat": 14.68987,
-    "lng": -17.44538,
-    "name": "PHARMACIE DERKLE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf52",
-    "cat": "pharmacie",
-    "lat": 14.69389,
-    "lng": -17.44648,
-    "name": "PHARMACIE BOURGUIBA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf53",
-    "cat": "pharmacie",
-    "lat": 14.7309,
-    "lng": -17.49695,
-    "name": "PHARMACIE MAME MAODO MALICK",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf54",
-    "cat": "pharmacie",
-    "lat": 14.70747,
-    "lng": -17.46819,
-    "name": "PHARMACIE INCHALLA GRAND DAKAR",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf55",
-    "cat": "pharmacie",
-    "lat": 14.71312,
-    "lng": -17.45398,
-    "name": "PHARMACIE CHEIKHOUL KHADIM",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf56",
-    "cat": "pharmacie",
-    "lat": 14.71566,
-    "lng": -17.45812,
-    "name": "PHARMACIE CAMP LECLERC",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf57",
-    "cat": "pharmacie",
-    "lat": 14.6928,
-    "lng": -17.44863,
-    "name": "PHARMACIE ELHADJI IBRAHIMA NIASS",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf58",
-    "cat": "pharmacie",
-    "lat": 14.69528,
-    "lng": -17.44448,
-    "name": "PHARMACIE DAROU SALAM YOFF",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf59",
-    "cat": "pharmacie",
-    "lat": 14.66679,
-    "lng": -17.43347,
-    "name": "PHARMACIE GALLIENI",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf60",
-    "cat": "pharmacie",
-    "lat": 14.75405,
-    "lng": -17.39988,
-    "name": "PHARMACIE MAME ARAME PIKINE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf61",
-    "cat": "pharmacie",
-    "lat": 14.69438,
-    "lng": -17.44646,
-    "name": "PHARMACIE ELHADJI MALICK",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf62",
-    "cat": "pharmacie",
-    "lat": 14.74727,
-    "lng": -17.33102,
-    "name": "PHARMACIE THIAROYE SUR MER",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf63",
-    "cat": "pharmacie",
-    "lat": 14.7426,
-    "lng": -17.45336,
-    "name": "PHARMACIE ELIMANE ALI DRAMANE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf64",
-    "cat": "pharmacie",
-    "lat": 14.74162,
-    "lng": -17.31753,
-    "name": "PHARMACIE PETIT MBAO",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf65",
-    "cat": "pharmacie",
-    "lat": 14.76007,
-    "lng": -17.39361,
-    "name": "PHARMACIE BOUBESS PIKINE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf66",
-    "cat": "pharmacie",
-    "lat": 14.69165,
-    "lng": -17.44935,
-    "name": "PHARMACIE CONSEIL SUD FOIRE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf67",
-    "cat": "pharmacie",
-    "lat": 14.74117,
-    "lng": -17.44962,
-    "name": "PHARMACIE FATOU IDEU SY",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf68",
-    "cat": "pharmacie",
-    "lat": 14.71531,
-    "lng": -17.42348,
-    "name": "PHARMACIE HANN MARISTE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf69",
-    "cat": "pharmacie",
-    "lat": 14.76522,
-    "lng": -17.44074,
-    "name": "PHARMACIE GUEDIAWAYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf70",
-    "cat": "pharmacie",
-    "lat": 14.7228,
-    "lng": -17.19003,
-    "name": "PHARMACIE KHALY DJIBRIL DIAGNE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf71",
-    "cat": "pharmacie",
-    "lat": 14.75995,
-    "lng": -17.3909,
-    "name": "PHARMACIE SERIGNE FALLOU MBACKE PIKINE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf72",
-    "cat": "pharmacie",
-    "lat": 14.76749,
-    "lng": -17.43447,
-    "name": "PHARMACIE YEUMBEUL",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf73",
-    "cat": "pharmacie",
-    "lat": 14.69234,
-    "lng": -17.44843,
-    "name": "PHARMACIE KADER DIOP",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf74",
-    "cat": "pharmacie",
-    "lat": 14.74584,
-    "lng": -17.45092,
-    "name": "PHARMACIE MARIAMA PARCELLES",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf75",
-    "cat": "pharmacie",
-    "lat": 14.71601,
-    "lng": -17.42453,
-    "name": "PHARMACIE ZAHRA MARISTES",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf76",
-    "cat": "pharmacie",
-    "lat": 14.69077,
-    "lng": -17.4425,
-    "name": "PHARMACIE MBOTTI POM",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf77",
-    "cat": "pharmacie",
-    "lat": 14.77303,
-    "lng": -17.36329,
-    "name": "PHARMACIE MALIKA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf78",
-    "cat": "pharmacie",
-    "lat": 14.74333,
-    "lng": -17.45395,
-    "name": "PHARMACIE BAYE NIASSE RUFISQUE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf79",
-    "cat": "pharmacie",
-    "lat": 14.73793,
-    "lng": -17.44837,
-    "name": "PHARMACIE MAME DIARRA BOUSSO SOPRIM",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf80",
-    "cat": "pharmacie",
-    "lat": 14.69118,
-    "lng": -17.44838,
-    "name": "PHARMACIE CONTINENTALE KAS",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf81",
-    "cat": "pharmacie",
-    "lat": 14.71303,
-    "lng": -17.26811,
-    "name": "PHARMACIE CAPA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf82",
-    "cat": "pharmacie",
-    "lat": 14.69117,
-    "lng": -17.44427,
-    "name": "PHARMACIE LEOPOLD SEDAR SENGHOR",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf83",
-    "cat": "pharmacie",
-    "lat": 14.74776,
-    "lng": -17.33377,
-    "name": "PHARMACIE AZUR THIAROYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf84",
-    "cat": "pharmacie",
-    "lat": 14.73733,
-    "lng": -17.45129,
-    "name": "PHARMACIE DE LA SCAT URBAN",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf85",
-    "cat": "pharmacie",
-    "lat": 14.69109,
-    "lng": -17.44891,
-    "name": "PHARMACIE DIAM ATHIE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf86",
-    "cat": "pharmacie",
-    "lat": 14.77041,
-    "lng": -17.44187,
-    "name": "PHARMACIE GOLF NORD GUEDIAWAYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf87",
-    "cat": "pharmacie",
-    "lat": 14.76764,
-    "lng": -17.44059,
-    "name": "PHARMACIE NIMZATT GUEDIAWAYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf88",
-    "cat": "pharmacie",
-    "lat": 14.69464,
-    "lng": -17.44856,
-    "name": "PHARMACIE AIME CESAIRE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf89",
-    "cat": "pharmacie",
-    "lat": 14.68988,
-    "lng": -17.44931,
-    "name": "PHARMACIE COLOBANE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf90",
-    "cat": "pharmacie",
-    "lat": 14.74514,
-    "lng": -17.4525,
-    "name": "PHARMACIE BARHAM NIASS",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf91",
-    "cat": "pharmacie",
-    "lat": 14.76917,
-    "lng": -17.44126,
-    "name": "PHARMACIE NGUYEN DALAL JAM",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf92",
-    "cat": "pharmacie",
-    "lat": 14.6957,
-    "lng": -17.44911,
-    "name": "PHARMACIE CHEIKH ISSA AW",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf93",
-    "cat": "pharmacie",
-    "lat": 14.69222,
-    "lng": -17.44766,
-    "name": "PHARMACIE ANNA KADET",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf94",
-    "cat": "pharmacie",
-    "lat": 14.67017,
-    "lng": -17.43581,
-    "name": "PHARMACIE LE FIGUIER",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf95",
-    "cat": "pharmacie",
-    "lat": 14.66614,
-    "lng": -17.43461,
-    "name": "PHARMACIE KAWSARA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf96",
-    "cat": "pharmacie",
-    "lat": 14.66753,
-    "lng": -17.43563,
-    "name": "PHARMACIE SOPE NABY",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf97",
-    "cat": "pharmacie",
-    "lat": 14.6913,
-    "lng": -17.44416,
-    "name": "PHARMACIE MARIAMA DIANE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf98",
-    "cat": "pharmacie",
-    "lat": 14.69246,
-    "lng": -17.44453,
-    "name": "PHARMACIE GEOLAND",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf99",
-    "cat": "pharmacie",
-    "lat": 14.6683,
-    "lng": -17.437,
-    "name": "PHARMACIE DU GUET",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf100",
-    "cat": "pharmacie",
-    "lat": 14.7564,
-    "lng": -17.39578,
-    "name": "PHARMACIE ALIMATOU SADYA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf101",
-    "cat": "pharmacie",
-    "lat": 14.77061,
-    "lng": -17.43974,
-    "name": "PHARMACIE CHEIKH AHMED TIDIANE SY GOLF",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf102",
-    "cat": "pharmacie",
-    "lat": 14.74769,
-    "lng": -17.4543,
-    "name": "PHARMACIE DU STADE LSS",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf103",
-    "cat": "pharmacie",
-    "lat": 14.73221,
-    "lng": -17.49952,
-    "name": "PHARMACIE DE LA RENAISSANCE OUAKAM",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf104",
-    "cat": "pharmacie",
-    "lat": 14.75281,
-    "lng": -17.40045,
-    "name": "PHARMACIE KHALIFA ABABACAR SY PIKINE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf105",
-    "cat": "pharmacie",
-    "lat": 14.69207,
-    "lng": -17.44379,
-    "name": "PHARMACIE DE L'ETRIER",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf106",
-    "cat": "pharmacie",
-    "lat": 14.73419,
-    "lng": -17.3128,
-    "name": "PHARMACIE RABY ASSETTE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf107",
-    "cat": "pharmacie",
-    "lat": 14.69253,
-    "lng": -17.44716,
-    "name": "PHARMACIE ABDOUL BIRANE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf108",
-    "cat": "pharmacie",
-    "lat": 14.69554,
-    "lng": -17.44373,
-    "name": "PHARMACIE SOKHNA FATIMA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf109",
-    "cat": "pharmacie",
-    "lat": 14.74923,
-    "lng": -17.39649,
-    "name": "PHARMACIE EL AMIN DALIFORD",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf110",
-    "cat": "pharmacie",
-    "lat": 14.69073,
-    "lng": -17.44792,
-    "name": "PHARMACIE BLAISE DIAGNE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf111",
-    "cat": "pharmacie",
-    "lat": 14.77061,
-    "lng": -17.44182,
-    "name": "PHARMACIE MAYE GOLF SUD",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf112",
-    "cat": "pharmacie",
-    "lat": 14.76805,
-    "lng": -17.44081,
-    "name": "PHARMACIE PAI LAS PALMAS",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf113",
-    "cat": "pharmacie",
-    "lat": 14.69014,
-    "lng": -17.44619,
-    "name": "PHARMACIE SERIGNE SOUHAIBOU",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf114",
-    "cat": "pharmacie",
-    "lat": 14.69282,
-    "lng": -17.44458,
-    "name": "PHARMACIE MOUNTAKHA MBACKE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf115",
-    "cat": "pharmacie",
-    "lat": 14.72134,
-    "lng": -17.47954,
-    "name": "PHARMACIE MERMOZ",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf116",
-    "cat": "pharmacie",
-    "lat": 14.69028,
-    "lng": -17.44859,
-    "name": "PHARMACIE CHEIKH AHMADOU BAMBA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf117",
-    "cat": "pharmacie",
-    "lat": 14.76837,
-    "lng": -17.44125,
-    "name": "PHARMACIE GOUNASS GUEDIAWAYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf118",
-    "cat": "pharmacie",
-    "lat": 14.77181,
-    "lng": -17.36568,
-    "name": "PHARMACIE MAME OUMOU MADICKE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf119",
-    "cat": "pharmacie",
-    "lat": 14.72014,
-    "lng": -17.42492,
-    "name": "PHARMACIE ALLIANCE MARISTES",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf120",
-    "cat": "pharmacie",
-    "lat": 14.75397,
-    "lng": -17.39708,
-    "name": "PHARMACIE RASSOULILLAHI PIKINE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf121",
-    "cat": "pharmacie",
-    "lat": 14.76732,
-    "lng": -17.4418,
-    "name": "PHARMACIE NASSIHA GUEDIAWAYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf122",
-    "cat": "pharmacie",
-    "lat": 14.77354,
-    "lng": -17.36079,
-    "name": "PHARMACIE MINGUE KEUR MASSAR",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf123",
-    "cat": "pharmacie",
-    "lat": 14.71833,
-    "lng": -17.4821,
-    "name": "PHARMACIE LE PARCOURS",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf124",
-    "cat": "pharmacie",
-    "lat": 14.76623,
-    "lng": -17.44293,
-    "name": "PHARMACIE OUMAR SYLLA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf125",
-    "cat": "pharmacie",
-    "lat": 14.69383,
-    "lng": -17.4479,
-    "name": "PHARMACIE EL HADJ MAMADOU SEYDOU BA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf126",
-    "cat": "pharmacie",
-    "lat": 14.7478,
-    "lng": -17.39629,
-    "name": "PHARMACIE NEFERTITI DALIFORD",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf127",
-    "cat": "pharmacie",
-    "lat": 14.73634,
-    "lng": -17.44915,
-    "name": "PHARMACIE SERIGNE BABACAR SY SOPRIM",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf128",
-    "cat": "pharmacie",
-    "lat": 14.73529,
-    "lng": -17.49482,
-    "name": "PHARMACIE MAME ABY THIAW OUAKAM",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf129",
-    "cat": "pharmacie",
-    "lat": 14.75754,
-    "lng": -17.39292,
-    "name": "PHARMACIE ALKARIMOU PIKINE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf130",
-    "cat": "pharmacie",
-    "lat": 14.72199,
-    "lng": -17.4797,
-    "name": "PHARMACIE STELLA MERMOZ",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf131",
-    "cat": "pharmacie",
-    "lat": 14.71789,
-    "lng": -17.26662,
-    "name": "PHARMACIE ACORE RUFISQUE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf132",
-    "cat": "pharmacie",
-    "lat": 14.71812,
-    "lng": -17.47655,
-    "name": "PHARMACIE SIDY BOUYA VDN",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf133",
-    "cat": "pharmacie",
-    "lat": 14.6948,
-    "lng": -17.44548,
-    "name": "PHARMACIE MOUHAMADOUL AMIN HANN",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf134",
-    "cat": "pharmacie",
-    "lat": 14.71407,
-    "lng": -17.45378,
-    "name": "PHARMACIE ADJI MAGUETTE LIBERTE 6",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf135",
-    "cat": "pharmacie",
-    "lat": 14.72102,
-    "lng": -17.48635,
-    "name": "PHARMACIE SEDAMI AMITIE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf136",
-    "cat": "pharmacie",
-    "lat": 14.7697,
-    "lng": -17.4435,
-    "name": "PHARMACIE FOUTA TORO GUEDIAWAYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf137",
-    "cat": "pharmacie",
-    "lat": 14.75658,
-    "lng": -17.39077,
-    "name": "PHARMACIE MARCHE ZING PIKINE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf138",
-    "cat": "pharmacie",
-    "lat": 14.71671,
-    "lng": -17.47681,
-    "name": "PHARMACIE VDN",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf139",
-    "cat": "pharmacie",
-    "lat": 14.76544,
-    "lng": -17.44198,
-    "name": "PHARMACIE SOLEIL LEVANT HAMO",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf140",
-    "cat": "pharmacie",
-    "lat": 14.69143,
-    "lng": -17.44607,
-    "name": "PHARMACIE DJADJI ABDOU DIODIO",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf141",
-    "cat": "pharmacie",
-    "lat": 14.71471,
-    "lng": -17.45848,
-    "name": "PHARMACIE DE LA PAIX LIBERTE 6",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf142",
-    "cat": "pharmacie",
-    "lat": 14.74641,
-    "lng": -17.45372,
-    "name": "PHARMACIE POPULAIRE PARCELLES",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf143",
-    "cat": "pharmacie",
-    "lat": 14.74113,
-    "lng": -17.32537,
-    "name": "PHARMACIE THIANT MACIRE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf144",
-    "cat": "pharmacie",
-    "lat": 14.73768,
-    "lng": -17.50365,
-    "name": "PHARMACIE MOTA OUEST FOIRE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf145",
-    "cat": "pharmacie",
-    "lat": 14.74514,
-    "lng": -17.45364,
-    "name": "PHARMACIE DIAL DIOP MALIKA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf146",
-    "cat": "pharmacie",
-    "lat": 14.74262,
-    "lng": -17.45067,
-    "name": "PHARMACIE UNITE 3 PARCELLES",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf147",
-    "cat": "pharmacie",
-    "lat": 14.76862,
-    "lng": -17.44373,
-    "name": "PHARMACIE NOTAIRE GUEDIAWAYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf148",
-    "cat": "pharmacie",
-    "lat": 14.69425,
-    "lng": -17.44639,
-    "name": "PHARMACIE THIERNO AMADOU BARRO",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf149",
-    "cat": "pharmacie",
-    "lat": 14.76737,
-    "lng": -17.44524,
-    "name": "PHARMACIE SANT YALLA GOLF NORD",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf150",
-    "cat": "pharmacie",
-    "lat": 14.69025,
-    "lng": -17.4444,
-    "name": "PHARMACIE FANA VDN FOIRE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf151",
-    "cat": "pharmacie",
-    "lat": 14.75582,
-    "lng": -17.39753,
-    "name": "PHARMACIE TOUBA KANE ICOTAF",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf152",
-    "cat": "pharmacie",
-    "lat": 14.75321,
-    "lng": -17.4473,
-    "name": "PHARMACIE AHLOULAHI CAMBERENE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf153",
-    "cat": "pharmacie",
-    "lat": 14.69069,
-    "lng": -17.44894,
-    "name": "PHARMACIE BENETALLY",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf154",
-    "cat": "pharmacie",
-    "lat": 14.76665,
-    "lng": -17.43991,
-    "name": "PHARMACIE MOSSANE GUEDIAWAYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf155",
-    "cat": "pharmacie",
-    "lat": 14.69458,
-    "lng": -17.44454,
-    "name": "PHARMACIE BAGDAD KHAR YALLA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf156",
-    "cat": "pharmacie",
-    "lat": 14.73359,
-    "lng": -17.43294,
-    "name": "PHARMACIE FRONT DE TERRE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf157",
-    "cat": "pharmacie",
-    "lat": 14.6913,
-    "lng": -17.44908,
-    "name": "PHARMACIE DES MAMELLES",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf158",
-    "cat": "pharmacie",
-    "lat": 14.71508,
-    "lng": -17.4544,
-    "name": "PHARMACIE ANAROGIL VDN",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf159",
-    "cat": "pharmacie",
-    "lat": 14.69224,
-    "lng": -17.44598,
-    "name": "PHARMACIE MACHALA BOPP",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf160",
-    "cat": "pharmacie",
-    "lat": 14.73023,
-    "lng": -17.49522,
-    "name": "PHARMACIE SOKHENA BOUSSO OUAKAM",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf161",
-    "cat": "pharmacie",
-    "lat": 14.74109,
-    "lng": -17.44944,
-    "name": "PHARMACIE WORE FALL GRAND YOFF",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf162",
-    "cat": "pharmacie",
-    "lat": 14.74076,
-    "lng": -17.45001,
-    "name": "PHARMACIE PAPA MALICK SY GRAND YOFF",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf163",
-    "cat": "pharmacie",
-    "lat": 14.7313,
-    "lng": -17.31961,
-    "name": "PHARMACIE RAYHANA MBAO",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf164",
-    "cat": "pharmacie",
-    "lat": 14.74459,
-    "lng": -17.23192,
-    "name": "PHARMACIE ABDOU KARIM GUEYE RUFISQUE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf165",
-    "cat": "pharmacie",
-    "lat": 14.71071,
-    "lng": -17.45122,
-    "name": "PHARMACIE KALOUNAYE DIAMORALE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf166",
-    "cat": "pharmacie",
-    "lat": 14.74746,
-    "lng": -17.3326,
-    "name": "PHARMACIE JAAL FALL THIAROYE AZUR",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf167",
-    "cat": "pharmacie",
-    "lat": 14.73842,
-    "lng": -17.32795,
-    "name": "PHARMACIE FATY MBAYE MAR SICAP MBAO",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf168",
-    "cat": "pharmacie",
-    "lat": 14.74783,
-    "lng": -17.45015,
-    "name": "PHARMACIE ELHADJI OUMAR DIAW PARCELLES",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf169",
-    "cat": "pharmacie",
-    "lat": 14.71173,
-    "lng": -17.4548,
-    "name": "PHARMACIE MANATA LIBERTE 6",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf170",
-    "cat": "pharmacie",
-    "lat": 14.74536,
-    "lng": -17.33237,
-    "name": "PHARMACIE TALLY DIALLO PIKINE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf171",
-    "cat": "pharmacie",
-    "lat": 14.69457,
-    "lng": -17.44833,
-    "name": "PHARMACIE YOFFOISE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf172",
-    "cat": "pharmacie",
-    "lat": 14.71054,
-    "lng": -17.45854,
-    "name": "PHARMACIE LAHAD LIBERTE 6",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf173",
-    "cat": "pharmacie",
-    "lat": 14.66697,
-    "lng": -17.43211,
-    "name": "PHARMACIE SANDAGA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf174",
-    "cat": "pharmacie",
-    "lat": 14.7762,
-    "lng": -17.36473,
-    "name": "PHARMACIE SERIGNE MANSOUR SY YEUMBEUL",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf175",
-    "cat": "pharmacie",
-    "lat": 14.74645,
-    "lng": -17.3318,
-    "name": "PHARMACIE BINTOU RASSOUL THIAROYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf176",
-    "cat": "pharmacie",
-    "lat": 14.75629,
-    "lng": -17.39758,
-    "name": "PHARMACIE CHEICKH OUL KHALIFA PIKINE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf177",
-    "cat": "pharmacie",
-    "lat": 14.74824,
-    "lng": -17.45461,
-    "name": "PHARMACIE CHEIKH MBOW PARCELLES",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf178",
-    "cat": "pharmacie",
-    "lat": 14.74172,
-    "lng": -17.45423,
-    "name": "PHARMACIE AMINATA KANE GRAND YOFF",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf179",
-    "cat": "pharmacie",
-    "lat": 14.69558,
-    "lng": -17.44811,
-    "name": "PHARMACIE LES ALLEES",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf180",
-    "cat": "pharmacie",
-    "lat": 14.68105,
-    "lng": -17.44819,
-    "name": "PHARMACIE MAME FATOU DIOP YORO",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf181",
-    "cat": "pharmacie",
-    "lat": 14.71697,
-    "lng": -17.27002,
-    "name": "PHARMACIE DU STADE RUFISQUE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf182",
-    "cat": "pharmacie",
-    "lat": 14.71844,
-    "lng": -17.42333,
-    "name": "PHARMACIE HLM MARISTE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf183",
-    "cat": "pharmacie",
-    "lat": 14.73161,
-    "lng": -17.49734,
-    "name": "PHARMACIE CITE ASECNA OUAKAM",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf184",
-    "cat": "pharmacie",
-    "lat": 14.69133,
-    "lng": -17.44545,
-    "name": "PHARMACIE DJIDDAH KHAR YALLAH",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf185",
-    "cat": "pharmacie",
-    "lat": 14.74261,
-    "lng": -17.32865,
-    "name": "PHARMACIE AMINA THIAROYE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf186",
-    "cat": "pharmacie",
-    "lat": 14.73583,
-    "lng": -17.31318,
-    "name": "PHARMACIE GRAND MBAO",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf187",
-    "cat": "pharmacie",
-    "lat": 14.68815,
-    "lng": -17.44458,
-    "name": "PHARMACIE MAME SOUKEYNA MBAO",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf188",
-    "cat": "pharmacie",
-    "lat": 14.73589,
-    "lng": -17.32818,
-    "name": "PHARMACIE MEDINA FASS MBAO",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf189",
-    "cat": "pharmacie",
-    "lat": 14.77219,
-    "lng": -17.43882,
-    "name": "PHARMACIE CODIS SAM NOTAIRE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf190",
-    "cat": "pharmacie",
-    "lat": 14.68228,
-    "lng": -17.44571,
-    "name": "PHARMACIE CHIFAOUN MEDINA",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf191",
-    "cat": "pharmacie",
-    "lat": 14.71692,
-    "lng": -17.2701,
-    "name": "PHARMACIE FATOU DIAWARA RUFISQUE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf192",
-    "cat": "pharmacie",
-    "lat": 14.68226,
-    "lng": -17.44835,
-    "name": "PHARMACIE SERIGNE MBAYE SY MANSOUR",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf193",
-    "cat": "pharmacie",
-    "lat": 14.76831,
-    "lng": -17.43793,
-    "name": "PHARMACIE YAYE NDEYE DIAKHERE",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf194",
-    "cat": "pharmacie",
-    "lat": 14.76666,
-    "lng": -17.43718,
-    "name": "PHARMACIE SEGA NDAO YEUMBEUL",
-    "type": "Pharmacie",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#B8860B",
-    "emoji": "💊"
-  },
-  {
-    "id": "pdf195",
-    "cat": "sante",
-    "lat": 14.75154,
-    "lng": -17.52014,
-    "name": "CLINIQUE DES ALMADIES",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf196",
-    "cat": "sante",
-    "lat": 14.67042,
-    "lng": -17.43361,
-    "name": "CLINIQUE PASTEUR",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf197",
-    "cat": "sante",
-    "lat": 14.66681,
-    "lng": -17.43401,
-    "name": "CLINIQUE NAT",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf198",
-    "cat": "sante",
-    "lat": 14.665,
-    "lng": -17.43558,
-    "name": "CLINIQUE DES MADELEINES",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf199",
-    "cat": "sante",
-    "lat": 14.70848,
-    "lng": -17.45292,
-    "name": "CLINIQUE CROIX BLEUE",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf200",
-    "cat": "sante",
-    "lat": 14.74653,
-    "lng": -17.45251,
-    "name": "CLINIQUE MEDICAL MEDICUS GUEDIAWAYE",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf201",
-    "cat": "sante",
-    "lat": 14.76745,
-    "lng": -17.44402,
-    "name": "CLINIQUE SOKHNA KHOUDIA LO",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf202",
-    "cat": "sante",
-    "lat": 14.76764,
-    "lng": -17.43989,
-    "name": "CLINIQUE MAME ASTA GUEDIAWAYE",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf203",
-    "cat": "sante",
-    "lat": 14.76958,
-    "lng": -17.44428,
-    "name": "CENTRE MEDICAL BAMTARE GUEDIAWAYE",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf204",
-    "cat": "sante",
-    "lat": 14.68531,
-    "lng": -17.44331,
-    "name": "CENTRE DE SANTE YAYE SYLVIE",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf205",
-    "cat": "hopital",
-    "lat": 14.6931,
-    "lng": -17.44989,
-    "name": "HOPITAL DE LA SOLIDARITE ISLAMIQUE",
-    "type": "Hôpital",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#006633",
-    "emoji": "🏥"
-  },
-  {
-    "id": "pdf206",
-    "cat": "sante",
-    "lat": 14.75531,
-    "lng": -17.39629,
-    "name": "CENTRE DE SANTE TECHNOPOLE PIKINE",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf207",
-    "cat": "sante",
-    "lat": 14.69384,
-    "lng": -17.44835,
-    "name": "ASSISTANCE MEDICALE SENEGAL AMS",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf208",
-    "cat": "sante",
-    "lat": 14.68599,
-    "lng": -17.44625,
-    "name": "SOS SENEGAL MEDECIN",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf209",
-    "cat": "sante",
-    "lat": 14.72187,
-    "lng": -17.48245,
-    "name": "CENTRE MEDICAL CLEO MERMOZ",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf210",
-    "cat": "sante",
-    "lat": 14.7177,
-    "lng": -17.47376,
-    "name": "CLINIQUE CHEIKH EL HADJ OMAR",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf211",
-    "cat": "sante",
-    "lat": 14.72289,
-    "lng": -17.48592,
-    "name": "PLATEAU MEDICAL CITE KEUR GORGUI",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf212",
-    "cat": "sante",
-    "lat": 14.69047,
-    "lng": -17.44772,
-    "name": "CABINET MEDICAL AFRICAN MILLENIUM HEALTH",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf213",
-    "cat": "sante",
-    "lat": 14.72117,
-    "lng": -17.18934,
-    "name": "COMPLEXE MEDICAL DABAKH DIAMNIADIO",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf214",
-    "cat": "sante",
-    "lat": 14.76874,
-    "lng": -17.44527,
-    "name": "GPL ESPACE SANTE COMMUNAUTAIRE",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf215",
-    "cat": "sante",
-    "lat": 14.69431,
-    "lng": -17.44508,
-    "name": "LABORATOIRE DISCACCIATI",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf216",
-    "cat": "sante",
-    "lat": 14.66564,
-    "lng": -17.43475,
-    "name": "LABORATOIRE BALAB",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf217",
-    "cat": "sante",
-    "lat": 14.72146,
-    "lng": -17.47955,
-    "name": "SUNU LABO MERMOZ",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf218",
-    "cat": "sante",
-    "lat": 14.66811,
-    "lng": -17.437,
-    "name": "RADIOLOGUES ASSOCIES",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf219",
-    "cat": "sante",
-    "lat": 14.6913,
-    "lng": -17.44461,
-    "name": "CENTRE D'IMAGERIE SOUMBEDIOUNE",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  },
-  {
-    "id": "pdf220",
-    "cat": "sante",
-    "lat": 14.69254,
-    "lng": -17.44489,
-    "name": "INSTITUT PASTEUR DAKAR",
-    "type": "Centre de santé",
-    "num": "—",
-    "status": "Voir sur place",
-    "color": "#0F6E56",
-    "emoji": "🩺"
-  }
+{id:'pdf1',cat:'pharmacie',lat:14.71064,lng:-17.47065,name:"PHARMACIE DE L'EMMANUEL",type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf2',cat:'pharmacie',lat:14.68205,lng:-17.44946,name:'PHARMACIE DU BOULEVARD',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf3',cat:'pharmacie',lat:14.75702,lng:-17.39234,name:'PHARMACIE PRINCIPALE PIKINE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf4',cat:'pharmacie',lat:14.77015,lng:-17.44478,name:'PHARMACIE DABAKH MALICK GUEDIAWAYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf5',cat:'pharmacie',lat:14.69233,lng:-17.44952,name:'PHARMACIE NDOSS',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf6',cat:'pharmacie',lat:14.69111,lng:-17.44667,name:'PHARMACIE LAT DIOR',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf7',cat:'pharmacie',lat:14.66516,lng:-17.43611,name:'PHARMACIE GAMBETTA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf8',cat:'pharmacie',lat:14.6937,lng:-17.44643,name:'PHARMACIE NGOR OASIS',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf9',cat:'pharmacie',lat:14.68172,lng:-17.44726,name:'PHARMACIE FATIM ZAHRA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf10',cat:'pharmacie',lat:14.75526,lng:-17.40076,name:'PHARMACIE SOTIBA PIKINE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf11',cat:'pharmacie',lat:14.77523,lng:-17.36221,name:'PHARMACIE DES TRANSMISSIONS',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf12',cat:'pharmacie',lat:14.71244,lng:-17.45877,name:'PHARMACIE DIARAF MBOR NDOYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf13',cat:'pharmacie',lat:14.73394,lng:-17.49108,name:'PHARMACIE KEUR DAMEL',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf14',cat:'pharmacie',lat:14.72876,lng:-17.43362,name:'PHARMACIE MABOUSSO THIAM',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf15',cat:'pharmacie',lat:14.69488,lng:-17.44608,name:'PHARMACIE AHMET BATHILY',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf16',cat:'pharmacie',lat:14.69964,lng:-17.45092,name:'PHARMACIE BIRAGO DIOP',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf17',cat:'pharmacie',lat:14.74582,lng:-17.44946,name:'PHARMACIE BARAKA PARCELLES',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf18',cat:'pharmacie',lat:14.71267,lng:-17.45639,name:'PHARMACIE TERMINUS LIBERTE 5',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf19',cat:'pharmacie',lat:14.71538,lng:-17.45599,name:'PHARMACIE NASSOU KEITA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf20',cat:'pharmacie',lat:14.75777,lng:-17.39294,name:'PHARMACIE KHADIJA BA PIKINE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf21',cat:'pharmacie',lat:14.77463,lng:-17.36613,name:'PHARMACIE BIRANE LY KEUR MASSAR',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf22',cat:'pharmacie',lat:14.69117,lng:-17.44796,name:'PHARMACIE SONATEL1',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf23',cat:'pharmacie',lat:14.73218,lng:-17.32768,name:'PHARMACIE ALHAMDOULILAH MBAO',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf24',cat:'pharmacie',lat:14.68101,lng:-17.44913,name:'PHARMACIE MEDINA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf25',cat:'pharmacie',lat:14.71641,lng:-17.47201,name:'PHARMACIE DAYA SICAP',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf26',cat:'pharmacie',lat:14.69202,lng:-17.44844,name:'PHARMACIE REPUBLIQUE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf27',cat:'pharmacie',lat:14.6914,lng:-17.44408,name:'LA GRANDE PHARMACIE DAKAROISE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf28',cat:'pharmacie',lat:14.73979,lng:-17.45165,name:'PHARMACIE MOUNA GRAND YOFF',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf29',cat:'pharmacie',lat:14.71363,lng:-17.46983,name:'PHARMACIE NOUVELLE SICAP',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf30',cat:'pharmacie',lat:14.73358,lng:-17.50192,name:'PHARMACIE SALSY',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf31',cat:'pharmacie',lat:14.69574,lng:-17.44586,name:"PHARMACIE DE L'AEROPORT",type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf32',cat:'pharmacie',lat:14.73594,lng:-17.50009,name:'PHARMACIE SABARA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf33',cat:'pharmacie',lat:14.67006,lng:-17.43264,name:'PHARMACIE GUIGON',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf34',cat:'pharmacie',lat:14.69117,lng:-17.44951,name:'PHARMACIE MAMADOU RACINE SY',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf35',cat:'pharmacie',lat:14.74779,lng:-17.52259,name:'PHARMACIE DES ALMADIES NGOR',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf36',cat:'pharmacie',lat:14.77167,lng:-17.36074,name:'PHARMACIE ADJA KHOUDIA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf37',cat:'pharmacie',lat:14.74786,lng:-17.33231,name:'PHARMACIE EL HADJ MEDOUNE SEYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf38',cat:'pharmacie',lat:14.69373,lng:-17.44733,name:'PHARMACIE RAHMANE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf39',cat:'pharmacie',lat:14.69529,lng:-17.44695,name:'PHARMACIE KERMEL',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf40',cat:'pharmacie',lat:14.76309,lng:-17.44492,name:'PHARMACIE DU LYS',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf41',cat:'pharmacie',lat:14.72377,lng:-17.48372,name:'PHARMACIE OCEAN MERMOZ',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf42',cat:'pharmacie',lat:14.73611,lng:-17.49881,name:'PHARMACIE XANDAR',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf43',cat:'pharmacie',lat:14.6922,lng:-17.44838,name:'PHARMACIE HANN PECHEURS',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf44',cat:'pharmacie',lat:14.69579,lng:-17.44664,name:'PHARMACIE AVICENNE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf45',cat:'pharmacie',lat:14.66555,lng:-17.43702,name:'PHARMACIE DRUGSTORE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf46',cat:'pharmacie',lat:14.71886,lng:-17.18704,name:'PHARMACIE GALLAS DIAMNIADIO',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf47',cat:'pharmacie',lat:14.74735,lng:-17.33167,name:'PHARMACIE TAWFEEX THIAROYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf48',cat:'pharmacie',lat:14.69968,lng:-17.46191,name:'PHARMACIE SALAM DIEUPPEUL',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf49',cat:'pharmacie',lat:14.77078,lng:-17.44213,name:'PHARMACIE NDINGALA GUEDIAWAYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf50',cat:'pharmacie',lat:14.74733,lng:-17.31794,name:'PHARMACIE OUMY NDIAYE MBAO',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf51',cat:'pharmacie',lat:14.68987,lng:-17.44538,name:'PHARMACIE DERKLE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf52',cat:'pharmacie',lat:14.69389,lng:-17.44648,name:'PHARMACIE BOURGUIBA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf53',cat:'pharmacie',lat:14.7309,lng:-17.49695,name:'PHARMACIE MAME MAODO MALICK',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf54',cat:'pharmacie',lat:14.70747,lng:-17.46819,name:'PHARMACIE INCHALLA GRAND DAKAR',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf55',cat:'pharmacie',lat:14.71312,lng:-17.45398,name:'PHARMACIE CHEIKHOUL KHADIM',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf56',cat:'pharmacie',lat:14.71566,lng:-17.45812,name:'PHARMACIE CAMP LECLERC',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf57',cat:'pharmacie',lat:14.6928,lng:-17.44863,name:'PHARMACIE ELHADJI IBRAHIMA NIASS',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf58',cat:'pharmacie',lat:14.69528,lng:-17.44448,name:'PHARMACIE DAROU SALAM YOFF',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf59',cat:'pharmacie',lat:14.66679,lng:-17.43347,name:'PHARMACIE GALLIENI',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf60',cat:'pharmacie',lat:14.75405,lng:-17.39988,name:'PHARMACIE MAME ARAME PIKINE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf61',cat:'pharmacie',lat:14.69438,lng:-17.44646,name:'PHARMACIE ELHADJI MALICK',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf62',cat:'pharmacie',lat:14.74727,lng:-17.33102,name:'PHARMACIE THIAROYE SUR MER',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf63',cat:'pharmacie',lat:14.7426,lng:-17.45336,name:'PHARMACIE ELIMANE ALI DRAMANE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf64',cat:'pharmacie',lat:14.74162,lng:-17.31753,name:'PHARMACIE PETIT MBAO',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf65',cat:'pharmacie',lat:14.76007,lng:-17.39361,name:'PHARMACIE BOUBESS PIKINE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf66',cat:'pharmacie',lat:14.69165,lng:-17.44935,name:'PHARMACIE CONSEIL SUD FOIRE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf67',cat:'pharmacie',lat:14.74117,lng:-17.44962,name:'PHARMACIE FATOU IDEU SY',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf68',cat:'pharmacie',lat:14.71531,lng:-17.42348,name:'PHARMACIE HANN MARISTE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf69',cat:'pharmacie',lat:14.76522,lng:-17.44074,name:'PHARMACIE GUEDIAWAYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf70',cat:'pharmacie',lat:14.7228,lng:-17.19003,name:'PHARMACIE KHALY DJIBRIL DIAGNE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf71',cat:'pharmacie',lat:14.75995,lng:-17.3909,name:'PHARMACIE SERIGNE FALLOU MBACKE PIKINE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf72',cat:'pharmacie',lat:14.76749,lng:-17.43447,name:'PHARMACIE YEUMBEUL',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf73',cat:'pharmacie',lat:14.69234,lng:-17.44843,name:'PHARMACIE KADER DIOP',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf74',cat:'pharmacie',lat:14.74584,lng:-17.45092,name:'PHARMACIE MARIAMA PARCELLES',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf75',cat:'pharmacie',lat:14.71601,lng:-17.42453,name:'PHARMACIE ZAHRA MARISTES',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf76',cat:'pharmacie',lat:14.69077,lng:-17.4425,name:'PHARMACIE MBOTTI POM',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf77',cat:'pharmacie',lat:14.77303,lng:-17.36329,name:'PHARMACIE MALIKA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf78',cat:'pharmacie',lat:14.74333,lng:-17.45395,name:'PHARMACIE BAYE NIASSE RUFISQUE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf79',cat:'pharmacie',lat:14.73793,lng:-17.44837,name:'PHARMACIE MAME DIARRA BOUSSO SOPRIM',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf80',cat:'pharmacie',lat:14.69118,lng:-17.44838,name:'PHARMACIE CONTINENTALE KAS',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf81',cat:'pharmacie',lat:14.71303,lng:-17.26811,name:'PHARMACIE CAPA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf82',cat:'pharmacie',lat:14.69117,lng:-17.44427,name:'PHARMACIE LEOPOLD SEDAR SENGHOR',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf83',cat:'pharmacie',lat:14.74776,lng:-17.33377,name:'PHARMACIE AZUR THIAROYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf84',cat:'pharmacie',lat:14.73733,lng:-17.45129,name:'PHARMACIE DE LA SCAT URBAN',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf85',cat:'pharmacie',lat:14.69109,lng:-17.44891,name:'PHARMACIE DIAM ATHIE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf86',cat:'pharmacie',lat:14.77041,lng:-17.44187,name:'PHARMACIE GOLF NORD GUEDIAWAYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf87',cat:'pharmacie',lat:14.76764,lng:-17.44059,name:'PHARMACIE NIMZATT GUEDIAWAYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf88',cat:'pharmacie',lat:14.69464,lng:-17.44856,name:'PHARMACIE AIME CESAIRE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf89',cat:'pharmacie',lat:14.68988,lng:-17.44931,name:'PHARMACIE COLOBANE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf90',cat:'pharmacie',lat:14.74514,lng:-17.4525,name:'PHARMACIE BARHAM NIASS',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf91',cat:'pharmacie',lat:14.76917,lng:-17.44126,name:'PHARMACIE NGUYEN DALAL JAM',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf92',cat:'pharmacie',lat:14.6957,lng:-17.44911,name:'PHARMACIE CHEIKH ISSA AW',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf93',cat:'pharmacie',lat:14.69222,lng:-17.44766,name:'PHARMACIE ANNA KADET',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf94',cat:'pharmacie',lat:14.67017,lng:-17.43581,name:'PHARMACIE LE FIGUIER',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf95',cat:'pharmacie',lat:14.66614,lng:-17.43461,name:'PHARMACIE KAWSARA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf96',cat:'pharmacie',lat:14.66753,lng:-17.43563,name:'PHARMACIE SOPE NABY',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf97',cat:'pharmacie',lat:14.6913,lng:-17.44416,name:'PHARMACIE MARIAMA DIANE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf98',cat:'pharmacie',lat:14.69246,lng:-17.44453,name:'PHARMACIE GEOLAND',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf99',cat:'pharmacie',lat:14.6683,lng:-17.437,name:'PHARMACIE DU GUET',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf100',cat:'pharmacie',lat:14.7564,lng:-17.39578,name:'PHARMACIE ALIMATOU SADYA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf101',cat:'pharmacie',lat:14.77061,lng:-17.43974,name:'PHARMACIE CHEIKH AHMED TIDIANE SY GOLF',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf102',cat:'pharmacie',lat:14.74769,lng:-17.4543,name:'PHARMACIE DU STADE LSS',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf103',cat:'pharmacie',lat:14.73221,lng:-17.49952,name:'PHARMACIE DE LA RENAISSANCE OUAKAM',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf104',cat:'pharmacie',lat:14.75281,lng:-17.40045,name:'PHARMACIE KHALIFA ABABACAR SY PIKINE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf105',cat:'pharmacie',lat:14.69207,lng:-17.44379,name:"PHARMACIE DE L'ETRIER",type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf106',cat:'pharmacie',lat:14.73419,lng:-17.3128,name:'PHARMACIE RABY ASSETTE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf107',cat:'pharmacie',lat:14.69253,lng:-17.44716,name:'PHARMACIE ABDOUL BIRANE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf108',cat:'pharmacie',lat:14.69554,lng:-17.44373,name:'PHARMACIE SOKHNA FATIMA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf109',cat:'pharmacie',lat:14.74923,lng:-17.39649,name:'PHARMACIE EL AMIN DALIFORD',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf110',cat:'pharmacie',lat:14.69073,lng:-17.44792,name:'PHARMACIE BLAISE DIAGNE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf111',cat:'pharmacie',lat:14.77061,lng:-17.44182,name:'PHARMACIE MAYE GOLF SUD',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf112',cat:'pharmacie',lat:14.76805,lng:-17.44081,name:'PHARMACIE PAI LAS PALMAS',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf113',cat:'pharmacie',lat:14.69014,lng:-17.44619,name:'PHARMACIE SERIGNE SOUHAIBOU',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf114',cat:'pharmacie',lat:14.69282,lng:-17.44458,name:'PHARMACIE MOUNTAKHA MBACKE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf115',cat:'pharmacie',lat:14.72134,lng:-17.47954,name:'PHARMACIE MERMOZ',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf116',cat:'pharmacie',lat:14.69028,lng:-17.44859,name:'PHARMACIE CHEIKH AHMADOU BAMBA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf117',cat:'pharmacie',lat:14.76837,lng:-17.44125,name:'PHARMACIE GOUNASS GUEDIAWAYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf118',cat:'pharmacie',lat:14.77181,lng:-17.36568,name:'PHARMACIE MAME OUMOU MADICKE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf119',cat:'pharmacie',lat:14.72014,lng:-17.42492,name:'PHARMACIE ALLIANCE MARISTES',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf120',cat:'pharmacie',lat:14.75397,lng:-17.39708,name:'PHARMACIE RASSOULILLAHI PIKINE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf121',cat:'pharmacie',lat:14.76732,lng:-17.4418,name:'PHARMACIE NASSIHA GUEDIAWAYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf122',cat:'pharmacie',lat:14.77354,lng:-17.36079,name:'PHARMACIE MINGUE KEUR MASSAR',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf123',cat:'pharmacie',lat:14.71833,lng:-17.4821,name:'PHARMACIE LE PARCOURS',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf124',cat:'pharmacie',lat:14.76623,lng:-17.44293,name:'PHARMACIE OUMAR SYLLA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf125',cat:'pharmacie',lat:14.69383,lng:-17.4479,name:'PHARMACIE EL HADJ MAMADOU SEYDOU BA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf126',cat:'pharmacie',lat:14.7478,lng:-17.39629,name:'PHARMACIE NEFERTITI DALIFORD',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf127',cat:'pharmacie',lat:14.73634,lng:-17.44915,name:'PHARMACIE SERIGNE BABACAR SY SOPRIM',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf128',cat:'pharmacie',lat:14.73529,lng:-17.49482,name:'PHARMACIE MAME ABY THIAW OUAKAM',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf129',cat:'pharmacie',lat:14.75754,lng:-17.39292,name:'PHARMACIE ALKARIMOU PIKINE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf130',cat:'pharmacie',lat:14.72199,lng:-17.4797,name:'PHARMACIE STELLA MERMOZ',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf131',cat:'pharmacie',lat:14.71789,lng:-17.26662,name:'PHARMACIE ACORE RUFISQUE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf132',cat:'pharmacie',lat:14.71812,lng:-17.47655,name:'PHARMACIE SIDY BOUYA VDN',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf133',cat:'pharmacie',lat:14.6948,lng:-17.44548,name:'PHARMACIE MOUHAMADOUL AMIN HANN',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf134',cat:'pharmacie',lat:14.71407,lng:-17.45378,name:'PHARMACIE ADJI MAGUETTE LIBERTE 6',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf135',cat:'pharmacie',lat:14.72102,lng:-17.48635,name:'PHARMACIE SEDAMI AMITIE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf136',cat:'pharmacie',lat:14.7697,lng:-17.4435,name:'PHARMACIE FOUTA TORO GUEDIAWAYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf137',cat:'pharmacie',lat:14.75658,lng:-17.39077,name:'PHARMACIE MARCHE ZING PIKINE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf138',cat:'pharmacie',lat:14.71671,lng:-17.47681,name:'PHARMACIE VDN',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf139',cat:'pharmacie',lat:14.76544,lng:-17.44198,name:'PHARMACIE SOLEIL LEVANT HAMO',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf140',cat:'pharmacie',lat:14.69143,lng:-17.44607,name:'PHARMACIE DJADJI ABDOU DIODIO',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf141',cat:'pharmacie',lat:14.71471,lng:-17.45848,name:'PHARMACIE DE LA PAIX LIBERTE 6',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf142',cat:'pharmacie',lat:14.74641,lng:-17.45372,name:'PHARMACIE POPULAIRE PARCELLES',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf143',cat:'pharmacie',lat:14.74113,lng:-17.32537,name:'PHARMACIE THIANT MACIRE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf144',cat:'pharmacie',lat:14.73768,lng:-17.50365,name:'PHARMACIE MOTA OUEST FOIRE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf145',cat:'pharmacie',lat:14.74514,lng:-17.45364,name:'PHARMACIE DIAL DIOP MALIKA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf146',cat:'pharmacie',lat:14.74262,lng:-17.45067,name:'PHARMACIE UNITE 3 PARCELLES',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf147',cat:'pharmacie',lat:14.76862,lng:-17.44373,name:'PHARMACIE NOTAIRE GUEDIAWAYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf148',cat:'pharmacie',lat:14.69425,lng:-17.44639,name:'PHARMACIE THIERNO AMADOU BARRO',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf149',cat:'pharmacie',lat:14.76737,lng:-17.44524,name:'PHARMACIE SANT YALLA GOLF NORD',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf150',cat:'pharmacie',lat:14.69025,lng:-17.4444,name:'PHARMACIE FANA VDN FOIRE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf151',cat:'pharmacie',lat:14.75582,lng:-17.39753,name:'PHARMACIE TOUBA KANE ICOTAF',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf152',cat:'pharmacie',lat:14.75321,lng:-17.4473,name:'PHARMACIE AHLOULAHI CAMBERENE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf153',cat:'pharmacie',lat:14.69069,lng:-17.44894,name:'PHARMACIE BENETALLY',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf154',cat:'pharmacie',lat:14.76665,lng:-17.43991,name:'PHARMACIE MOSSANE GUEDIAWAYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf155',cat:'pharmacie',lat:14.69458,lng:-17.44454,name:'PHARMACIE BAGDAD KHAR YALLA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf156',cat:'pharmacie',lat:14.73359,lng:-17.43294,name:'PHARMACIE FRONT DE TERRE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf157',cat:'pharmacie',lat:14.6913,lng:-17.44908,name:'PHARMACIE DES MAMELLES',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf158',cat:'pharmacie',lat:14.71508,lng:-17.4544,name:'PHARMACIE ANAROGIL VDN',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf159',cat:'pharmacie',lat:14.69224,lng:-17.44598,name:'PHARMACIE MACHALA BOPP',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf160',cat:'pharmacie',lat:14.73023,lng:-17.49522,name:'PHARMACIE SOKHENA BOUSSO OUAKAM',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf161',cat:'pharmacie',lat:14.74109,lng:-17.44944,name:'PHARMACIE WORE FALL GRAND YOFF',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf162',cat:'pharmacie',lat:14.74076,lng:-17.45001,name:'PHARMACIE PAPA MALICK SY GRAND YOFF',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf163',cat:'pharmacie',lat:14.7313,lng:-17.31961,name:'PHARMACIE RAYHANA MBAO',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf164',cat:'pharmacie',lat:14.74459,lng:-17.23192,name:'PHARMACIE ABDOU KARIM GUEYE RUFISQUE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf165',cat:'pharmacie',lat:14.71071,lng:-17.45122,name:'PHARMACIE KALOUNAYE DIAMORALE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf166',cat:'pharmacie',lat:14.74746,lng:-17.3326,name:'PHARMACIE JAAL FALL THIAROYE AZUR',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf167',cat:'pharmacie',lat:14.73842,lng:-17.32795,name:'PHARMACIE FATY MBAYE MAR SICAP MBAO',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf168',cat:'pharmacie',lat:14.74783,lng:-17.45015,name:'PHARMACIE ELHADJI OUMAR DIAW PARCELLES',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf169',cat:'pharmacie',lat:14.71173,lng:-17.4548,name:'PHARMACIE MANATA LIBERTE 6',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf170',cat:'pharmacie',lat:14.74536,lng:-17.33237,name:'PHARMACIE TALLY DIALLO PIKINE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf171',cat:'pharmacie',lat:14.69457,lng:-17.44833,name:'PHARMACIE YOFFOISE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf172',cat:'pharmacie',lat:14.71054,lng:-17.45854,name:'PHARMACIE LAHAD LIBERTE 6',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf173',cat:'pharmacie',lat:14.66697,lng:-17.43211,name:'PHARMACIE SANDAGA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf174',cat:'pharmacie',lat:14.7762,lng:-17.36473,name:'PHARMACIE SERIGNE MANSOUR SY YEUMBEUL',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf175',cat:'pharmacie',lat:14.74645,lng:-17.3318,name:'PHARMACIE BINTOU RASSOUL THIAROYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf176',cat:'pharmacie',lat:14.75629,lng:-17.39758,name:'PHARMACIE CHEICKH OUL KHALIFA PIKINE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf177',cat:'pharmacie',lat:14.74824,lng:-17.45461,name:'PHARMACIE CHEIKH MBOW PARCELLES',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf178',cat:'pharmacie',lat:14.74172,lng:-17.45423,name:'PHARMACIE AMINATA KANE GRAND YOFF',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf179',cat:'pharmacie',lat:14.69558,lng:-17.44811,name:'PHARMACIE LES ALLEES',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf180',cat:'pharmacie',lat:14.68105,lng:-17.44819,name:'PHARMACIE MAME FATOU DIOP YORO',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf181',cat:'pharmacie',lat:14.71697,lng:-17.27002,name:'PHARMACIE DU STADE RUFISQUE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf182',cat:'pharmacie',lat:14.71844,lng:-17.42333,name:'PHARMACIE HLM MARISTE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf183',cat:'pharmacie',lat:14.73161,lng:-17.49734,name:'PHARMACIE CITE ASECNA OUAKAM',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf184',cat:'pharmacie',lat:14.69133,lng:-17.44545,name:'PHARMACIE DJIDDAH KHAR YALLAH',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf185',cat:'pharmacie',lat:14.74261,lng:-17.32865,name:'PHARMACIE AMINA THIAROYE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf186',cat:'pharmacie',lat:14.73583,lng:-17.31318,name:'PHARMACIE GRAND MBAO',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf187',cat:'pharmacie',lat:14.68815,lng:-17.44458,name:'PHARMACIE MAME SOUKEYNA MBAO',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf188',cat:'pharmacie',lat:14.73589,lng:-17.32818,name:'PHARMACIE MEDINA FASS MBAO',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf189',cat:'pharmacie',lat:14.77219,lng:-17.43882,name:'PHARMACIE CODIS SAM NOTAIRE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf190',cat:'pharmacie',lat:14.68228,lng:-17.44571,name:'PHARMACIE CHIFAOUN MEDINA',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf191',cat:'pharmacie',lat:14.71692,lng:-17.2701,name:'PHARMACIE FATOU DIAWARA RUFISQUE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf192',cat:'pharmacie',lat:14.68226,lng:-17.44835,name:'PHARMACIE SERIGNE MBAYE SY MANSOUR',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf193',cat:'pharmacie',lat:14.76831,lng:-17.43793,name:'PHARMACIE YAYE NDEYE DIAKHERE',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf194',cat:'pharmacie',lat:14.76666,lng:-17.43718,name:'PHARMACIE SEGA NDAO YEUMBEUL',type:'Pharmacie',num:'—',status:'Voir sur place',color:'#B8860B',emoji:'💊'},
+{id:'pdf195',cat:'sante',lat:14.75154,lng:-17.52014,name:'CLINIQUE DES ALMADIES',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf196',cat:'sante',lat:14.67042,lng:-17.43361,name:'CLINIQUE PASTEUR',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf197',cat:'sante',lat:14.66681,lng:-17.43401,name:'CLINIQUE NAT',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf198',cat:'sante',lat:14.665,lng:-17.43558,name:'CLINIQUE DES MADELEINES',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf199',cat:'sante',lat:14.70848,lng:-17.45292,name:'CLINIQUE CROIX BLEUE',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf200',cat:'sante',lat:14.74653,lng:-17.45251,name:'CLINIQUE MEDICAL MEDICUS GUEDIAWAYE',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf201',cat:'sante',lat:14.76745,lng:-17.44402,name:'CLINIQUE SOKHNA KHOUDIA LO',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf202',cat:'sante',lat:14.76764,lng:-17.43989,name:'CLINIQUE MAME ASTA GUEDIAWAYE',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf203',cat:'sante',lat:14.76958,lng:-17.44428,name:'CENTRE MEDICAL BAMTARE GUEDIAWAYE',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf204',cat:'sante',lat:14.68531,lng:-17.44331,name:'CENTRE DE SANTE YAYE SYLVIE',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf205',cat:'hopital',lat:14.6931,lng:-17.44989,name:'HOPITAL DE LA SOLIDARITE ISLAMIQUE',type:'Hôpital',num:'—',status:'Voir sur place',color:'#006633',emoji:'🏥'},
+{id:'pdf206',cat:'sante',lat:14.75531,lng:-17.39629,name:'CENTRE DE SANTE TECHNOPOLE PIKINE',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf207',cat:'sante',lat:14.69384,lng:-17.44835,name:'ASSISTANCE MEDICALE SENEGAL AMS',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf208',cat:'sante',lat:14.68599,lng:-17.44625,name:'SOS SENEGAL MEDECIN',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf209',cat:'sante',lat:14.72187,lng:-17.48245,name:'CENTRE MEDICAL CLEO MERMOZ',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf210',cat:'sante',lat:14.7177,lng:-17.47376,name:'CLINIQUE CHEIKH EL HADJ OMAR',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf211',cat:'sante',lat:14.72289,lng:-17.48592,name:'PLATEAU MEDICAL CITE KEUR GORGUI',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf212',cat:'sante',lat:14.69047,lng:-17.44772,name:'CABINET MEDICAL AFRICAN MILLENIUM HEALTH',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf213',cat:'sante',lat:14.72117,lng:-17.18934,name:'COMPLEXE MEDICAL DABAKH DIAMNIADIO',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf214',cat:'sante',lat:14.76874,lng:-17.44527,name:'GPL ESPACE SANTE COMMUNAUTAIRE',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf215',cat:'sante',lat:14.69431,lng:-17.44508,name:'LABORATOIRE DISCACCIATI',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf216',cat:'sante',lat:14.66564,lng:-17.43475,name:'LABORATOIRE BALAB',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf217',cat:'sante',lat:14.72146,lng:-17.47955,name:'SUNU LABO MERMOZ',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf218',cat:'sante',lat:14.66811,lng:-17.437,name:'RADIOLOGUES ASSOCIES',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf219',cat:'sante',lat:14.6913,lng:-17.44461,name:"CENTRE D'IMAGERIE SOUMBEDIOUNE",type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'},
+{id:'pdf220',cat:'sante',lat:14.69254,lng:-17.44489,name:'INSTITUT PASTEUR DAKAR',type:'Centre de santé',num:'—',status:'Voir sur place',color:'#0F6E56',emoji:'🩺'}
 ];
-
+</script>
+<script>
 const PINS=[
   {id:'s1',cat:'police',lat:14.6676,lng:-17.4343,name:'Commissariat Plateau',type:'Police Nationale',num:'17',status:'Ouvert 24h/24',color:'#1A4A8A',emoji:'🚔'},
   {id:'s2',cat:'police',lat:14.6812,lng:-17.4523,name:'Commissariat Médina',type:'Police Nationale',num:'17',status:'Ouvert 24h/24',color:'#1A4A8A',emoji:'🚔'},
@@ -3449,7 +1091,6 @@ function goTo(id){
   document.getElementById(id).classList.add('active');
   if(id==='scr-sending') startSendTimer();
   if(id==='scr-map'){
-    // initialise Leaflet au premier affichage, puis force le recalcul de taille
     setTimeout(()=>{ initLeafletMap(); if(leafletMap) leafletMap.invalidateSize(); }, 80);
   }
 }
@@ -3564,14 +1205,14 @@ function setLang(l){
     if(el) el.textContent = val;
   });
 }
-
+</script>
+<script>
 // ── CARTE LEAFLET + OVERPASS API ───────────────────────────────────────────────
 let leafletMap = null;
 let leafletMarkers = [];
 let userMarker = null;
-let overpassData = []; // cache des données OSM chargées
+let overpassData = [];
 
-// Mapping OSM → catégories 221
 const OSM_RULES = [
   { cat:'hopital',     test: f => f.tags.amenity==='hospital',
     label:'Hôpital', emoji:'🏥', color:'#006633' },
@@ -3640,9 +1281,8 @@ function popupContent(p) {
     <button class="lf-popup-btn" onclick="goTo('scr-sos')" aria-label="Appeler le 221 pour ce service">📞 Appeler via 221</button>`;
 }
 
-// Requête Overpass pour la région de Dakar
 function buildOverpassQuery() {
-  const bbox = '14.60,-17.55,14.85,-17.35'; // Dakar + banlieue
+  const bbox = '14.60,-17.55,14.85,-17.35';
   return `
 [out:json][timeout:25];
 (
@@ -3670,7 +1310,7 @@ function showMapLoading(show) {
 }
 
 async function loadOverpassData() {
-  if (overpassData.length > 0) { renderLeafletPins(); return; } // cache hit
+  if (overpassData.length > 0) { renderLeafletPins(); return; }
   showMapLoading(true);
   try {
     const query = buildOverpassQuery();
@@ -3681,7 +1321,6 @@ async function loadOverpassData() {
     if (!res.ok) throw new Error('Overpass HTTP ' + res.status);
     const json = await res.json();
 
-    // Convertit les features OSM en pins 221, en ajoutant les pins statiques
     const osmPins = [];
     for (const f of json.elements) {
       const rule = classifyFeature(f);
@@ -3690,7 +1329,6 @@ async function loadOverpassData() {
       if (pin) osmPins.push(pin);
     }
 
-    // Fusionne OSM + pins statiques + pins PDF (répertoire officiel)
     overpassData = osmPins.length > 0
       ? [...PINS, ...PDF_PINS, ...osmPins]
       : [...PINS, ...PDF_PINS];
@@ -3699,7 +1337,7 @@ async function loadOverpassData() {
     renderNearby();
   } catch(err) {
     console.warn('Overpass indisponible, données statiques + PDF utilisées :', err.message);
-    overpassData = [...PINS, ...PDF_PINS]; // fallback gracieux
+    overpassData = [...PINS, ...PDF_PINS];
     renderLeafletPins();
   } finally {
     showMapLoading(false);
@@ -3721,7 +1359,6 @@ function initLeafletMap() {
     maxZoom: 19,
   }).addTo(leafletMap);
 
-  // Géolocalisation utilisateur
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(pos => {
       const { latitude: lat, longitude: lng } = pos.coords;
@@ -3771,7 +1408,6 @@ function locateUser() {
   const btn = document.getElementById('btn-locate');
   if (!leafletMap) return;
 
-  // Indicateur visuel de chargement
   btn.innerHTML = '<i class="ti ti-loader" aria-hidden="true" style="animation:spin .8s linear infinite"></i>Localisation…';
   btn.disabled = true;
 
@@ -3785,11 +1421,7 @@ function locateUser() {
   navigator.geolocation.getCurrentPosition(
     pos => {
       const { latitude: lat, longitude: lng } = pos.coords;
-
-      // Repositionne et zoome sur la position
       leafletMap.setView([lat, lng], 16, { animate: true });
-
-      // Met à jour ou crée le marker utilisateur
       if (userMarker) {
         userMarker.setLatLng([lat, lng]);
       } else {
@@ -3805,8 +1437,6 @@ function locateUser() {
           .bindPopup('<b>📍 Votre position</b>', { closeButton: false });
       }
       userMarker.openPopup();
-
-      // Rétablit le bouton avec confirmation visuelle
       btn.innerHTML = '<i class="ti ti-circle-check" aria-hidden="true"></i>Localisé !';
       btn.style.background = '#E8F5E9';
       btn.style.borderColor = '#006633';
@@ -3849,7 +1479,8 @@ function renderNearby(src) {
       </div>
     </div>`).join('');
 }
-
+</script>
+<script>
 // ── SOS ────────────────────────────────────────────────────────────────────────
 function selSOS(btn,dispatch){
   document.querySelectorAll('#scr-sos .tbtn,#scr-silent .tbtn').forEach(b=>b.classList.remove('sel'));
@@ -3866,7 +1497,6 @@ function selWType(btn){
   document.querySelectorAll('#wt-rep .tbtn').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
 }
-
 function setWtab(tab,btn){
   document.querySelectorAll('#scr-witness [role="tab"]').forEach(b=>{
     b.style.color='#888'; b.style.borderBottomColor='transparent'; b.setAttribute('aria-selected','false');
@@ -3881,7 +1511,6 @@ function selMotif(btn){
   document.querySelectorAll('#scr-refus .catbtn').forEach(b=>{ b.classList.remove('sel'); b.setAttribute('aria-pressed','false'); });
   btn.classList.add('sel'); btn.setAttribute('aria-pressed','true');
 }
-
 function submitRefus(){
   if(!document.getElementById('ref-etab').value||!document.getElementById('ref-urg').value){
     alert('Merci de renseigner l\'établissement et la nature de l\'urgence.'); return;
@@ -3890,7 +1519,6 @@ function submitRefus(){
 }
 
 // ── CYBER-URGENCES ─────────────────────────────────────────────────────────────
-// Taxonomie et orientation conformes au dossier projet v10.6 (partenariat ENCVR)
 const CYBER_CATEGORIES = {
   arnaques:        { label: 'Arnaques en ligne',                service: 'DSC Police / Gendarmerie' },
   harcelement:      { label: 'Cyberharcèlement',                 service: 'DSC Police / ENCVR' },
@@ -3901,7 +1529,6 @@ const CYBER_CATEGORIES = {
 };
 let cyberCategory = null;
 let cyberUrgent = false;
-
 function selCyber(btn, key){
   document.querySelectorAll('#scr-cyber .tbtn').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
@@ -3915,23 +1542,19 @@ function selCyber(btn, key){
   s.setAttribute('aria-label',`Envoyer le signalement cyber — ${info.label}, orientation vers ${info.service}`);
   l.textContent = 'Envoyer le signalement';
 }
-
 function toggleCyberUrgent(btn){
   cyberUrgent = !cyberUrgent;
   btn.classList.toggle('sel', cyberUrgent);
   btn.setAttribute('aria-pressed', cyberUrgent ? 'true' : 'false');
 }
-
 function submitCyber(){
   if(!cyberCategory) return;
   const info = CYBER_CATEGORIES[cyberCategory];
   if(cyberUrgent){
-    // Cas urgent (sextorsion active, menace physique en ligne) → intervention en temps réel
     document.getElementById('dispatch-lbl').textContent = info.label + ' (urgent) → ' + info.service;
     goTo('scr-sending');
     return;
   }
-  // Cas standard → dossier documenté + suivi avec rappel automatique sous 48h
   const num = 'CYBER-' + Math.floor(100000 + Math.random()*900000);
   document.getElementById('cy-dossier-num').textContent = num;
   document.getElementById('cy-dossier-cat').textContent = info.label;
@@ -3951,12 +1574,10 @@ function startCI(){
     if(ciSecs<=0){ clearInterval(ciInt); alert('⚠️ Trajet Sécurisé — Délai écoulé. Alerte transmise au CNRD-221 !'); }
   },1000);
 }
-
 function updateCI(){
   const m=Math.floor(ciSecs/60), s=ciSecs%60;
   document.getElementById('ci-timer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
-
 function cancelCI(){
   if(ciInt) clearInterval(ciInt);
   document.getElementById('ci-form').style.display='block';
@@ -4025,16 +1646,139 @@ function setGuide(key,tab){
   });
   document.getElementById('guide-body').innerHTML=h;
 }
+</script>
+<script>
+// ── MESSAGE VOCAL (NOUVEAU) — accessibilité pour les personnes ne sachant pas lire/écrire ──
+let mediaRecorder = null;
+let audioChunks = [];
+let audioStream = null;
+let recTimerInt = null;
+let recSeconds = 0;
+let audioBlobUrl = null;
+let screenBeforeAudio = 'scr-home';
+let isRecordingAudio = false;
+
+function openAudioModal(){
+  // mémorise l'écran actif pour y revenir en cas d'annulation
+  const current = document.querySelector('.screen.active');
+  screenBeforeAudio = current ? current.id : 'scr-home';
+  if(screenBeforeAudio === 'scr-audio') screenBeforeAudio = 'scr-home';
+  resetAudioRecording();
+  goTo('scr-audio');
+}
+
+function closeAudioModal(){
+  if(isRecordingAudio && mediaRecorder && mediaRecorder.state !== 'inactive'){
+    mediaRecorder.stop();
+  }
+  if(audioStream){ audioStream.getTracks().forEach(t=>t.stop()); audioStream=null; }
+  if(recTimerInt){ clearInterval(recTimerInt); recTimerInt=null; }
+  goTo(screenBeforeAudio || 'scr-home');
+}
+
+function updateRecTimerDisplay(){
+  const m=Math.floor(recSeconds/60), s=recSeconds%60;
+  const el=document.getElementById('audio-timer');
+  if(el) el.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+async function toggleAudioRecording(){
+  const btn = document.getElementById('btn-audio-rec');
+  const status = document.getElementById('audio-status');
+  const wave = document.getElementById('rec-wave');
+
+  if(!isRecordingAudio){
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === 'undefined'){
+      alert('L\'enregistrement audio n\'est pas disponible sur cet appareil ou ce navigateur.');
+      return;
+    }
+    try{
+      audioStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+    }catch(err){
+      alert('Impossible d\'accéder au micro. Merci d\'autoriser l\'accès au microphone dans les réglages de votre navigateur.');
+      return;
+    }
+    audioChunks = [];
+    try{
+      mediaRecorder = new MediaRecorder(audioStream);
+    }catch(err){
+      alert('Le format d\'enregistrement audio n\'est pas pris en charge sur cet appareil.');
+      audioStream.getTracks().forEach(t=>t.stop()); audioStream=null;
+      return;
+    }
+    mediaRecorder.ondataavailable = e => { if(e.data && e.data.size>0) audioChunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+      if(audioBlobUrl) URL.revokeObjectURL(audioBlobUrl);
+      audioBlobUrl = URL.createObjectURL(blob);
+      const player = document.getElementById('audio-playback');
+      player.src = audioBlobUrl;
+      document.getElementById('audio-step-record').style.display='none';
+      document.getElementById('audio-step-review').style.display='block';
+      if(audioStream){ audioStream.getTracks().forEach(t=>t.stop()); audioStream=null; }
+    };
+    mediaRecorder.start();
+    isRecordingAudio = true;
+    recSeconds = 0; updateRecTimerDisplay();
+    if(recTimerInt) clearInterval(recTimerInt);
+    recTimerInt = setInterval(()=>{ recSeconds++; updateRecTimerDisplay(); }, 1000);
+    btn.style.background = '#333';
+    btn.innerHTML = '<i class="ti ti-player-stop-filled" style="font-size:26px;color:#fff" aria-hidden="true"></i>';
+    btn.setAttribute('aria-label','Appuyez pour arrêter l\'enregistrement');
+    status.textContent = 'Enregistrement en cours… appuyez pour arrêter';
+    wave.style.display = 'flex';
+  } else {
+    if(mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+    isRecordingAudio = false;
+    if(recTimerInt){ clearInterval(recTimerInt); recTimerInt=null; }
+    wave.style.display = 'none';
+  }
+}
+
+function resetAudioRecording(){
+  if(isRecordingAudio && mediaRecorder && mediaRecorder.state !== 'inactive'){
+    mediaRecorder.stop();
+  }
+  isRecordingAudio = false;
+  if(recTimerInt){ clearInterval(recTimerInt); recTimerInt=null; }
+  if(audioStream){ audioStream.getTracks().forEach(t=>t.stop()); audioStream=null; }
+  if(audioBlobUrl){ URL.revokeObjectURL(audioBlobUrl); audioBlobUrl=null; }
+  recSeconds = 0;
+  const player = document.getElementById('audio-playback');
+  if(player){ player.pause(); player.removeAttribute('src'); player.load(); }
+  const btn = document.getElementById('btn-audio-rec');
+  if(btn){
+    btn.style.background = 'var(--r)';
+    btn.innerHTML = '<i class="ti ti-microphone" style="font-size:28px;color:#fff" aria-hidden="true"></i>';
+    btn.setAttribute('aria-label','Appuyez pour commencer l\'enregistrement de votre message vocal d\'urgence');
+  }
+  const status = document.getElementById('audio-status');
+  if(status) status.textContent = 'Appuyez pour enregistrer';
+  const wave = document.getElementById('rec-wave');
+  if(wave) wave.style.display = 'none';
+  updateRecTimerDisplay();
+  const stepRecord = document.getElementById('audio-step-record');
+  const stepReview = document.getElementById('audio-step-review');
+  if(stepRecord) stepRecord.style.display = 'block';
+  if(stepReview) stepReview.style.display = 'none';
+}
+
+function sendAudioMessage(){
+  document.getElementById('dispatch-lbl').textContent = 'Message vocal → CNRD-221';
+  if(audioStream){ audioStream.getTracks().forEach(t=>t.stop()); audioStream=null; }
+  goTo('scr-sending');
+}
 
 // ── INIT ───────────────────────────────────────────────────────────────────────
 updateClock();
-setInterval(updateClock, 30000); // mise à jour toutes les 30 secondes
+setInterval(updateClock, 30000);
 
 setTimeout(()=>{
   document.getElementById('splash').classList.add('hide');
   setTimeout(()=>{
     document.getElementById('splash').style.display='none';
     document.getElementById('app').style.display='block';
+    document.getElementById('audio-fab').style.display='flex';
     renderNearby(); setGuide('cardiac',document.querySelector('.gtab'));
   },500);
 },2800);
