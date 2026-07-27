@@ -203,12 +203,12 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   </div>
   <div style="margin:0 10px 8px;background:#EEF2FF;border-radius:10px;padding:10px 11px;border:1px solid #d6d2f5;cursor:pointer;display:flex;align-items:center;gap:9px" onclick="goTo('scr-cyber')" role="button" tabindex="0" aria-label="Cyber-Urgences — Signaler une arnaque, un piratage, une usurpation d'identité ou un contenu illicite">
     <i class="ti ti-shield-lock" style="font-size:20px;color:var(--pur)" aria-hidden="true"></i>
-    <div><p style="font-size:12px;font-weight:700;color:var(--pur)" id="q9">Cyber-Urgences</p><p style="font-size:10px;color:#888" id="q9s">Arnaque, piratage, sextorsion...</p></div>
+    <div><p style="font-size:12px;font-weight:700;color:var(--pur)" id="q9" data-i18n="cyber.card.title">Cyber-Urgences</p><p style="font-size:10px;color:#888" id="q9s" data-i18n="home.q9s">Arnaque, piratage, sextorsion...</p></div>
     <i class="ti ti-chevron-right" style="font-size:14px;color:#b7b0ea;margin-left:auto" aria-hidden="true"></i>
   </div>
   <div style="margin:0 10px 8px;background:#fff0f0;border-radius:10px;padding:10px 11px;border:1px solid #ffd0d0;cursor:pointer;display:flex;align-items:center;gap:9px" onclick="goTo('scr-sang')" role="button" tabindex="0" aria-label="Appel aux Dons de Sang — Signaler un besoin urgent, vérifié par le CNRD-221">
     <i class="ti ti-droplet" style="font-size:20px;color:var(--r)" aria-hidden="true"></i>
-    <div><p style="font-size:12px;font-weight:700;color:var(--r)" id="q10">Dons de Sang</p><p style="font-size:10px;color:#888" id="q10s">Signaler un besoin urgent</p></div>
+    <div><p style="font-size:12px;font-weight:700;color:var(--r)" id="q10" data-i18n="sang.card.title">Dons de Sang</p><p style="font-size:10px;color:#888" id="q10s" data-i18n="sang.card.desc1">Signaler un besoin urgent</p></div>
     <i class="ti ti-chevron-right" style="font-size:14px;color:#f0a0a0;margin-left:auto" aria-hidden="true"></i>
   </div>
   <div style="margin:0 10px 10px;background:#fff;border-radius:9px;padding:9px 11px;border:1px solid #eee;display:flex;align-items:center;gap:7px" role="status" aria-live="polite">
@@ -232,17 +232,17 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
       <h3 id="sos-title">Type d'urgence</h3>
       <p id="sos-desc">Sélectionnez pour un dispatch prioritaire</p>
       <div class="tgrid" role="group" aria-label="Choisissez le type d'urgence">
-        <button class="tbtn" onclick="selSOS(this,'Urgence médicale → SAMU')" aria-label="Urgence médicale — dispatch vers le SAMU"><i class="ti ti-ambulance" style="color:var(--r)" aria-hidden="true"></i><span id="tt1">Médical</span></button>
-        <button class="tbtn" onclick="selSOS(this,'Incendie → Pompiers')" aria-label="Incendie — dispatch vers les Pompiers"><i class="ti ti-flame" style="color:#ff6b00" aria-hidden="true"></i><span id="tt2">Incendie</span></button>
-        <button class="tbtn" onclick="selSOS(this,'Sécurité → Police')" aria-label="Sécurité — dispatch vers la Police"><i class="ti ti-shield-lock" style="color:var(--b)" aria-hidden="true"></i><span id="tt3">Sécurité</span></button>
-        <button class="tbtn" onclick="selSOS(this,'Accident → Pompiers + SAMU')" aria-label="Accident — dispatch vers Pompiers et SAMU"><i class="ti ti-car-crash" style="color:var(--amb)" aria-hidden="true"></i><span id="tt4">Accident</span></button>
-        <button class="tbtn" onclick="selSOS(this,'Inondation → Protection Civile')" aria-label="Inondation — dispatch vers la Protection Civile"><i class="ti ti-droplet" style="color:var(--g)" aria-hidden="true"></i><span id="tt5">Inondation</span></button>
-        <button class="tbtn" onclick="selSOS(this,'Urgence → CNRD-221')" aria-label="Autre urgence — dispatch vers le CNRD-221"><i class="ti ti-urgent" style="color:#666" aria-hidden="true"></i><span id="tt6">Autre</span></button>
+        <button class="tbtn" onclick="selSOS(this,'med_samu')" aria-label="Urgence médicale — dispatch vers le SAMU"><i class="ti ti-ambulance" style="color:var(--r)" aria-hidden="true"></i><span id="tt1">Médical</span></button>
+        <button class="tbtn" onclick="selSOS(this,'incendie_pompiers')" aria-label="Incendie — dispatch vers les Pompiers"><i class="ti ti-flame" style="color:#ff6b00" aria-hidden="true"></i><span id="tt2">Incendie</span></button>
+        <button class="tbtn" onclick="selSOS(this,'securite_police')" aria-label="Sécurité — dispatch vers la Police"><i class="ti ti-shield-lock" style="color:var(--b)" aria-hidden="true"></i><span id="tt3">Sécurité</span></button>
+        <button class="tbtn" onclick="selSOS(this,'accident_multi')" aria-label="Accident — dispatch vers Pompiers et SAMU"><i class="ti ti-car-crash" style="color:var(--amb)" aria-hidden="true"></i><span id="tt4">Accident</span></button>
+        <button class="tbtn" onclick="selSOS(this,'inondation_pc')" aria-label="Inondation — dispatch vers la Protection Civile"><i class="ti ti-droplet" style="color:var(--g)" aria-hidden="true"></i><span id="tt5">Inondation</span></button>
+        <button class="tbtn" onclick="selSOS(this,'autre_cnrd')" aria-label="Autre urgence — dispatch vers le CNRD-221"><i class="ti ti-urgent" style="color:#666" aria-hidden="true"></i><span id="tt6">Autre</span></button>
       </div>
       <button class="btn-p" id="btn-sos-send" disabled onclick="goTo('scr-sending')"
         aria-label="Appeler le 221 — bouton désactivé jusqu'à la sélection du type d'urgence"
         aria-disabled="true">
-        <i class="ti ti-phone-call" aria-hidden="true"></i><span id="sos-send-lbl">Sélectionner un type</span>
+        <i class="ti ti-phone-call" aria-hidden="true"></i><span id="sos-send-lbl" data-i18n="common.selectType">Sélectionner un type</span>
       </button>
       <button class="btn-b" onclick="goTo('scr-silent')"
         aria-label="Basculer vers l'alerte silencieuse — pour les situations où vous ne pouvez pas parler">
@@ -260,18 +260,18 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
       <h3 id="sil-title">🤫 Alerte Silencieuse</h3>
       <p id="sil-desc">Impossible de parler. Position GPS transmise automatiquement au CNRD-221.</p>
       <div class="tgrid" role="group" aria-label="Choisissez le type d'urgence silencieuse">
-        <button class="tbtn" onclick="selSOS(this,'Urgence médicale')" aria-label="Urgence médicale silencieuse"><i class="ti ti-ambulance" style="color:var(--r)" aria-hidden="true"></i><span id="st1">Médical</span></button>
-        <button class="tbtn" onclick="selSOS(this,'Agression')" aria-label="Agression — alerte silencieuse"><i class="ti ti-alert-triangle" style="color:var(--r)" aria-hidden="true"></i><span id="st2">Agression</span></button>
-        <button class="tbtn" onclick="selSOS(this,'Violence domestique')" aria-label="Violence domestique — traitement confidentiel CNRD-221 uniquement"><i class="ti ti-home-off" style="color:var(--pur)" aria-hidden="true"></i><span id="st3">Violence dom.</span></button>
-        <button class="tbtn" onclick="selSOS(this,'Autre urgence')" aria-label="Autre urgence silencieuse"><i class="ti ti-urgent" style="color:#666" aria-hidden="true"></i><span id="st4">Autre</span></button>
+        <button class="tbtn" onclick="selSOS(this,'sil_medical')" aria-label="Urgence médicale silencieuse"><i class="ti ti-ambulance" style="color:var(--r)" aria-hidden="true"></i><span id="st1">Médical</span></button>
+        <button class="tbtn" onclick="selSOS(this,'sil_agression')" aria-label="Agression — alerte silencieuse"><i class="ti ti-alert-triangle" style="color:var(--r)" aria-hidden="true"></i><span id="st2">Agression</span></button>
+        <button class="tbtn" onclick="selSOS(this,'sil_violence')" aria-label="Violence domestique — traitement confidentiel CNRD-221 uniquement"><i class="ti ti-home-off" style="color:var(--pur)" aria-hidden="true"></i><span id="st3">Violence dom.</span></button>
+        <button class="tbtn" onclick="selSOS(this,'sil_autre')" aria-label="Autre urgence silencieuse"><i class="ti ti-urgent" style="color:#666" aria-hidden="true"></i><span id="st4">Autre</span></button>
       </div>
       <button class="btn-p" id="btn-sil-send" disabled onclick="goTo('scr-sending')"
         style="background:var(--b)"
         aria-label="Envoyer l'alerte silencieuse — bouton désactivé jusqu'à la sélection du type"
         aria-disabled="true">
-        <i class="ti ti-eye-off" aria-hidden="true"></i><span id="sil-send-lbl">Sélectionner un type</span>
+        <i class="ti ti-eye-off" aria-hidden="true"></i><span id="sil-send-lbl" data-i18n="common.selectType">Sélectionner un type</span>
       </button>
-      <button class="btn-s" onclick="goTo('scr-home')" aria-label="Annuler et retourner à l'accueil">Annuler</button>
+      <button class="btn-s" onclick="goTo('scr-home')" aria-label="Annuler et retourner à l'accueil" data-i18n="common.cancel">Annuler</button>
     </div>
   </div>
 </div>
@@ -286,10 +286,10 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   <div style="display:flex;border-bottom:1px solid #eee;background:#fff;flex-shrink:0" role="tablist" aria-label="Onglets Mode Témoin">
     <button style="flex:1;padding:10px 4px;font-size:11px;font-weight:600;border:none;background:none;font-family:inherit;cursor:pointer;color:var(--r);border-bottom:2.5px solid var(--r)"
       id="wt-tab1" role="tab" aria-selected="true" aria-controls="wt-rep"
-      onclick="setWtab('rep',this)">Signaler</button>
+      onclick="setWtab('rep',this)" data-i18n="wit.tab.report">Signaler</button>
     <button style="flex:1;padding:10px 4px;font-size:11px;font-weight:600;border:none;background:none;font-family:inherit;cursor:pointer;color:#888;border-bottom:2.5px solid transparent"
       id="wt-tab2" role="tab" aria-selected="false" aria-controls="wt-act"
-      onclick="setWtab('act',this)">En attendant</button>
+      onclick="setWtab('act',this)" data-i18n="wit.tab.wait">En attendant</button>
   </div>
   <div style="overflow-y:auto;flex:1">
     <div id="wt-rep" role="tabpanel" aria-labelledby="wt-tab1">
@@ -297,37 +297,37 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
         <div class="ibox"><p id="wit-info">Vous êtes témoin d'une urgence. Ce formulaire aide le CNRD-221 à dispatcher les bons secours.</p></div>
         <label class="flbl" id="wit-lbl1">Type d'urgence observée</label>
         <div class="tgrid" style="margin-bottom:9px" role="group" aria-label="Type d'urgence observée">
-          <button class="tbtn" onclick="selWType(this)" aria-label="Urgence médicale observée"><i class="ti ti-ambulance" style="color:var(--r)" aria-hidden="true"></i><span>Médical</span></button>
-          <button class="tbtn" onclick="selWType(this)" aria-label="Incendie observé"><i class="ti ti-flame" style="color:#ff6b00" aria-hidden="true"></i><span>Incendie</span></button>
-          <button class="tbtn" onclick="selWType(this)" aria-label="Accident observé"><i class="ti ti-car-crash" style="color:var(--amb)" aria-hidden="true"></i><span>Accident</span></button>
-          <button class="tbtn" onclick="selWType(this)" aria-label="Agression observée"><i class="ti ti-shield-lock" style="color:var(--b)" aria-hidden="true"></i><span>Agression</span></button>
-          <button class="tbtn" onclick="selWType(this)" aria-label="Inondation observée"><i class="ti ti-droplet" style="color:var(--g)" aria-hidden="true"></i><span>Inondation</span></button>
-          <button class="tbtn" onclick="selWType(this)" aria-label="Autre urgence observée"><i class="ti ti-urgent" style="color:#666" aria-hidden="true"></i><span>Autre</span></button>
+          <button class="tbtn" onclick="selWType(this)" aria-label="Urgence médicale observée"><i class="ti ti-ambulance" style="color:var(--r)" aria-hidden="true"></i><span data-i18n="common.medical">Médical</span></button>
+          <button class="tbtn" onclick="selWType(this)" aria-label="Incendie observé"><i class="ti ti-flame" style="color:#ff6b00" aria-hidden="true"></i><span data-i18n="common.incendie">Incendie</span></button>
+          <button class="tbtn" onclick="selWType(this)" aria-label="Accident observé"><i class="ti ti-car-crash" style="color:var(--amb)" aria-hidden="true"></i><span data-i18n="common.accident">Accident</span></button>
+          <button class="tbtn" onclick="selWType(this)" aria-label="Agression observée"><i class="ti ti-shield-lock" style="color:var(--b)" aria-hidden="true"></i><span data-i18n="wit.agression">Agression</span></button>
+          <button class="tbtn" onclick="selWType(this)" aria-label="Inondation observée"><i class="ti ti-droplet" style="color:var(--g)" aria-hidden="true"></i><span data-i18n="common.inondation">Inondation</span></button>
+          <button class="tbtn" onclick="selWType(this)" aria-label="Autre urgence observée"><i class="ti ti-urgent" style="color:#666" aria-hidden="true"></i><span data-i18n="common.other">Autre</span></button>
         </div>
-        <label class="flbl" for="wit-victimes">Nombre de victimes</label>
-        <select class="fsel" id="wit-victimes"><option>1 personne</option><option>2 à 5</option><option>Plus de 5</option><option>Inconnu</option></select>
-        <label class="flbl" for="wit-etat">État apparent</label>
-        <select class="fsel" id="wit-etat"><option>Conscient(e)</option><option>Inconscient(e)</option><option>Ne respire pas</option><option>Blessures visibles</option><option>Impossible à évaluer</option></select>
-        <label class="flbl" for="wit-info-comp">Informations complémentaires</label>
-        <input class="finp" type="text" id="wit-info-comp" placeholder="Informations complémentaires..." aria-label="Informations complémentaires sur l'urgence observée">
-        <button class="btn-p" onclick="goTo('scr-sending')" aria-label="Alerter le 221 avec les informations du formulaire témoin"><i class="ti ti-phone-call" aria-hidden="true"></i> Alerter le 221</button>
-        <p style="font-size:10px;color:#999;text-align:center;margin:6px 0 14px" aria-live="polite">Position GPS transmise automatiquement</p>
+        <label class="flbl" for="wit-victimes" data-i18n="wit.lbl.victimes">Nombre de victimes</label>
+        <select class="fsel" id="wit-victimes"><option data-i18n="wit.v1">1 personne</option><option data-i18n="wit.v2">2 à 5</option><option data-i18n="wit.v3">Plus de 5</option><option data-i18n="wit.v4">Inconnu</option></select>
+        <label class="flbl" for="wit-etat" data-i18n="wit.lbl.etat">État apparent</label>
+        <select class="fsel" id="wit-etat"><option data-i18n="wit.e1">Conscient(e)</option><option data-i18n="wit.e2">Inconscient(e)</option><option data-i18n="wit.e3">Ne respire pas</option><option data-i18n="wit.e4">Blessures visibles</option><option data-i18n="wit.e5">Impossible à évaluer</option></select>
+        <label class="flbl" for="wit-info-comp" data-i18n="wit.lbl.comp">Informations complémentaires</label>
+        <input class="finp" type="text" id="wit-info-comp" placeholder="Informations complémentaires..." aria-label="Informations complémentaires sur l'urgence observée" data-i18n-ph="wit.lbl.comp">
+        <button class="btn-p" onclick="goTo('scr-sending')" aria-label="Alerter le 221 avec les informations du formulaire témoin"><i class="ti ti-phone-call" aria-hidden="true"></i> <span data-i18n="wit.alert">Alerter le 221</span></button>
+        <p style="font-size:10px;color:#999;text-align:center;margin:6px 0 14px" aria-live="polite" data-i18n="refus.gps">Position GPS transmise automatiquement</p>
       </div>
     </div>
     <div id="wt-act" role="tabpanel" aria-labelledby="wt-tab2" style="display:none;padding:11px 11px 0">
-      <div class="wbox"><i class="ti ti-alert-triangle" aria-hidden="true"></i><p>Appelez d'abord le 221. Ces conseils s'appliquent uniquement en attendant les secours.</p></div>
-      <div class="gstep"><div class="gnum" aria-hidden="true">1</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a">Sécurisez la zone</p><p style="font-size:10px;color:#666;margin-top:2px">Ne déplacez pas les victimes. Éloignez les badauds.</p></div></div>
-      <div class="gstep"><div class="gnum g" aria-hidden="true">2</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a">Parlez à la victime</p><p style="font-size:10px;color:#666;margin-top:2px">"Vous m'entendez ?" Rassurez. Ne laissez pas seule.</p></div></div>
-      <div class="gstep"><div class="gnum b" aria-hidden="true">3</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a">Contrôlez le saignement</p><p style="font-size:10px;color:#666;margin-top:2px">Comprimez fort avec tissu propre jusqu'aux secours.</p></div></div>
-      <div class="gstep"><div class="gnum" aria-hidden="true">4</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a">Guidez les secours</p><p style="font-size:10px;color:#666;margin-top:2px">Restez visible. Faites signe pour guider l'ambulance.</p></div></div>
+      <div class="wbox"><i class="ti ti-alert-triangle" aria-hidden="true"></i><p data-i18n="wit.wait.warn">Appelez d'abord le 221. Ces conseils s'appliquent uniquement en attendant les secours.</p></div>
+      <div class="gstep"><div class="gnum" aria-hidden="true">1</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a" data-i18n="wit.step1.t">Sécurisez la zone</p><p style="font-size:10px;color:#666;margin-top:2px" data-i18n="wit.step1.d">Ne déplacez pas les victimes. Éloignez les badauds.</p></div></div>
+      <div class="gstep"><div class="gnum g" aria-hidden="true">2</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a" data-i18n="wit.step2.t">Parlez à la victime</p><p style="font-size:10px;color:#666;margin-top:2px" data-i18n="wit.step2.d">"Vous m'entendez ?" Rassurez. Ne laissez pas seule.</p></div></div>
+      <div class="gstep"><div class="gnum b" aria-hidden="true">3</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a" data-i18n="wit.step3.t">Contrôlez le saignement</p><p style="font-size:10px;color:#666;margin-top:2px" data-i18n="wit.step3.d">Comprimez fort avec tissu propre jusqu'aux secours.</p></div></div>
+      <div class="gstep"><div class="gnum" aria-hidden="true">4</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a" data-i18n="wit.step4.t">Guidez les secours</p><p style="font-size:10px;color:#666;margin-top:2px" data-i18n="wit.step4.d">Restez visible. Faites signe pour guider l'ambulance.</p></div></div>
     </div>
   </div>
   <nav class="bnav" aria-label="Navigation principale">
-    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
-    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span>Carte</span></button>
-    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span>Numéros</span></button>
-    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span>Volontaires</span></button>
-    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span>Secours</span></button>
+    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span data-i18n="nav.home">Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span data-i18n="nav.map">Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span data-i18n="nav.numbers">Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span data-i18n="nav.volunteers">Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span data-i18n="nav.rescue">Secours</span></button>
   </nav>
 </div>
 
@@ -361,11 +361,11 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
         <input class="finp" type="tel" placeholder="+221 7X XXX XX XX" id="ci-contact" aria-labelledby="ci-lbl2" aria-describedby="ci-info">
         <label class="flbl" for="ci-dur" id="ci-lbl3">Durée avant alerte automatique</label>
         <select class="fsel" id="ci-dur" aria-labelledby="ci-lbl3">
-          <option value="15">15 minutes</option>
-          <option value="30" selected>30 minutes</option>
-          <option value="60">1 heure</option>
-          <option value="120">2 heures</option>
-          <option value="240">4 heures</option>
+          <option value="15" data-i18n="ci.dur15">15 minutes</option>
+          <option value="30" selected data-i18n="ci.dur30">30 minutes</option>
+          <option value="60" data-i18n="ci.dur60">1 heure</option>
+          <option value="120" data-i18n="ci.dur120">2 heures</option>
+          <option value="240" data-i18n="ci.dur240">4 heures</option>
         </select>
         <div class="ibox" role="note"><p id="ci-info">Si vous ne désactivez pas manuellement dans le délai, votre contact reçoit votre position GPS et une alerte est transmise au CNRD-221.</p></div>
         <button style="width:100%;padding:12px;background:var(--pur);color:#fff;border:none;border-radius:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px"
@@ -389,16 +389,16 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
           id="btn-ci-cancel"
           aria-label="Désactiver le Trajet Sécurisé — confirmer que tout va bien">✅ Désactiver — Tout va bien</button>
         <button onclick="goTo('scr-sos')" style="width:100%;padding:11px;background:var(--r);color:#fff;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"
-          aria-label="SOS urgent — déclencher une alerte d'urgence immédiate">🆘 SOS — J'ai besoin d'aide</button>
+          aria-label="SOS urgent — déclencher une alerte d'urgence immédiate" data-i18n="ci.sosbtn">🆘 SOS — J'ai besoin d'aide</button>
       </div>
     </div>
   </div>
   <nav class="bnav" aria-label="Navigation principale">
-    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
-    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span>Carte</span></button>
-    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span>Numéros</span></button>
-    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span>Volontaires</span></button>
-    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span>Secours</span></button>
+    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span data-i18n="nav.home">Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span data-i18n="nav.map">Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span data-i18n="nav.numbers">Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span data-i18n="nav.volunteers">Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span data-i18n="nav.rescue">Secours</span></button>
   </nav>
 </div>
 
@@ -407,28 +407,28 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   <div class="sb"><span id="sb-clock-map" aria-hidden="true"></span></div>
   <div class="nsub">
     <button onclick="goTo('scr-home')" aria-label="Retour à l'accueil"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-    <h2>Services à proximité</h2>
+    <h2 data-i18n="map.title">Services à proximité</h2>
   </div>
   <div class="filter-bar" role="group" aria-label="Filtrer les services sur la carte">
-    <button class="chip active" onclick="filterMap('all',this)" aria-pressed="true" aria-label="Afficher tous les services"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i>Tout</button>
-    <button class="chip" onclick="filterMap('police',this)" aria-pressed="false" aria-label="Afficher les commissariats de Police"><i class="ti ti-building-police" aria-hidden="true"></i>Police</button>
-    <button class="chip" onclick="filterMap('pompiers',this)" aria-pressed="false" aria-label="Afficher les casernes de Pompiers"><i class="ti ti-firetruck" aria-hidden="true"></i>Pompiers</button>
-    <button class="chip" onclick="filterMap('hopital',this)" aria-pressed="false" aria-label="Afficher les Hôpitaux"><i class="ti ti-building-hospital" aria-hidden="true"></i>Hôpitaux</button>
-    <button class="chip" onclick="filterMap('sante',this)" aria-pressed="false" aria-label="Afficher les Centres de santé"><i class="ti ti-stethoscope" aria-hidden="true"></i>Santé</button>
-    <button class="chip" onclick="filterMap('pharmacie',this)" aria-pressed="false" aria-label="Afficher les Pharmacies"><i class="ti ti-pill" aria-hidden="true"></i>Pharmacies</button>
-    <button class="chip" onclick="filterMap('gendarmerie',this)" aria-pressed="false" aria-label="Afficher les brigades de Gendarmerie"><i class="ti ti-shield" aria-hidden="true"></i>Gendarmerie</button>
+    <button class="chip active" onclick="filterMap('all',this)" aria-pressed="true" aria-label="Afficher tous les services"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i><span data-i18n="map.chip.all">Tout</span></button>
+    <button class="chip" onclick="filterMap('police',this)" aria-pressed="false" aria-label="Afficher les commissariats de Police"><i class="ti ti-building-police" aria-hidden="true"></i><span data-i18n="map.chip.police">Police</span></button>
+    <button class="chip" onclick="filterMap('pompiers',this)" aria-pressed="false" aria-label="Afficher les casernes de Pompiers"><i class="ti ti-firetruck" aria-hidden="true"></i><span data-i18n="map.chip.firemen">Pompiers</span></button>
+    <button class="chip" onclick="filterMap('hopital',this)" aria-pressed="false" aria-label="Afficher les Hôpitaux"><i class="ti ti-building-hospital" aria-hidden="true"></i><span data-i18n="map.chip.hospitals">Hôpitaux</span></button>
+    <button class="chip" onclick="filterMap('sante',this)" aria-pressed="false" aria-label="Afficher les Centres de santé"><i class="ti ti-stethoscope" aria-hidden="true"></i><span data-i18n="map.chip.health">Santé</span></button>
+    <button class="chip" onclick="filterMap('pharmacie',this)" aria-pressed="false" aria-label="Afficher les Pharmacies"><i class="ti ti-pill" aria-hidden="true"></i><span data-i18n="map.chip.pharmacies">Pharmacies</span></button>
+    <button class="chip" onclick="filterMap('gendarmerie',this)" aria-pressed="false" aria-label="Afficher les brigades de Gendarmerie"><i class="ti ti-shield" aria-hidden="true"></i><span data-i18n="map.chip.gendarmerie">Gendarmerie</span></button>
     <button class="chip chip-locate" id="btn-locate" onclick="locateUser()" aria-label="Centrer la carte sur ma position actuelle" style="margin-left:auto;flex-shrink:0;background:#EEF2FF;border-color:#534AB7;color:#534AB7">
-      <i class="ti ti-current-location" aria-hidden="true"></i>Ma position
+      <i class="ti ti-current-location" aria-hidden="true"></i><span data-i18n="map.locate">Ma position</span>
     </button>
   </div>
   <div id="leaflet-map" style="height:300px;width:100%;z-index:1;flex-shrink:0" role="application" aria-label="Carte interactive des services d'urgence à Dakar — OpenStreetMap"></div>
   <div class="nlist" id="nlist" style="max-height:200px" role="list" aria-label="Liste des services à proximité"></div>
   <nav class="bnav" aria-label="Navigation principale">
-    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
-    <button class="bni active" aria-current="page" aria-label="Carte — page actuelle"><i class="ti ti-map" aria-hidden="true"></i><span>Carte</span></button>
-    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span>Numéros</span></button>
-    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span>Volontaires</span></button>
-    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span>Secours</span></button>
+    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span data-i18n="nav.home">Accueil</span></button>
+    <button class="bni active" aria-current="page" aria-label="Carte — page actuelle"><i class="ti ti-map" aria-hidden="true"></i><span data-i18n="nav.map">Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span data-i18n="nav.numbers">Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span data-i18n="nav.volunteers">Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span data-i18n="nav.rescue">Secours</span></button>
   </nav>
 </div>
 
@@ -437,55 +437,55 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   <div class="sb"><span id="sb-clock-numeros" aria-hidden="true"></span></div>
   <div class="nsub">
     <button onclick="goTo('scr-home')" aria-label="Retour à l'accueil"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-    <h2>Numéros d'urgence</h2>
+    <h2 data-i18n="num.title">Numéros d'urgence</h2>
   </div>
   <div style="overflow-y:auto;flex:1;padding-bottom:14px">
     <div style="background:#fff5f5;padding:9px 13px;border-bottom:1px solid #ffd0d0;display:flex;align-items:center;gap:7px" role="note">
       <i class="ti ti-info-circle" style="font-size:14px;color:var(--r)" aria-hidden="true"></i>
-      <p style="font-size:11px;color:#8b1515;line-height:1.4">Le 221 connecte tous ces services. Un seul réflexe, tous les secours.</p>
+      <p style="font-size:11px;color:#8b1515;line-height:1.4" data-i18n="num.banner">Le 221 connecte tous ces services. Un seul réflexe, tous les secours.</p>
     </div>
-    <div class="numsec"><h3>Sécurité</h3>
-      <div class="numcard"><span class="numbadge" style="color:var(--b)" aria-hidden="true">17</span><div class="numinfo"><h4>Police Secours</h4><p>Police Nationale · zones urbaines</p></div><button class="ncall" style="background:var(--b)" aria-label="Appeler le 17 — Police Secours">Appel</button></div>
-      <div class="numcard"><span class="numbadge" style="color:var(--pur);font-size:12px" aria-hidden="true">800</span><div class="numinfo"><h4>Gendarmerie Nationale</h4><p>800 00 20 20 · zones rurales</p></div><button class="ncall" style="background:var(--pur)" aria-label="Appeler le 800 00 20 20 — Gendarmerie Nationale">Appel</button></div>
-      <div class="numcard"><span class="numbadge" style="color:#444" aria-hidden="true">112</span><div class="numinfo"><h4>Numéro européen</h4><p>Accessible depuis tout réseau</p></div><button class="ncall" style="background:#444" aria-label="Appeler le 112 — numéro européen accessible depuis tout réseau">Appel</button></div>
+    <div class="numsec"><h3 data-i18n="num.sec.security">Sécurité</h3>
+      <div class="numcard"><span class="numbadge" style="color:var(--b)" aria-hidden="true">17</span><div class="numinfo"><h4 data-i18n="num.17.name">Police Secours</h4><p data-i18n="num.17.desc">Police Nationale · zones urbaines</p></div><button class="ncall" style="background:var(--b)" aria-label="Appeler le 17 — Police Secours" data-i18n="num.btn.call">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--pur);font-size:12px" aria-hidden="true">800</span><div class="numinfo"><h4 data-i18n="num.gendarmerie.name">Gendarmerie Nationale</h4><p data-i18n="num.gendarmerie.desc">800 00 20 20 · zones rurales</p></div><button class="ncall" style="background:var(--pur)" aria-label="Appeler le 800 00 20 20 — Gendarmerie Nationale" data-i18n="num.btn.call">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:#444" aria-hidden="true">112</span><div class="numinfo"><h4 data-i18n="num.112.name">Numéro européen</h4><p data-i18n="num.112.desc">Accessible depuis tout réseau</p></div><button class="ncall" style="background:#444" aria-label="Appeler le 112 — numéro européen accessible depuis tout réseau" data-i18n="num.btn.call">Appel</button></div>
     </div>
-    <div class="numsec"><h3>Pompiers</h3>
-      <div class="numcard"><span class="numbadge" style="color:var(--r)" aria-hidden="true">18</span><div class="numinfo"><h4>Pompiers (BNSP)</h4><p>Brigade Nationale · 6 groupements</p></div><button class="ncall" aria-label="Appeler le 18 — Pompiers BNSP">Appel</button></div>
-      <div class="numcard"><span class="numbadge" style="color:var(--r);font-size:10px" aria-hidden="true">33823</span><div class="numinfo"><h4>Caserne Centrale Dakar</h4><p>33 823 10 14 · Plateau</p></div><button class="ncall" aria-label="Appeler le 33 823 10 14 — Caserne Centrale Dakar">Appel</button></div>
+    <div class="numsec"><h3 data-i18n="num.sec.firemen">Pompiers</h3>
+      <div class="numcard"><span class="numbadge" style="color:var(--r)" aria-hidden="true">18</span><div class="numinfo"><h4 data-i18n="num.18.name">Pompiers (BNSP)</h4><p data-i18n="num.18.desc">Brigade Nationale · 6 groupements</p></div><button class="ncall" aria-label="Appeler le 18 — Pompiers BNSP" data-i18n="num.btn.call">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--r);font-size:10px" aria-hidden="true">33823</span><div class="numinfo"><h4 data-i18n="num.caserne.name">Caserne Centrale Dakar</h4><p>33 823 10 14 · Plateau</p></div><button class="ncall" aria-label="Appeler le 33 823 10 14 — Caserne Centrale Dakar" data-i18n="num.btn.call">Appel</button></div>
     </div>
-    <div class="numsec"><h3>Urgences médicales</h3>
-      <div class="numcard"><span class="numbadge" style="color:var(--g)" aria-hidden="true">1515</span><div class="numinfo"><h4>SAMU National</h4><p>Gratuit · régulation 24h/24</p></div><button class="ncall" style="background:var(--g)" aria-label="Appeler le 1515 — SAMU National, gratuit">Appel</button></div>
-      <div class="numcard"><span class="numbadge" style="color:var(--teal);font-size:10px" aria-hidden="true">33839</span><div class="numinfo"><h4>CHU Le Dantec</h4><p>33 839 50 00 · Dakar</p></div><button class="ncall" style="background:var(--teal)" aria-label="Appeler le 33 839 50 00 — CHU Le Dantec">Appel</button></div>
-      <div class="numcard"><span class="numbadge" style="color:var(--teal);font-size:10px" aria-hidden="true">33860</span><div class="numinfo"><h4>Hôpital Principal</h4><p>33 860 00 00 · Dakar</p></div><button class="ncall" style="background:var(--teal)" aria-label="Appeler le 33 860 00 00 — Hôpital Principal">Appel</button></div>
-      <div class="numcard"><span class="numbadge" style="color:var(--teal);font-size:10px" aria-hidden="true">33889</span><div class="numinfo"><h4>CHU de Fann</h4><p>33 889 10 00 · Dakar</p></div><button class="ncall" style="background:var(--teal)" aria-label="Appeler le 33 889 10 00 — CHU de Fann">Appel</button></div>
-      <div class="numcard"><span class="numbadge" style="color:var(--teal);font-size:10px" aria-hidden="true">33827</span><div class="numinfo"><h4>HOGGY</h4><p>33 827 93 37 · Grand Yoff</p></div><button class="ncall" style="background:var(--teal)" aria-label="Appeler le 33 827 93 37 — HOGGY Grand Yoff">Appel</button></div>
+    <div class="numsec"><h3 data-i18n="num.sec.medical">Urgences médicales</h3>
+      <div class="numcard"><span class="numbadge" style="color:var(--g)" aria-hidden="true">1515</span><div class="numinfo"><h4 data-i18n="num.1515.name">SAMU National</h4><p data-i18n="num.1515.desc">Gratuit · régulation 24h/24</p></div><button class="ncall" style="background:var(--g)" aria-label="Appeler le 1515 — SAMU National, gratuit" data-i18n="num.btn.call">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--teal);font-size:10px" aria-hidden="true">33839</span><div class="numinfo"><h4>CHU Le Dantec</h4><p data-i18n="num.dakar">33 839 50 00 · Dakar</p></div><button class="ncall" style="background:var(--teal)" aria-label="Appeler le 33 839 50 00 — CHU Le Dantec" data-i18n="num.btn.call">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--teal);font-size:10px" aria-hidden="true">33860</span><div class="numinfo"><h4>Hôpital Principal</h4><p data-i18n="num.dakar">33 860 00 00 · Dakar</p></div><button class="ncall" style="background:var(--teal)" aria-label="Appeler le 33 860 00 00 — Hôpital Principal" data-i18n="num.btn.call">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--teal);font-size:10px" aria-hidden="true">33889</span><div class="numinfo"><h4>CHU de Fann</h4><p data-i18n="num.dakar">33 889 10 00 · Dakar</p></div><button class="ncall" style="background:var(--teal)" aria-label="Appeler le 33 889 10 00 — CHU de Fann" data-i18n="num.btn.call">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--teal);font-size:10px" aria-hidden="true">33827</span><div class="numinfo"><h4>HOGGY</h4><p data-i18n="num.grandyoff">33 827 93 37 · Grand Yoff</p></div><button class="ncall" style="background:var(--teal)" aria-label="Appeler le 33 827 93 37 — HOGGY Grand Yoff" data-i18n="num.btn.call">Appel</button></div>
     </div>
-    <div class="numsec" style="padding-bottom:6px"><h3>Autres</h3>
-      <div class="numcard"><span class="numbadge" style="color:var(--amb);font-size:10px" aria-hidden="true">800</span><div class="numinfo"><h4>SENELEC</h4><p>800 00 00 04 · panne électrique</p></div><button class="ncall" style="background:var(--amb)" aria-label="Appeler le 800 00 00 04 — SENELEC panne électrique">Appel</button></div>
-      <div class="numcard"><span class="numbadge" style="color:#888" aria-hidden="true">116</span><div class="numinfo"><h4>Enfance en danger</h4><p>116 · gratuit</p></div><button class="ncall" style="background:#888" aria-label="Appeler le 116 — Enfance en danger, gratuit">Appel</button></div>
+    <div class="numsec" style="padding-bottom:6px"><h3 data-i18n="num.sec.other">Autres</h3>
+      <div class="numcard"><span class="numbadge" style="color:var(--amb);font-size:10px" aria-hidden="true">800</span><div class="numinfo"><h4>SENELEC</h4><p data-i18n="num.senelec.desc">800 00 00 04 · panne électrique</p></div><button class="ncall" style="background:var(--amb)" aria-label="Appeler le 800 00 00 04 — SENELEC panne électrique" data-i18n="num.btn.call">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:#888" aria-hidden="true">116</span><div class="numinfo"><h4 data-i18n="num.116.name">Enfance en danger</h4><p data-i18n="num.116.desc">116 · gratuit</p></div><button class="ncall" style="background:#888" aria-label="Appeler le 116 — Enfance en danger, gratuit" data-i18n="num.btn.call">Appel</button></div>
     </div>
     <div style="margin:8px 11px 4px;background:#fff0f0;border-radius:10px;padding:10px 11px;border:1px solid #ffd0d0;cursor:pointer;display:flex;align-items:center;gap:9px" onclick="goTo('scr-refus')" role="button" tabindex="0" aria-label="Signaler un refus de soins hospitalier">
       <i class="ti ti-building-hospital" style="font-size:20px;color:var(--r)" aria-hidden="true"></i>
-      <div><p style="font-size:12px;font-weight:700;color:var(--r)">Signaler un refus de soins</p><p style="font-size:10px;color:#888">Un hôpital refuse une urgence ? Agissez maintenant.</p></div>
+      <div><p style="font-size:12px;font-weight:700;color:var(--r)" data-i18n="refus.card.title">Signaler un refus de soins</p><p style="font-size:10px;color:#888" data-i18n="refus.card.desc">Un hôpital refuse une urgence ? Agissez maintenant.</p></div>
       <i class="ti ti-chevron-right" style="font-size:14px;color:#ccc;margin-left:auto" aria-hidden="true"></i>
     </div>
     <div style="margin:8px 11px 4px;background:#EEF2FF;border-radius:10px;padding:10px 11px;border:1px solid #d6d2f5;cursor:pointer;display:flex;align-items:center;gap:9px" onclick="goTo('scr-cyber')" role="button" tabindex="0" aria-label="Cyber-Urgences — Signaler une arnaque, un piratage ou un contenu illicite">
       <i class="ti ti-shield-lock" style="font-size:20px;color:var(--pur)" aria-hidden="true"></i>
-      <div><p style="font-size:12px;font-weight:700;color:var(--pur)">Cyber-Urgences</p><p style="font-size:10px;color:#888">Arnaque, piratage, sextorsion, contenu illicite</p></div>
+      <div><p style="font-size:12px;font-weight:700;color:var(--pur)" data-i18n="cyber.card.title">Cyber-Urgences</p><p style="font-size:10px;color:#888" data-i18n="cyber.card.desc">Arnaque, piratage, sextorsion, contenu illicite</p></div>
       <i class="ti ti-chevron-right" style="font-size:14px;color:#b7b0ea;margin-left:auto" aria-hidden="true"></i>
     </div>
     <div style="margin:8px 11px 4px;background:#fff0f0;border-radius:10px;padding:10px 11px;border:1px solid #ffd0d0;cursor:pointer;display:flex;align-items:center;gap:9px" onclick="goTo('scr-sang')" role="button" tabindex="0" aria-label="Appel aux Dons de Sang — signaler un besoin urgent">
       <i class="ti ti-droplet" style="font-size:20px;color:var(--r)" aria-hidden="true"></i>
-      <div><p style="font-size:12px;font-weight:700;color:var(--r)">Dons de Sang</p><p style="font-size:10px;color:#888">Signaler un besoin urgent, vérifié par le CNRD-221</p></div>
+      <div><p style="font-size:12px;font-weight:700;color:var(--r)" data-i18n="sang.card.title">Dons de Sang</p><p style="font-size:10px;color:#888" data-i18n="sang.card.desc2">Signaler un besoin urgent, vérifié par le CNRD-221</p></div>
       <i class="ti ti-chevron-right" style="font-size:14px;color:#f0a0a0;margin-left:auto" aria-hidden="true"></i>
     </div>
   </div>
   <nav class="bnav" aria-label="Navigation principale">
-    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
-    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span>Carte</span></button>
-    <button class="bni active" aria-current="page" aria-label="Numéros — page actuelle"><i class="ti ti-phone" aria-hidden="true"></i><span>Numéros</span></button>
-    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span>Volontaires</span></button>
-    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span>Secours</span></button>
+    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span data-i18n="nav.home">Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span data-i18n="nav.map">Carte</span></button>
+    <button class="bni active" aria-current="page" aria-label="Numéros — page actuelle"><i class="ti ti-phone" aria-hidden="true"></i><span data-i18n="nav.numbers">Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span data-i18n="nav.volunteers">Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span data-i18n="nav.rescue">Secours</span></button>
   </nav>
 </div>
 
@@ -494,66 +494,66 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   <div class="sb"><span id="sb-clock-refus" aria-hidden="true"></span></div>
   <div class="nsub">
     <button onclick="goTo('scr-home')" aria-label="Retour à l'accueil"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-    <h2>Refus de soins</h2>
+    <h2 data-i18n="refus.title">Refus de soins</h2>
   </div>
   <div style="overflow-y:auto;flex:1">
     <div class="refus-hero" role="banner">
       <i class="ti ti-building-hospital" aria-hidden="true"></i>
-      <div><p style="font-size:14px;font-weight:700">Refus de prise en charge</p><p style="font-size:11px;opacity:.85;margin-top:3px;line-height:1.4">Signalement transmis au CNRD-221, au Ministère de la Santé et à l'Ordre des Médecins.</p></div>
+      <div><p style="font-size:14px;font-weight:700" data-i18n="refus.hero.title">Refus de prise en charge</p><p style="font-size:11px;opacity:.85;margin-top:3px;line-height:1.4" data-i18n="refus.hero.sub">Signalement transmis au CNRD-221, au Ministère de la Santé et à l'Ordre des Médecins.</p></div>
     </div>
     <div style="background:#fff5f5;padding:9px 13px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #ffd0d0" role="alert">
       <i class="ti ti-info-circle" style="font-size:14px;color:var(--r)" aria-hidden="true"></i>
-      <p style="font-size:11px;color:#8b1515;line-height:1.4">En cas d'urgence vitale, appelez <strong>le 221 en premier</strong>.</p>
+      <p style="font-size:11px;color:#8b1515;line-height:1.4" data-i18n="refus.alert">En cas d'urgence vitale, appelez <strong>le 221 en premier</strong>.</p>
     </div>
     <div style="padding:10px 11px">
-      <p style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px">Que faire maintenant</p>
-      <div class="rstep"><div class="rnum" style="background:var(--r)" aria-hidden="true">1</div><div><h4 style="font-size:11px;font-weight:700;color:#1a1a1a">Appelez le 221 maintenant</h4><p style="font-size:10px;color:#666;margin-top:2px">L'opérateur cherche une structure disponible immédiatement.</p></div></div>
-      <div class="rstep"><div class="rnum" style="background:#D44000" aria-hidden="true">2</div><div><h4 style="font-size:11px;font-weight:700;color:#1a1a1a">Documentez le refus</h4><p style="font-size:10px;color:#666;margin-top:2px">Heure, nom de l'établissement, motif allégué. Photo si possible.</p></div></div>
-      <div class="rstep"><div class="rnum" style="background:var(--g)" aria-hidden="true">3</div><div><h4 style="font-size:11px;font-weight:700;color:#1a1a1a">Signalez via ce formulaire</h4><p style="font-size:10px;color:#666;margin-top:2px">Signalement horodaté et géolocalisé transmis aux autorités.</p></div></div>
+      <p style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px" data-i18n="refus.now">Que faire maintenant</p>
+      <div class="rstep"><div class="rnum" style="background:var(--r)" aria-hidden="true">1</div><div><h4 style="font-size:11px;font-weight:700;color:#1a1a1a" data-i18n="refus.step1.t">Appelez le 221 maintenant</h4><p style="font-size:10px;color:#666;margin-top:2px" data-i18n="refus.step1.d">L'opérateur cherche une structure disponible immédiatement.</p></div></div>
+      <div class="rstep"><div class="rnum" style="background:#D44000" aria-hidden="true">2</div><div><h4 style="font-size:11px;font-weight:700;color:#1a1a1a" data-i18n="refus.step2.t">Documentez le refus</h4><p style="font-size:10px;color:#666;margin-top:2px" data-i18n="refus.step2.d">Heure, nom de l'établissement, motif allégué. Photo si possible.</p></div></div>
+      <div class="rstep"><div class="rnum" style="background:var(--g)" aria-hidden="true">3</div><div><h4 style="font-size:11px;font-weight:700;color:#1a1a1a" data-i18n="refus.step3.t">Signalez via ce formulaire</h4><p style="font-size:10px;color:#666;margin-top:2px" data-i18n="refus.step3.d">Signalement horodaté et géolocalisé transmis aux autorités.</p></div></div>
     </div>
     <div class="fsec">
-      <label class="flbl" for="ref-etab">Établissement concerné</label>
+      <label class="flbl" for="ref-etab" data-i18n="refus.lbl.etab">Établissement concerné</label>
       <select class="fsel" id="ref-etab" aria-label="Sélectionner l'établissement qui a refusé les soins">
-        <option value="">-- Sélectionner --</option>
+        <option value="" data-i18n="common.select">-- Sélectionner --</option>
         <option>CHU Le Dantec · Dakar</option><option>Hôpital Principal · Dakar</option>
         <option>Hôpital de Fann · Dakar</option><option>HOGGY · Grand Yoff</option>
-        <option>Hôpital Militaire de Ouakam</option><option>Centre de Santé Gueule Tapée</option>
-        <option>Centre de Santé Médina</option><option>Clinique privée (préciser)</option>
-        <option>Autre (préciser ci-dessous)</option>
+        <option>Hôpital Militaire de Ouakam</option><option data-i18n="refus.opt.cs1">Centre de Santé Gueule Tapée</option>
+        <option data-i18n="refus.opt.cs2">Centre de Santé Médina</option><option data-i18n="refus.opt.clinic">Clinique privée (préciser)</option>
+        <option data-i18n="refus.opt.other">Autre (préciser ci-dessous)</option>
       </select>
-      <label class="flbl" for="ref-nom">Précision (si autre)</label>
-      <input class="finp" type="text" placeholder="Nom et adresse de l'établissement" id="ref-nom" aria-label="Nom et adresse de l'établissement si non listé">
-      <label class="flbl" for="ref-urg">Nature de l'urgence</label>
+      <label class="flbl" for="ref-nom" data-i18n="refus.lbl.precision">Précision (si autre)</label>
+      <input class="finp" type="text" placeholder="Nom et adresse de l'établissement" id="ref-nom" aria-label="Nom et adresse de l'établissement si non listé" data-i18n-ph="refus.ph.nom">
+      <label class="flbl" for="ref-urg" data-i18n="refus.lbl.nature">Nature de l'urgence</label>
       <select class="fsel" id="ref-urg" aria-label="Nature de l'urgence pour laquelle les soins ont été refusés">
-        <option value="">-- Sélectionner --</option>
-        <option>Urgence médicale (malaise, douleur intense)</option>
-        <option>Accident de la route / traumatisme</option>
-        <option>Urgence obstétricale / accouchement</option>
-        <option>Tentative de suicide / pendaison</option>
-        <option>AVC / infarctus</option>
-        <option>Enfant en détresse</option>
-        <option>Autre urgence vitale</option>
+        <option value="" data-i18n="common.select">-- Sélectionner --</option>
+        <option data-i18n="refus.urg1">Urgence médicale (malaise, douleur intense)</option>
+        <option data-i18n="refus.urg2">Accident de la route / traumatisme</option>
+        <option data-i18n="refus.urg3">Urgence obstétricale / accouchement</option>
+        <option data-i18n="refus.urg4">Tentative de suicide / pendaison</option>
+        <option data-i18n="refus.urg5">AVC / infarctus</option>
+        <option data-i18n="refus.urg6">Enfant en détresse</option>
+        <option data-i18n="refus.urg7">Autre urgence vitale</option>
       </select>
-      <label class="flbl">Motif du refus allégué</label>
+      <label class="flbl" data-i18n="refus.lbl.motif">Motif du refus allégué</label>
       <div class="catgrid" role="group" aria-label="Motif du refus de soins">
-        <button class="catbtn" onclick="selMotif(this)" aria-pressed="false" aria-label="Motif financier"><span>💰 Financier</span></button>
-        <button class="catbtn" onclick="selMotif(this)" aria-pressed="false" aria-label="Motif administratif"><span>📋 Administratif</span></button>
-        <button class="catbtn" onclick="selMotif(this)" aria-pressed="false" aria-label="Service saturé"><span>🏥 Saturé</span></button>
-        <button class="catbtn" onclick="selMotif(this)" aria-pressed="false" aria-label="Sans motif exprimé"><span>❓ Sans motif</span></button>
+        <button class="catbtn" onclick="selMotif(this)" aria-pressed="false" aria-label="Motif financier"><span data-i18n="refus.motif1">💰 Financier</span></button>
+        <button class="catbtn" onclick="selMotif(this)" aria-pressed="false" aria-label="Motif administratif"><span data-i18n="refus.motif2">📋 Administratif</span></button>
+        <button class="catbtn" onclick="selMotif(this)" aria-pressed="false" aria-label="Service saturé"><span data-i18n="refus.motif3">🏥 Saturé</span></button>
+        <button class="catbtn" onclick="selMotif(this)" aria-pressed="false" aria-label="Sans motif exprimé"><span data-i18n="refus.motif4">❓ Sans motif</span></button>
       </div>
-      <label class="flbl" for="ref-desc">Description (facultatif)</label>
-      <textarea class="ftxt" id="ref-desc" placeholder="Décrivez ce qui s'est passé : heure, interlocuteur, propos tenus..." aria-label="Description du refus de soins : heure, interlocuteur, propos tenus"></textarea>
-      <div class="abox" role="note"><p>Ce signalement est horodaté, géolocalisé et transmis simultanément au <strong>CNRD-221</strong>, au <strong>Ministère de la Santé</strong> et à l'<strong>Ordre des Médecins</strong>. Un accusé de réception vous sera envoyé par SMS.</p></div>
-      <button class="btn-p" onclick="submitRefus()" aria-label="Envoyer le signalement de refus de soins"><i class="ti ti-send" aria-hidden="true"></i> Envoyer le signalement</button>
-      <p style="font-size:10px;color:#999;text-align:center;margin:7px 0 16px" aria-live="polite">Position GPS et heure enregistrées automatiquement</p>
+      <label class="flbl" for="ref-desc" data-i18n="refus.lbl.desc">Description (facultatif)</label>
+      <textarea class="ftxt" id="ref-desc" placeholder="Décrivez ce qui s'est passé : heure, interlocuteur, propos tenus..." aria-label="Description du refus de soins : heure, interlocuteur, propos tenus" data-i18n-ph="refus.ph.desc"></textarea>
+      <div class="abox" role="note"><p data-i18n="refus.legal">Ce signalement est horodaté, géolocalisé et transmis simultanément au <strong>CNRD-221</strong>, au <strong>Ministère de la Santé</strong> et à l'<strong>Ordre des Médecins</strong>. Un accusé de réception vous sera envoyé par SMS.</p></div>
+      <button class="btn-p" onclick="submitRefus()" aria-label="Envoyer le signalement de refus de soins"><i class="ti ti-send" aria-hidden="true"></i> <span data-i18n="refus.submit">Envoyer le signalement</span></button>
+      <p style="font-size:10px;color:#999;text-align:center;margin:7px 0 16px" aria-live="polite" data-i18n="refus.gps">Position GPS et heure enregistrées automatiquement</p>
     </div>
   </div>
   <nav class="bnav" aria-label="Navigation principale">
-    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
-    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span>Carte</span></button>
-    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span>Numéros</span></button>
-    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span>Volontaires</span></button>
-    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span>Secours</span></button>
+    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span data-i18n="nav.home">Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span data-i18n="nav.map">Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span data-i18n="nav.numbers">Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span data-i18n="nav.volunteers">Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span data-i18n="nav.rescue">Secours</span></button>
   </nav>
 </div>
 
@@ -562,20 +562,20 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   <div class="sb"><span id="sb-clock-refus-ok" aria-hidden="true"></span></div>
   <div class="nsub">
     <button onclick="goTo('scr-home')" aria-label="Retour à l'accueil"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-    <h2>Signalement envoyé</h2>
+    <h2 data-i18n="refusok.title">Signalement envoyé</h2>
   </div>
   <div style="overflow-y:auto;flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:28px 20px;gap:12px">
     <div style="width:72px;height:72px;border-radius:50%;background:#fff0f0;display:flex;align-items:center;justify-content:center;margin:0 auto" aria-hidden="true"><i class="ti ti-circle-check" style="font-size:40px;color:var(--r)"></i></div>
-    <h3 style="font-size:17px;font-weight:700;color:#1a1a1a">Signalement reçu</h3>
-    <p style="font-size:13px;color:#666;line-height:1.6">Votre signalement a été transmis. Un SMS de confirmation avec votre numéro de dossier vous sera envoyé dans les prochaines minutes.</p>
+    <h3 style="font-size:17px;font-weight:700;color:#1a1a1a" data-i18n="refusok.h3">Signalement reçu</h3>
+    <p style="font-size:13px;color:#666;line-height:1.6" data-i18n="refusok.p">Votre signalement a été transmis. Un SMS de confirmation avec votre numéro de dossier vous sera envoyé dans les prochaines minutes.</p>
     <div style="background:#f5f5f5;border-radius:10px;padding:13px;width:100%;text-align:left" role="list" aria-label="Destinataires du signalement">
-      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:6px;text-transform:uppercase">Destinataires</p>
-      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px" role="listitem"><i class="ti ti-urgent" style="font-size:14px;color:var(--r)" aria-hidden="true"></i><p style="font-size:12px;color:#333">CNRD-221 — Dispatch immédiat</p></div>
-      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px" role="listitem"><i class="ti ti-building-hospital" style="font-size:14px;color:var(--g)" aria-hidden="true"></i><p style="font-size:12px;color:#333">Ministère de la Santé</p></div>
-      <div style="display:flex;align-items:center;gap:7px" role="listitem"><i class="ti ti-stethoscope" style="font-size:14px;color:var(--b)" aria-hidden="true"></i><p style="font-size:12px;color:#333">Ordre des Médecins du Sénégal</p></div>
+      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:6px;text-transform:uppercase" data-i18n="common.recipients">Destinataires</p>
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px" role="listitem"><i class="ti ti-urgent" style="font-size:14px;color:var(--r)" aria-hidden="true"></i><p style="font-size:12px;color:#333" data-i18n="refusok.dest1">CNRD-221 — Dispatch immédiat</p></div>
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px" role="listitem"><i class="ti ti-building-hospital" style="font-size:14px;color:var(--g)" aria-hidden="true"></i><p style="font-size:12px;color:#333" data-i18n="refusok.dest2">Ministère de la Santé</p></div>
+      <div style="display:flex;align-items:center;gap:7px" role="listitem"><i class="ti ti-stethoscope" style="font-size:14px;color:var(--b)" aria-hidden="true"></i><p style="font-size:12px;color:#333" data-i18n="refusok.dest3">Ordre des Médecins du Sénégal</p></div>
     </div>
-    <button class="btn-g" onclick="goTo('scr-home')" style="width:100%" aria-label="Retour à l'accueil de l'application 221">Retour à l'accueil</button>
-    <button class="btn-p" onclick="goTo('scr-sos')" style="width:100%;margin-top:0" aria-label="Appeler le 221 — déclencher une alerte d'urgence">Appeler le 221</button>
+    <button class="btn-g" onclick="goTo('scr-home')" style="width:100%" aria-label="Retour à l'accueil de l'application 221" data-i18n="common.backhome">Retour à l'accueil</button>
+    <button class="btn-p" onclick="goTo('scr-sos')" style="width:100%;margin-top:0" aria-label="Appeler le 221 — déclencher une alerte d'urgence" data-i18n="common.call221">Appeler le 221</button>
   </div>
 </div>
 
@@ -584,79 +584,79 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   <div class="sb"><span id="sb-clock-cyber" aria-hidden="true"></span></div>
   <div class="nsub">
     <button onclick="goTo('scr-home')" aria-label="Retour à l'accueil"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-    <h2>Cyber-Urgences</h2>
+    <h2 data-i18n="cyber.title">Cyber-Urgences</h2>
   </div>
   <div style="overflow-y:auto;flex:1">
     <div class="cihero" role="banner">
       <i class="ti ti-shield-lock" style="font-size:38px;flex-shrink:0" aria-hidden="true"></i>
       <div>
-        <p style="font-size:14px;font-weight:700">Signalement Cyber</p>
-        <p style="font-size:11px;opacity:.85;margin-top:3px;line-height:1.4">Extension numérique du CNRD-221, en partenariat avec l'ENCVR (École Nationale de Cybersécurité à Vocation Régionale). Documentez la menace : nous orientons vers l'unité compétente.</p>
+        <p style="font-size:14px;font-weight:700" data-i18n="cyber.hero.title">Signalement Cyber</p>
+        <p style="font-size:11px;opacity:.85;margin-top:3px;line-height:1.4" data-i18n="cyber.hero.sub">Extension numérique du CNRD-221, en partenariat avec l'ENCVR (École Nationale de Cybersécurité à Vocation Régionale). Documentez la menace : nous orientons vers l'unité compétente.</p>
       </div>
     </div>
     <div class="fsec">
-      <div class="ibox" role="note"><p><strong>En cas de danger physique immédiat, appelez le 221.</strong> Pour les cas urgents (sextorsion active, menace physique en ligne), activez le bouton « Cas urgent » ci-dessous : une intervention en temps réel est déclenchée.</p></div>
+      <div class="ibox" role="note"><p data-i18n="cyber.ibox"><strong>En cas de danger physique immédiat, appelez le 221.</strong> Pour les cas urgents (sextorsion active, menace physique en ligne), activez le bouton « Cas urgent » ci-dessous : une intervention en temps réel est déclenchée.</p></div>
 
-      <label class="flbl" id="cy-lbl1">Type de cybermenace</label>
+      <label class="flbl" id="cy-lbl1" data-i18n="cyber.lbl.type">Type de cybermenace</label>
       <div class="tgrid" role="group" aria-label="Type de cybermenace">
-        <button class="tbtn" onclick="selCyber(this,'arnaques')" aria-label="Arnaques en ligne — escroqueries SMS, WhatsApp, réseaux sociaux, faux sites marchands, faux investissements"><i class="ti ti-wallet" style="color:var(--amb)" aria-hidden="true"></i><span>Arnaques en ligne</span></button>
-        <button class="tbtn" onclick="selCyber(this,'harcelement')" aria-label="Cyberharcèlement — menaces, intimidations numériques, cyberbullying scolaire"><i class="ti ti-message-2" style="color:var(--b)" aria-hidden="true"></i><span>Cyberharcèlement</span></button>
-        <button class="tbtn" onclick="selCyber(this,'violences')" aria-label="Cyberviolences — sextorsion, diffusion non consentie d'images intimes"><i class="ti ti-alert-triangle" style="color:var(--r)" aria-hidden="true"></i><span>Cyberviolences</span></button>
-        <button class="tbtn" onclick="selCyber(this,'usurpation')" aria-label="Usurpation d'identité — vol de comptes, faux profils, fraude à l'identité numérique"><i class="ti ti-user-x" style="color:var(--r)" aria-hidden="true"></i><span>Usurpation d'identité</span></button>
-        <button class="tbtn" onclick="selCyber(this,'cyberattaque')" aria-label="Cyberattaque critique contre une infrastructure numérique nationale ou un service public"><i class="ti ti-lock" style="color:var(--pur)" aria-hidden="true"></i><span>Cyberattaque critique</span></button>
-        <button class="tbtn" onclick="selCyber(this,'escroquerie_tel')" aria-label="Escroquerie téléphonique — faux opérateur, faux agent bancaire, sim swapping"><i class="ti ti-phone-off" style="color:#666" aria-hidden="true"></i><span>Escroquerie tél.</span></button>
+        <button class="tbtn" onclick="selCyber(this,'arnaques')" aria-label="Arnaques en ligne — escroqueries SMS, WhatsApp, réseaux sociaux, faux sites marchands, faux investissements"><i class="ti ti-wallet" style="color:var(--amb)" aria-hidden="true"></i><span data-i18n="cyber.cat.arnaques">Arnaques en ligne</span></button>
+        <button class="tbtn" onclick="selCyber(this,'harcelement')" aria-label="Cyberharcèlement — menaces, intimidations numériques, cyberbullying scolaire"><i class="ti ti-message-2" style="color:var(--b)" aria-hidden="true"></i><span data-i18n="cyber.cat.harcelement">Cyberharcèlement</span></button>
+        <button class="tbtn" onclick="selCyber(this,'violences')" aria-label="Cyberviolences — sextorsion, diffusion non consentie d'images intimes"><i class="ti ti-alert-triangle" style="color:var(--r)" aria-hidden="true"></i><span data-i18n="cyber.cat.violences">Cyberviolences</span></button>
+        <button class="tbtn" onclick="selCyber(this,'usurpation')" aria-label="Usurpation d'identité — vol de comptes, faux profils, fraude à l'identité numérique"><i class="ti ti-user-x" style="color:var(--r)" aria-hidden="true"></i><span data-i18n="cyber.cat.usurpation">Usurpation d'identité</span></button>
+        <button class="tbtn" onclick="selCyber(this,'cyberattaque')" aria-label="Cyberattaque critique contre une infrastructure numérique nationale ou un service public"><i class="ti ti-lock" style="color:var(--pur)" aria-hidden="true"></i><span data-i18n="cyber.cat.cyberattaque">Cyberattaque critique</span></button>
+        <button class="tbtn" onclick="selCyber(this,'escroquerie_tel')" aria-label="Escroquerie téléphonique — faux opérateur, faux agent bancaire, sim swapping"><i class="ti ti-phone-off" style="color:#666" aria-hidden="true"></i><span data-i18n="cyber.cat.escroquerie">Escroquerie tél.</span></button>
       </div>
       <div id="cy-service-preview" style="display:none;margin:-4px 0 10px;font-size:11px;color:var(--pur);font-weight:600" aria-live="polite"></div>
 
-      <label class="flbl" for="cy-plateforme">Plateforme concernée</label>
+      <label class="flbl" for="cy-plateforme" data-i18n="cyber.lbl.plateforme">Plateforme concernée</label>
       <select class="fsel" id="cy-plateforme" aria-label="Plateforme concernée par l'incident">
-        <option value="">-- Sélectionner --</option>
+        <option value="" data-i18n="common.select">-- Sélectionner --</option>
         <option>WhatsApp</option><option>Facebook</option><option>Instagram</option>
-        <option>TikTok</option><option>SMS</option><option>Appel téléphonique</option>
-        <option>Orange Money / Wave / Free Money</option><option>Site web</option><option>Autre</option>
+        <option>TikTok</option><option>SMS</option><option data-i18n="cyber.plat.appel">Appel téléphonique</option>
+        <option>Orange Money / Wave / Free Money</option><option data-i18n="cyber.plat.site">Site web</option><option data-i18n="common.other">Autre</option>
       </select>
-      <label class="flbl" for="cy-prejudice">Préjudice subi</label>
+      <label class="flbl" for="cy-prejudice" data-i18n="cyber.lbl.prejudice">Préjudice subi</label>
       <select class="fsel" id="cy-prejudice" aria-label="Préjudice subi">
-        <option value="">-- Sélectionner --</option>
-        <option>Perte financière</option>
-        <option>Perte d'accès à un compte</option>
-        <option>Atteinte à la réputation / à l'image</option>
-        <option>Détresse psychologique</option>
-        <option>Aucun préjudice à ce stade</option>
-        <option>Autre</option>
+        <option value="" data-i18n="common.select">-- Sélectionner --</option>
+        <option data-i18n="cyber.prej1">Perte financière</option>
+        <option data-i18n="cyber.prej2">Perte d'accès à un compte</option>
+        <option data-i18n="cyber.prej3">Atteinte à la réputation / à l'image</option>
+        <option data-i18n="cyber.prej4">Détresse psychologique</option>
+        <option data-i18n="cyber.prej5">Aucun préjudice à ce stade</option>
+        <option data-i18n="common.other">Autre</option>
       </select>
-      <label class="flbl" for="cy-auteur">Identité de l'auteur, si connue</label>
-      <input class="finp" type="text" id="cy-auteur" placeholder="Nom, pseudo, numéro de téléphone... (facultatif)" aria-label="Identité de l'auteur si connue, facultatif">
-      <label class="flbl" for="cy-desc">Chronologie des faits</label>
-      <textarea class="ftxt" id="cy-desc" placeholder="Décrivez les faits dans l'ordre : ce qui s'est passé, quand, montants éventuels..." aria-label="Chronologie des faits"></textarea>
-      <label class="flbl" for="cy-preuves">Preuves disponibles</label>
+      <label class="flbl" for="cy-auteur" data-i18n="cyber.lbl.auteur">Identité de l'auteur, si connue</label>
+      <input class="finp" type="text" id="cy-auteur" placeholder="Nom, pseudo, numéro de téléphone... (facultatif)" aria-label="Identité de l'auteur si connue, facultatif" data-i18n-ph="cyber.ph.auteur">
+      <label class="flbl" for="cy-desc" data-i18n="cyber.lbl.chrono">Chronologie des faits</label>
+      <textarea class="ftxt" id="cy-desc" placeholder="Décrivez les faits dans l'ordre : ce qui s'est passé, quand, montants éventuels..." aria-label="Chronologie des faits" data-i18n-ph="cyber.ph.desc"></textarea>
+      <label class="flbl" for="cy-preuves" data-i18n="cyber.lbl.preuves">Preuves disponibles</label>
       <input class="finp" type="file" id="cy-preuves" multiple accept="image/*,.pdf" aria-label="Joindre des preuves : captures d'écran, pièces jointes">
       <button class="catbtn" id="cy-urgent-toggle" onclick="toggleCyberUrgent(this)" aria-pressed="false" style="width:100%;justify-content:center;margin-bottom:9px">
-        <i class="ti ti-alert-triangle" aria-hidden="true"></i><span>Cas urgent — sextorsion active / menace physique</span>
+        <i class="ti ti-alert-triangle" aria-hidden="true"></i><span data-i18n="cyber.urgent">Cas urgent — sextorsion active / menace physique</span>
       </button>
-      <div class="wbox"><i class="ti ti-alert-triangle" aria-hidden="true"></i><p>Ne partagez jamais vos mots de passe, codes OTP ou numéros de carte, même avec le 221. Aucun agent légitime ne vous les demandera.</p></div>
-      <div class="wbox"><i class="ti ti-alert-triangle" aria-hidden="true"></i><p>Victime d'une arnaque Mobile Money ? Bloquez votre compte immédiatement auprès de votre opérateur, en plus de ce signalement.</p></div>
-      <div class="abox" role="note"><p>Si un enfant est concerné (contenu, sextorsion, sollicitation), signalez-le également au <strong>116 — Centre Ginddi, Protection de l'enfance</strong>, gratuit et disponible 24h/24.</p></div>
+      <div class="wbox"><i class="ti ti-alert-triangle" aria-hidden="true"></i><p data-i18n="cyber.warn1">Ne partagez jamais vos mots de passe, codes OTP ou numéros de carte, même avec le 221. Aucun agent légitime ne vous les demandera.</p></div>
+      <div class="wbox"><i class="ti ti-alert-triangle" aria-hidden="true"></i><p data-i18n="cyber.warn2">Victime d'une arnaque Mobile Money ? Bloquez votre compte immédiatement auprès de votre opérateur, en plus de ce signalement.</p></div>
+      <div class="abox" role="note"><p data-i18n="cyber.childbox">Si un enfant est concerné (contenu, sextorsion, sollicitation), signalez-le également au <strong>116 — Centre Ginddi, Protection de l'enfance</strong>, gratuit et disponible 24h/24.</p></div>
       <button class="btn-p" id="btn-cyber-send" disabled onclick="submitCyber()" style="background:var(--pur)"
         aria-label="Envoyer le signalement cyber — bouton désactivé jusqu'à la sélection du type de cybermenace" aria-disabled="true">
-        <i class="ti ti-send" aria-hidden="true"></i><span id="cyber-send-lbl">Sélectionner un type</span>
+        <i class="ti ti-send" aria-hidden="true"></i><span id="cyber-send-lbl" data-i18n="common.selectType">Sélectionner un type</span>
       </button>
-      <button class="btn-s" onclick="goTo('scr-home')" aria-label="Annuler et retourner à l'accueil">Annuler</button>
-      <p style="font-size:10px;color:#999;text-align:center;margin:8px 0 4px" aria-live="polite">Qualification guidée par un agent certifié ENCVR · dossier suivi, rappel automatique sous 48h</p>
+      <button class="btn-s" onclick="goTo('scr-home')" aria-label="Annuler et retourner à l'accueil" data-i18n="common.cancel">Annuler</button>
+      <p style="font-size:10px;color:#999;text-align:center;margin:8px 0 4px" aria-live="polite" data-i18n="cyber.footer">Qualification guidée par un agent certifié ENCVR · dossier suivi, rappel automatique sous 48h</p>
     </div>
-    <div class="numsec" style="padding-bottom:14px"><h3>Numéros et ressources utiles</h3>
-      <div class="numcard"><span class="numbadge" style="color:var(--g)" aria-hidden="true">221</span><div class="numinfo"><h4>CNRD-221</h4><p>Réception, qualification et orientation d'urgence</p></div><button class="ncall" style="background:var(--g)" onclick="goTo('scr-sos')" aria-label="Appeler le 221 pour une orientation d'urgence">Appel</button></div>
-      <div class="numcard"><span class="numbadge" style="color:var(--pur);font-size:9px" aria-hidden="true">DSC</span><div class="numinfo"><h4>Division Spéciale Cybercriminalité</h4><p>Police nationale · signalementcyber.dgpn.sn</p></div></div>
-      <div class="numcard"><span class="numbadge" style="color:var(--pur);font-size:9px" aria-hidden="true">ENCVR</span><div class="numinfo"><h4>École Nat. de Cybersécurité (ENCVR)</h4><p>Cyberattaques critiques · rattachée à la Présidence</p></div></div>
-      <div class="numcard"><span class="numbadge" style="color:#888" aria-hidden="true">116</span><div class="numinfo"><h4>Centre Ginddi — Enfance en danger</h4><p>116 · gratuit · contenu ou sollicitation visant un enfant</p></div><button class="ncall" style="background:#888" aria-label="Appeler le 116 — Enfance en danger, gratuit">Appel</button></div>
+    <div class="numsec" style="padding-bottom:14px"><h3 data-i18n="cyber.resources.title">Numéros et ressources utiles</h3>
+      <div class="numcard"><span class="numbadge" style="color:var(--g)" aria-hidden="true">221</span><div class="numinfo"><h4>CNRD-221</h4><p data-i18n="cyber.res.221">Réception, qualification et orientation d'urgence</p></div><button class="ncall" style="background:var(--g)" onclick="goTo('scr-sos')" aria-label="Appeler le 221 pour une orientation d'urgence" data-i18n="num.btn.call">Appel</button></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--pur);font-size:9px" aria-hidden="true">DSC</span><div class="numinfo"><h4 data-i18n="cyber.res.dsc.name">Division Spéciale Cybercriminalité</h4><p>Police nationale · signalementcyber.dgpn.sn</p></div></div>
+      <div class="numcard"><span class="numbadge" style="color:var(--pur);font-size:9px" aria-hidden="true">ENCVR</span><div class="numinfo"><h4 data-i18n="cyber.res.encvr.name">École Nat. de Cybersécurité (ENCVR)</h4><p data-i18n="cyber.res.encvr.desc">Cyberattaques critiques · rattachée à la Présidence</p></div></div>
+      <div class="numcard"><span class="numbadge" style="color:#888" aria-hidden="true">116</span><div class="numinfo"><h4 data-i18n="cyber.res.ginddi.name">Centre Ginddi — Enfance en danger</h4><p data-i18n="cyber.res.ginddi.desc">116 · gratuit · contenu ou sollicitation visant un enfant</p></div><button class="ncall" style="background:#888" aria-label="Appeler le 116 — Enfance en danger, gratuit" data-i18n="num.btn.call">Appel</button></div>
     </div>
   </div>
   <nav class="bnav" aria-label="Navigation principale">
-    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
-    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span>Carte</span></button>
-    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span>Numéros</span></button>
-    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span>Volontaires</span></button>
-    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span>Secours</span></button>
+    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span data-i18n="nav.home">Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span data-i18n="nav.map">Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span data-i18n="nav.numbers">Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span data-i18n="nav.volunteers">Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span data-i18n="nav.rescue">Secours</span></button>
   </nav>
 </div>
 
@@ -665,22 +665,22 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   <div class="sb"><span id="sb-clock-cyber-ok" aria-hidden="true"></span></div>
   <div class="nsub">
     <button onclick="goTo('scr-home')" aria-label="Retour à l'accueil"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-    <h2>Dossier créé</h2>
+    <h2 data-i18n="cyberok.title">Dossier créé</h2>
   </div>
   <div style="overflow-y:auto;flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:28px 20px;gap:12px">
     <div style="width:72px;height:72px;border-radius:50%;background:#EEF2FF;display:flex;align-items:center;justify-content:center;margin:0 auto" aria-hidden="true"><i class="ti ti-circle-check" style="font-size:40px;color:var(--pur)"></i></div>
-    <h3 style="font-size:17px;font-weight:700;color:#1a1a1a">Signalement qualifié et transmis</h3>
-    <p style="font-size:13px;color:#666;line-height:1.6">Votre dossier a été créé. Un rappel automatique sera effectué sous <strong>48 heures</strong> pour vérifier votre prise en charge.</p>
+    <h3 style="font-size:17px;font-weight:700;color:#1a1a1a" data-i18n="cyberok.h3">Signalement qualifié et transmis</h3>
+    <p style="font-size:13px;color:#666;line-height:1.6" data-i18n="cyberok.p">Votre dossier a été créé. Un rappel automatique sera effectué sous <strong>48 heures</strong> pour vérifier votre prise en charge.</p>
     <div style="background:#f5f5f5;border-radius:10px;padding:13px;width:100%;text-align:left" role="list" aria-label="Détails du dossier">
-      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:6px;text-transform:uppercase">Numéro de dossier</p>
+      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:6px;text-transform:uppercase" data-i18n="common.dossier">Numéro de dossier</p>
       <p style="font-size:15px;font-weight:700;color:var(--pur);margin-bottom:10px" id="cy-dossier-num">CYBER-000000</p>
-      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:4px;text-transform:uppercase">Catégorie</p>
+      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:4px;text-transform:uppercase" data-i18n="common.category">Catégorie</p>
       <p style="font-size:12px;color:#333;margin-bottom:10px" id="cy-dossier-cat">—</p>
-      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:4px;text-transform:uppercase">Service orienté</p>
+      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:4px;text-transform:uppercase" data-i18n="common.serviceoriented">Service orienté</p>
       <p style="font-size:12px;color:#333" id="cy-dossier-service">—</p>
     </div>
-    <button class="btn-g" onclick="goTo('scr-home')" style="width:100%" aria-label="Retour à l'accueil de l'application 221">Retour à l'accueil</button>
-    <button class="btn-p" onclick="goTo('scr-sos')" style="width:100%;margin-top:0;background:var(--pur)" aria-label="Appeler le 221 — déclencher une alerte d'urgence">Appeler le 221</button>
+    <button class="btn-g" onclick="goTo('scr-home')" style="width:100%" aria-label="Retour à l'accueil de l'application 221" data-i18n="common.backhome">Retour à l'accueil</button>
+    <button class="btn-p" onclick="goTo('scr-sos')" style="width:100%;margin-top:0;background:var(--pur)" aria-label="Appeler le 221 — déclencher une alerte d'urgence" data-i18n="common.call221">Appeler le 221</button>
   </div>
 </div>
 
@@ -689,40 +689,40 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   <div class="sb"><span id="sb-clock-sang" aria-hidden="true"></span></div>
   <div class="nsub">
     <button onclick="goTo('scr-home')" aria-label="Retour à l'accueil"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-    <h2>Dons de Sang</h2>
+    <h2 data-i18n="sang.title">Dons de Sang</h2>
   </div>
   <div style="overflow-y:auto;flex:1">
     <div class="refus-hero" role="banner">
       <i class="ti ti-droplet" aria-hidden="true"></i>
-      <div><p style="font-size:14px;font-weight:700">Appel aux Dons de Sang</p><p style="font-size:11px;opacity:.85;margin-top:3px;line-height:1.4">Un besoin urgent et compatible peut sauver une vie en quelques heures. Chaque signalement est vérifié par le CNRD-221 avant toute diffusion aux donneurs.</p></div>
+      <div><p style="font-size:14px;font-weight:700" data-i18n="sang.hero.title">Appel aux Dons de Sang</p><p style="font-size:11px;opacity:.85;margin-top:3px;line-height:1.4" data-i18n="sang.hero.sub">Un besoin urgent et compatible peut sauver une vie en quelques heures. Chaque signalement est vérifié par le CNRD-221 avant toute diffusion aux donneurs.</p></div>
     </div>
     <div style="padding:11px 11px 0">
-      <p style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px">Demandes actives à proximité</p>
+      <p style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px" data-i18n="sang.active.title">Demandes actives à proximité</p>
       <div class="numcard" style="border-color:#ffd0d0">
         <span class="numbadge" style="color:var(--r);font-size:15px" aria-hidden="true">O-</span>
-        <div class="numinfo"><h4>Hôpital Principal de Dakar</h4><p>2 poches recherchées · Vérifié il y a 12 min</p></div>
-        <span style="font-size:9px;font-weight:700;color:var(--r);background:#fff0f0;padding:3px 8px;border-radius:10px;flex-shrink:0">URGENT</span>
+        <div class="numinfo"><h4>Hôpital Principal de Dakar</h4><p data-i18n="sang.active1">2 poches recherchées · Vérifié il y a 12 min</p></div>
+        <span style="font-size:9px;font-weight:700;color:var(--r);background:#fff0f0;padding:3px 8px;border-radius:10px;flex-shrink:0" data-i18n="sang.urgent">URGENT</span>
       </div>
       <div class="numcard" style="border-color:#ffe4cc">
         <span class="numbadge" style="color:var(--amb);font-size:15px" aria-hidden="true">AB+</span>
-        <div class="numinfo"><h4>CHU de Fann</h4><p>1 poche recherchée · Vérifié il y a 40 min</p></div>
-        <span style="font-size:9px;font-weight:700;color:var(--amb);background:#fff8e6;padding:3px 8px;border-radius:10px;flex-shrink:0">ACTIF</span>
+        <div class="numinfo"><h4>CHU de Fann</h4><p data-i18n="sang.active2">1 poche recherchée · Vérifié il y a 40 min</p></div>
+        <span style="font-size:9px;font-weight:700;color:var(--amb);background:#fff8e6;padding:3px 8px;border-radius:10px;flex-shrink:0" data-i18n="sang.actif">ACTIF</span>
       </div>
     </div>
     <div class="fsec">
-      <p style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.6px;margin:14px 0 7px">Signaler un besoin urgent</p>
-      <div class="abox" role="note"><p>Ce signalement est transmis à un opérateur <strong>CNRD-221</strong> pour vérification. Il n'est diffusé aux donneurs compatibles qu'après validation — aucune diffusion automatique.</p></div>
-      <label class="flbl" for="sg-etab">Établissement concerné</label>
+      <p style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.6px;margin:14px 0 7px" data-i18n="sang.form.title">Signaler un besoin urgent</p>
+      <div class="abox" role="note"><p data-i18n="sang.abox">Ce signalement est transmis à un opérateur <strong>CNRD-221</strong> pour vérification. Il n'est diffusé aux donneurs compatibles qu'après validation — aucune diffusion automatique.</p></div>
+      <label class="flbl" for="sg-etab" data-i18n="sang.lbl.etab">Établissement concerné</label>
       <select class="fsel" id="sg-etab" aria-label="Établissement où le don est nécessaire">
-        <option value="">-- Sélectionner --</option>
+        <option value="" data-i18n="common.select">-- Sélectionner --</option>
         <option>CHU Le Dantec · Dakar</option><option>Hôpital Principal · Dakar</option>
         <option>Hôpital de Fann · Dakar</option><option>HOGGY · Grand Yoff</option>
-        <option>Hôpital Roi Baudouin · Guédiawaye</option><option>Centre de Santé</option>
-        <option>Autre (préciser ci-dessous)</option>
+        <option>Hôpital Roi Baudouin · Guédiawaye</option><option data-i18n="sang.cs">Centre de Santé</option>
+        <option data-i18n="refus.opt.other">Autre (préciser ci-dessous)</option>
       </select>
-      <label class="flbl" for="sg-nom">Précision (si autre)</label>
-      <input class="finp" type="text" placeholder="Nom et adresse de l'établissement" id="sg-nom" aria-label="Nom et adresse de l'établissement si non listé">
-      <label class="flbl">Groupe sanguin recherché</label>
+      <label class="flbl" for="sg-nom" data-i18n="refus.lbl.precision">Précision (si autre)</label>
+      <input class="finp" type="text" placeholder="Nom et adresse de l'établissement" id="sg-nom" aria-label="Nom et adresse de l'établissement si non listé" data-i18n-ph="refus.ph.nom">
+      <label class="flbl" data-i18n="sang.lbl.groupe">Groupe sanguin recherché</label>
       <div class="catgrid" role="group" aria-label="Groupe sanguin recherché" style="grid-template-columns:repeat(4,1fr)">
         <button class="catbtn" onclick="selGroupe(this)" aria-pressed="false">O-</button>
         <button class="catbtn" onclick="selGroupe(this)" aria-pressed="false">O+</button>
@@ -733,34 +733,34 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
         <button class="catbtn" onclick="selGroupe(this)" aria-pressed="false">AB-</button>
         <button class="catbtn" onclick="selGroupe(this)" aria-pressed="false">AB+</button>
       </div>
-      <label class="flbl" for="sg-qte">Quantité nécessaire (poches)</label>
+      <label class="flbl" for="sg-qte" data-i18n="sang.lbl.qte">Quantité nécessaire (poches)</label>
       <select class="fsel" id="sg-qte" aria-label="Nombre de poches nécessaires">
-        <option value="">-- Sélectionner --</option>
-        <option>1 poche</option><option>2 poches</option><option>3 à 5 poches</option><option>Plus de 5</option>
+        <option value="" data-i18n="common.select">-- Sélectionner --</option>
+        <option data-i18n="sang.qte1">1 poche</option><option data-i18n="sang.qte2">2 poches</option><option data-i18n="sang.qte3">3 à 5 poches</option><option data-i18n="sang.qte4">Plus de 5</option>
       </select>
-      <label class="flbl" for="sg-tel">Contact sur place</label>
+      <label class="flbl" for="sg-tel" data-i18n="sang.lbl.tel">Contact sur place</label>
       <input class="finp" type="tel" placeholder="+221 7X XXX XX XX" id="sg-tel" aria-label="Numéro de contact sur place">
-      <label class="flbl" for="sg-desc">Contexte (facultatif)</label>
-      <textarea class="ftxt" id="sg-desc" placeholder="Intervention chirurgicale, accouchement, accident, drépanocytose..." aria-label="Contexte du besoin en sang"></textarea>
+      <label class="flbl" for="sg-desc" data-i18n="sang.lbl.contexte">Contexte (facultatif)</label>
+      <textarea class="ftxt" id="sg-desc" placeholder="Intervention chirurgicale, accouchement, accident, drépanocytose..." aria-label="Contexte du besoin en sang" data-i18n-ph="sang.ph.desc"></textarea>
       <button class="btn-p" id="btn-sang-send" disabled onclick="submitSang()"
         aria-label="Transmettre le signalement pour vérification — bouton désactivé tant que le formulaire n'est pas complet" aria-disabled="true">
-        <i class="ti ti-send" aria-hidden="true"></i><span id="sang-send-lbl">Compléter le formulaire</span>
+        <i class="ti ti-send" aria-hidden="true"></i><span id="sang-send-lbl" data-i18n="sang.complete">Compléter le formulaire</span>
       </button>
-      <button class="btn-s" onclick="goTo('scr-home')" aria-label="Annuler et retourner à l'accueil">Annuler</button>
+      <button class="btn-s" onclick="goTo('scr-home')" aria-label="Annuler et retourner à l'accueil" data-i18n="common.cancel">Annuler</button>
       <div style="margin:14px 0 4px;background:#fff;border:1px solid #eee;border-radius:10px;padding:12px" role="note">
-        <p style="font-size:12px;font-weight:700;color:#1a1a1a;margin-bottom:4px">Vous êtes donneur ?</p>
-        <p style="font-size:11px;color:#666;margin-bottom:9px;line-height:1.5">Complétez votre profil donneur dans Volontaires 221 pour être alerté(e) en cas de besoin compatible près de chez vous.</p>
-        <button class="btn-b" onclick="goTo('scr-vol')" aria-label="Compléter mon profil donneur dans Volontaires 221" style="margin-top:0"><i class="ti ti-droplet" aria-hidden="true"></i> Compléter mon profil donneur</button>
+        <p style="font-size:12px;font-weight:700;color:#1a1a1a;margin-bottom:4px" data-i18n="sang.donor.q">Vous êtes donneur ?</p>
+        <p style="font-size:11px;color:#666;margin-bottom:9px;line-height:1.5" data-i18n="sang.donor.d">Complétez votre profil donneur dans Volontaires 221 pour être alerté(e) en cas de besoin compatible près de chez vous.</p>
+        <button class="btn-b" onclick="goTo('scr-vol')" aria-label="Compléter mon profil donneur dans Volontaires 221" style="margin-top:0"><i class="ti ti-droplet" aria-hidden="true"></i> <span data-i18n="sang.donor.btn">Compléter mon profil donneur</span></button>
       </div>
-      <p style="font-size:10px;color:#999;text-align:center;margin:10px 0 16px" aria-live="polite">Groupe sanguin : donnée de santé traitée conformément à la loi 2008-12</p>
+      <p style="font-size:10px;color:#999;text-align:center;margin:10px 0 16px" aria-live="polite" data-i18n="sang.legal">Groupe sanguin : donnée de santé traitée conformément à la loi 2008-12</p>
     </div>
   </div>
   <nav class="bnav" aria-label="Navigation principale">
-    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
-    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span>Carte</span></button>
-    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span>Numéros</span></button>
-    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span>Volontaires</span></button>
-    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span>Secours</span></button>
+    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span data-i18n="nav.home">Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span data-i18n="nav.map">Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span data-i18n="nav.numbers">Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span data-i18n="nav.volunteers">Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span data-i18n="nav.rescue">Secours</span></button>
   </nav>
 </div>
 
@@ -769,20 +769,20 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   <div class="sb"><span id="sb-clock-sang-ok" aria-hidden="true"></span></div>
   <div class="nsub">
     <button onclick="goTo('scr-home')" aria-label="Retour à l'accueil"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-    <h2>Signalement transmis</h2>
+    <h2 data-i18n="sangok.title">Signalement transmis</h2>
   </div>
   <div style="overflow-y:auto;flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:28px 20px;gap:12px">
     <div style="width:72px;height:72px;border-radius:50%;background:#fff0f0;display:flex;align-items:center;justify-content:center;margin:0 auto" aria-hidden="true"><i class="ti ti-circle-check" style="font-size:40px;color:var(--r)"></i></div>
-    <h3 style="font-size:17px;font-weight:700;color:#1a1a1a">En cours de vérification</h3>
-    <p style="font-size:13px;color:#666;line-height:1.6">Un opérateur CNRD-221 vérifie l'information. Une fois validée, l'alerte est diffusée aux donneurs compatibles à proximité. Vous recevrez une confirmation par SMS.</p>
+    <h3 style="font-size:17px;font-weight:700;color:#1a1a1a" data-i18n="sangok.h3">En cours de vérification</h3>
+    <p style="font-size:13px;color:#666;line-height:1.6" data-i18n="sangok.p">Un opérateur CNRD-221 vérifie l'information. Une fois validée, l'alerte est diffusée aux donneurs compatibles à proximité. Vous recevrez une confirmation par SMS.</p>
     <div style="background:#f5f5f5;border-radius:10px;padding:13px;width:100%;text-align:left" role="list" aria-label="Détails du signalement">
-      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:6px;text-transform:uppercase">Numéro de dossier</p>
+      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:6px;text-transform:uppercase" data-i18n="common.dossier">Numéro de dossier</p>
       <p style="font-size:15px;font-weight:700;color:var(--r);margin-bottom:10px" id="sg-dossier-num">SANG-000000</p>
-      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:4px;text-transform:uppercase">Groupe recherché</p>
+      <p style="font-size:10px;font-weight:700;color:#888;margin-bottom:4px;text-transform:uppercase" data-i18n="sangok.groupe">Groupe recherché</p>
       <p style="font-size:12px;color:#333" id="sg-dossier-groupe">—</p>
     </div>
-    <button class="btn-g" onclick="goTo('scr-home')" style="width:100%" aria-label="Retour à l'accueil de l'application 221">Retour à l'accueil</button>
-    <button class="btn-p" onclick="goTo('scr-sos')" style="width:100%;margin-top:0" aria-label="Appeler le 221 — déclencher une alerte d'urgence">Appeler le 221</button>
+    <button class="btn-g" onclick="goTo('scr-home')" style="width:100%" aria-label="Retour à l'accueil de l'application 221" data-i18n="common.backhome">Retour à l'accueil</button>
+    <button class="btn-p" onclick="goTo('scr-sos')" style="width:100%;margin-top:0" aria-label="Appeler le 221 — déclencher une alerte d'urgence" data-i18n="common.call221">Appeler le 221</button>
   </div>
 </div>
 
@@ -791,39 +791,39 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   <div class="sb"><span id="sb-clock-vol" aria-hidden="true"></span></div>
   <div class="nsub">
     <button onclick="goTo('scr-home')" aria-label="Retour à l'accueil"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-    <h2>Devenir Volontaire 221</h2>
+    <h2 data-i18n="vol.title">Devenir Volontaire 221</h2>
   </div>
   <div style="overflow-y:auto;flex:1">
     <div class="volhero" role="banner">
       <i class="ti ti-shield-heart" style="font-size:38px;opacity:.9;flex-shrink:0" aria-hidden="true"></i>
-      <div><p style="font-size:14px;font-weight:700">Réseau 221 Volontaires</p><p style="font-size:11px;opacity:.85;margin-top:3px;line-height:1.4">Intervenez en premier. Chaque minute compte.</p></div>
+      <div><p style="font-size:14px;font-weight:700" data-i18n="vol.hero.title">Réseau 221 Volontaires</p><p style="font-size:11px;opacity:.85;margin-top:3px;line-height:1.4" data-i18n="vol.hero.sub">Intervenez en premier. Chaque minute compte.</p></div>
     </div>
     <div class="fsec">
-      <label class="flbl" for="v-nom">Prénom et Nom</label>
+      <label class="flbl" for="v-nom" data-i18n="vol.lbl.nom">Prénom et Nom</label>
       <input class="finp" type="text" placeholder="Aminata Diallo" id="v-nom" aria-label="Votre prénom et nom complet" autocomplete="name">
-      <label class="flbl" for="v-tel">Téléphone</label>
+      <label class="flbl" for="v-tel" data-i18n="vol.lbl.tel">Téléphone</label>
       <input class="finp" type="tel" placeholder="+221 7X XXX XX XX" id="v-tel" aria-label="Votre numéro de téléphone" autocomplete="tel">
-      <label class="flbl">Catégorie</label>
+      <label class="flbl" data-i18n="vol.lbl.categorie">Catégorie</label>
       <div class="catgrid" role="group" aria-label="Votre catégorie de volontaire">
-        <button class="catbtn" onclick="this.classList.toggle('sel');this.setAttribute('aria-pressed',this.classList.contains('sel'))" aria-pressed="false" aria-label="Secouriste"><i class="ti ti-first-aid-kit" aria-hidden="true"></i><span>Secouriste</span></button>
-        <button class="catbtn" onclick="this.classList.toggle('sel');this.setAttribute('aria-pressed',this.classList.contains('sel'))" aria-pressed="false" aria-label="Médecin ou Infirmier"><i class="ti ti-stethoscope" aria-hidden="true"></i><span>Médecin/Infirmier</span></button>
-        <button class="catbtn" onclick="this.classList.toggle('sel');this.setAttribute('aria-pressed',this.classList.contains('sel'))" aria-pressed="false" aria-label="Pompier volontaire"><i class="ti ti-firetruck" aria-hidden="true"></i><span>Pompier vol.</span></button>
-        <button class="catbtn" onclick="this.classList.toggle('sel');this.setAttribute('aria-pressed',this.classList.contains('sel'))" aria-pressed="false" aria-label="Logisticien"><i class="ti ti-car" aria-hidden="true"></i><span>Logisticien</span></button>
-        <button class="catbtn" onclick="this.classList.toggle('sel');this.setAttribute('aria-pressed',this.classList.contains('sel'))" aria-pressed="false" aria-label="Psychologue ou soutien moral"><i class="ti ti-heart-handshake" aria-hidden="true"></i><span>Psychologue</span></button>
-        <button class="catbtn" onclick="this.classList.toggle('sel');this.setAttribute('aria-pressed',this.classList.contains('sel'))" aria-pressed="false" aria-label="Autre compétence"><i class="ti ti-dots" aria-hidden="true"></i><span>Autre</span></button>
+        <button class="catbtn" onclick="this.classList.toggle('sel');this.setAttribute('aria-pressed',this.classList.contains('sel'))" aria-pressed="false" aria-label="Secouriste"><i class="ti ti-first-aid-kit" aria-hidden="true"></i><span data-i18n="vol.cat.secouriste">Secouriste</span></button>
+        <button class="catbtn" onclick="this.classList.toggle('sel');this.setAttribute('aria-pressed',this.classList.contains('sel'))" aria-pressed="false" aria-label="Médecin ou Infirmier"><i class="ti ti-stethoscope" aria-hidden="true"></i><span data-i18n="vol.cat.medecin">Médecin/Infirmier</span></button>
+        <button class="catbtn" onclick="this.classList.toggle('sel');this.setAttribute('aria-pressed',this.classList.contains('sel'))" aria-pressed="false" aria-label="Pompier volontaire"><i class="ti ti-firetruck" aria-hidden="true"></i><span data-i18n="vol.cat.pompier">Pompier vol.</span></button>
+        <button class="catbtn" onclick="this.classList.toggle('sel');this.setAttribute('aria-pressed',this.classList.contains('sel'))" aria-pressed="false" aria-label="Logisticien"><i class="ti ti-car" aria-hidden="true"></i><span data-i18n="vol.cat.logisticien">Logisticien</span></button>
+        <button class="catbtn" onclick="this.classList.toggle('sel');this.setAttribute('aria-pressed',this.classList.contains('sel'))" aria-pressed="false" aria-label="Psychologue ou soutien moral"><i class="ti ti-heart-handshake" aria-hidden="true"></i><span data-i18n="vol.cat.psy">Psychologue</span></button>
+        <button class="catbtn" onclick="this.classList.toggle('sel');this.setAttribute('aria-pressed',this.classList.contains('sel'))" aria-pressed="false" aria-label="Autre compétence"><i class="ti ti-dots" aria-hidden="true"></i><span data-i18n="common.other">Autre</span></button>
       </div>
-      <label class="flbl" for="v-diplome">Diplôme / Certification</label>
+      <label class="flbl" for="v-diplome" data-i18n="vol.lbl.diplome">Diplôme / Certification</label>
       <select class="fsel" id="v-diplome" aria-label="Votre diplôme ou certification">
-        <option>-- Sélectionner --</option><option>PSC1 / PSC2</option><option>AFGSU</option>
-        <option>Diplôme médical</option><option>Certification BNSP</option><option>Autre</option>
+        <option data-i18n="common.select">-- Sélectionner --</option><option>PSC1 / PSC2</option><option>AFGSU</option>
+        <option data-i18n="vol.dip.medical">Diplôme médical</option><option data-i18n="vol.dip.bnsp">Certification BNSP</option><option data-i18n="common.other">Autre</option>
       </select>
 
       <button class="catbtn" id="v-donor-toggle" onclick="toggleDonorProfile(this)" aria-pressed="false" style="width:100%;justify-content:center;margin-bottom:9px;border-color:#ffd0d0">
-        <i class="ti ti-droplet" style="color:var(--r)" aria-hidden="true"></i><span>🩸 Je souhaite aussi être donneur de sang</span>
+        <i class="ti ti-droplet" style="color:var(--r)" aria-hidden="true"></i><span data-i18n="vol.donor.toggle">🩸 Je souhaite aussi être donneur de sang</span>
       </button>
       <div id="v-donor-fields" style="display:none">
-        <div class="ibox" role="note"><p>Votre groupe sanguin est une donnée de santé, traitée conformément à la loi 2008-12 sur la protection des données personnelles. Il ne sert qu'à vous alerter en cas de besoin compatible près de chez vous.</p></div>
-        <label class="flbl">Groupe sanguin</label>
+        <div class="ibox" role="note"><p data-i18n="vol.donor.ibox">Votre groupe sanguin est une donnée de santé, traitée conformément à la loi 2008-12 sur la protection des données personnelles. Il ne sert qu'à vous alerter en cas de besoin compatible près de chez vous.</p></div>
+        <label class="flbl" data-i18n="sang.lbl.groupe2">Groupe sanguin</label>
         <div class="catgrid" role="group" aria-label="Votre groupe sanguin" style="grid-template-columns:repeat(4,1fr)">
           <button class="catbtn donor-groupe-btn" onclick="selDonorGroupe(this)" aria-pressed="false">O-</button>
           <button class="catbtn donor-groupe-btn" onclick="selDonorGroupe(this)" aria-pressed="false">O+</button>
@@ -834,26 +834,26 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
           <button class="catbtn donor-groupe-btn" onclick="selDonorGroupe(this)" aria-pressed="false">AB-</button>
           <button class="catbtn donor-groupe-btn" onclick="selDonorGroupe(this)" aria-pressed="false">AB+</button>
         </div>
-        <button class="catbtn donor-groupe-btn" onclick="selDonorGroupe(this)" aria-pressed="false" style="width:100%;justify-content:center;margin-bottom:9px">Je ne connais pas mon groupe</button>
-        <label class="flbl" for="v-donor-date">Date de mon dernier don (facultatif)</label>
+        <button class="catbtn donor-groupe-btn" onclick="selDonorGroupe(this)" aria-pressed="false" style="width:100%;justify-content:center;margin-bottom:9px" data-i18n="vol.donor.unknown">Je ne connais pas mon groupe</button>
+        <label class="flbl" for="v-donor-date" data-i18n="vol.donor.date">Date de mon dernier don (facultatif)</label>
         <input class="finp" type="date" id="v-donor-date" aria-label="Date de votre dernier don de sang, facultatif">
         <button class="catbtn" id="v-donor-consent" onclick="this.classList.toggle('sel');this.setAttribute('aria-pressed',this.classList.contains('sel'))" aria-pressed="false" style="width:100%;justify-content:center;margin-bottom:9px">
-          <i class="ti ti-checkbox" aria-hidden="true"></i><span>J'accepte d'être contacté(e) en cas de besoin compatible à proximité</span>
+          <i class="ti ti-checkbox" aria-hidden="true"></i><span data-i18n="vol.donor.consent">J'accepte d'être contacté(e) en cas de besoin compatible à proximité</span>
         </button>
       </div>
 
       <button class="btn-g" onclick="submitVol()" aria-label="Soumettre votre inscription comme Volontaire 221 — vérification sous 5 à 10 jours">
-        <i class="ti ti-shield-check" style="margin-right:5px" aria-hidden="true"></i>S'inscrire comme Volontaire
+        <i class="ti ti-shield-check" style="margin-right:5px" aria-hidden="true"></i><span data-i18n="vol.submit">S'inscrire comme Volontaire</span>
       </button>
-      <p style="font-size:10px;color:#999;text-align:center;margin:7px 0 14px" aria-live="polite">Vérification par le CNRD-221 sous 5–10 jours</p>
+      <p style="font-size:10px;color:#999;text-align:center;margin:7px 0 14px" aria-live="polite" data-i18n="vol.verif">Vérification par le CNRD-221 sous 5–10 jours</p>
     </div>
   </div>
   <nav class="bnav" aria-label="Navigation principale">
-    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
-    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span>Carte</span></button>
-    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span>Numéros</span></button>
-    <button class="bni active" aria-current="page" aria-label="Volontaires — page actuelle"><i class="ti ti-users" aria-hidden="true"></i><span>Volontaires</span></button>
-    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span>Secours</span></button>
+    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span data-i18n="nav.home">Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span data-i18n="nav.map">Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span data-i18n="nav.numbers">Numéros</span></button>
+    <button class="bni active" aria-current="page" aria-label="Volontaires — page actuelle"><i class="ti ti-users" aria-hidden="true"></i><span data-i18n="nav.volunteers">Volontaires</span></button>
+    <button class="bni" onclick="goTo('scr-guide')" aria-label="Premiers secours"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span data-i18n="nav.rescue">Secours</span></button>
   </nav>
 </div>
 
@@ -862,22 +862,22 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   <div class="sb"><span id="sb-clock-guide" aria-hidden="true"></span></div>
   <div class="nsub">
     <button onclick="goTo('scr-home')" aria-label="Retour à l'accueil"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
-    <h2>Guide Premiers Secours</h2>
+    <h2 data-i18n="guide.title">Guide Premiers Secours</h2>
   </div>
   <div class="gtabs" role="tablist" aria-label="Guides de premiers secours">
-    <button class="gtab active" onclick="setGuide('cardiac',this)" role="tab" aria-selected="true" aria-controls="guide-body">Arrêt cardiaque</button>
-    <button class="gtab" onclick="setGuide('noyade',this)" role="tab" aria-selected="false" aria-controls="guide-body">Noyade</button>
-    <button class="gtab" onclick="setGuide('accident',this)" role="tab" aria-selected="false" aria-controls="guide-body">Accident</button>
-    <button class="gtab" onclick="setGuide('incendie',this)" role="tab" aria-selected="false" aria-controls="guide-body">Incendie</button>
-    <button class="gtab" onclick="setGuide('pendaison',this)" role="tab" aria-selected="false" aria-controls="guide-body">Pendaison</button>
+    <button class="gtab active" onclick="setGuide('cardiac',this)" role="tab" aria-selected="true" aria-controls="guide-body" data-i18n="guide.tab.cardiac">Arrêt cardiaque</button>
+    <button class="gtab" onclick="setGuide('noyade',this)" role="tab" aria-selected="false" aria-controls="guide-body" data-i18n="guide.tab.noyade">Noyade</button>
+    <button class="gtab" onclick="setGuide('accident',this)" role="tab" aria-selected="false" aria-controls="guide-body" data-i18n="guide.tab.accident">Accident</button>
+    <button class="gtab" onclick="setGuide('incendie',this)" role="tab" aria-selected="false" aria-controls="guide-body" data-i18n="guide.tab.incendie">Incendie</button>
+    <button class="gtab" onclick="setGuide('pendaison',this)" role="tab" aria-selected="false" aria-controls="guide-body" data-i18n="guide.tab.pendaison">Pendaison</button>
   </div>
   <div style="padding:10px;overflow-y:auto;flex:1" id="guide-body" role="tabpanel" aria-live="polite"></div>
   <nav class="bnav" aria-label="Navigation principale">
-    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span>Accueil</span></button>
-    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span>Carte</span></button>
-    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span>Numéros</span></button>
-    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span>Volontaires</span></button>
-    <button class="bni active" aria-current="page" aria-label="Premiers secours — page actuelle"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span>Secours</span></button>
+    <button class="bni" onclick="goTo('scr-home')" aria-label="Accueil"><i class="ti ti-home" aria-hidden="true"></i><span data-i18n="nav.home">Accueil</span></button>
+    <button class="bni" onclick="goTo('scr-map')" aria-label="Carte"><i class="ti ti-map" aria-hidden="true"></i><span data-i18n="nav.map">Carte</span></button>
+    <button class="bni" onclick="goTo('scr-numeros')" aria-label="Numéros"><i class="ti ti-phone" aria-hidden="true"></i><span data-i18n="nav.numbers">Numéros</span></button>
+    <button class="bni" onclick="goTo('scr-vol')" aria-label="Volontaires"><i class="ti ti-users" aria-hidden="true"></i><span data-i18n="nav.volunteers">Volontaires</span></button>
+    <button class="bni active" aria-current="page" aria-label="Premiers secours — page actuelle"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span data-i18n="nav.rescue">Secours</span></button>
   </nav>
 </div>
 
@@ -887,15 +887,15 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
   <div class="sending">
     <div class="pulse" aria-hidden="true"><i class="ti ti-phone-call"></i></div>
     <div style="font-size:32px;font-weight:700;color:var(--r)" id="send-timer" aria-live="off">3</div>
-    <h3 style="font-size:17px;font-weight:700;color:#1a1a1a">Connexion au CNRD-221</h3>
-    <p style="font-size:12px;color:#666;line-height:1.5">Votre alerte est transmise. Un opérateur vous prend en charge.</p>
-    <div class="locbadge" aria-live="polite"><i class="ti ti-map-pin" aria-hidden="true"></i><span>Position GPS transmise · Dakar</span></div>
+    <h3 style="font-size:17px;font-weight:700;color:#1a1a1a" data-i18n="sending.title">Connexion au CNRD-221</h3>
+    <p style="font-size:12px;color:#666;line-height:1.5" data-i18n="sending.sub">Votre alerte est transmise. Un opérateur vous prend en charge.</p>
+    <div class="locbadge" aria-live="polite"><i class="ti ti-map-pin" aria-hidden="true"></i><span data-i18n="sending.gps">Position GPS transmise · Dakar</span></div>
     <div style="background:#fff;border-radius:10px;padding:11px;width:100%;border:1px solid #eee" aria-live="polite">
-      <p style="font-size:9px;color:#888;margin-bottom:3px">DISPATCH EN COURS</p>
+      <p style="font-size:9px;color:#888;margin-bottom:3px" data-i18n="sending.dispatch">DISPATCH EN COURS</p>
       <p style="font-size:12px;font-weight:600;color:#1a1a1a" id="dispatch-lbl">Urgence médicale → SAMU National</p>
-      <p style="font-size:10px;color:#888;margin-top:2px">Arrivée estimée : &lt; 8 min</p>
+      <p style="font-size:10px;color:#888;margin-top:2px" data-i18n="sending.eta">Arrivée estimée : &lt; 8 min</p>
     </div>
-    <button onclick="goTo('scr-home')" style="background:none;border:1px solid #ddd;border-radius:9px;padding:8px 16px;font-size:12px;cursor:pointer;font-family:inherit;color:#666" aria-label="Terminer la simulation et retourner à l'accueil">Terminer la simulation</button>
+    <button onclick="goTo('scr-home')" style="background:none;border:1px solid #ddd;border-radius:9px;padding:8px 16px;font-size:12px;cursor:pointer;font-family:inherit;color:#666" aria-label="Terminer la simulation et retourner à l'accueil" data-i18n="sending.end">Terminer la simulation</button>
   </div>
 </div>
 
@@ -3593,6 +3593,723 @@ function goTo(id){
 }
 
 // ── MULTILINGUE ────────────────────────────────────────────────────────────────
+const I18N = {
+  fr: {
+    'nav.home': 'Accueil',
+    'nav.map': 'Carte',
+    'nav.numbers': 'Numéros',
+    'nav.volunteers': 'Volontaires',
+    'nav.rescue': 'Secours',
+    'common.cancel': 'Annuler',
+    'common.select': '-- Sélectionner --',
+    'common.other': 'Autre',
+    'common.selectType': 'Sélectionner un type',
+    'common.backhome': 'Retour à l\'accueil',
+    'common.call221': 'Appeler le 221',
+    'common.recipients': 'Destinataires',
+    'common.category': 'Catégorie',
+    'common.serviceoriented': 'Service orienté',
+    'common.dossier': 'Numéro de dossier',
+    'common.medical': 'Médical',
+    'common.incendie': 'Incendie',
+    'common.inondation': 'Inondation',
+    'common.accident': 'Accident',
+    'map.title': 'Services à proximité',
+    'map.chip.all': 'Tout',
+    'map.chip.police': 'Police',
+    'map.chip.firemen': 'Pompiers',
+    'map.chip.hospitals': 'Hôpitaux',
+    'map.chip.health': 'Santé',
+    'map.chip.pharmacies': 'Pharmacies',
+    'map.chip.gendarmerie': 'Gendarmerie',
+    'map.locate': 'Ma position',
+    'num.title': 'Numéros d\'urgence',
+    'num.banner': 'Le 221 connecte tous ces services. Un seul réflexe, tous les secours.',
+    'num.sec.security': 'Sécurité',
+    'num.17.name': 'Police Secours',
+    'num.17.desc': 'Police Nationale · zones urbaines',
+    'num.gendarmerie.name': 'Gendarmerie Nationale',
+    'num.gendarmerie.desc': '800 00 20 20 · zones rurales',
+    'num.112.name': 'Numéro européen',
+    'num.112.desc': 'Accessible depuis tout réseau',
+    'num.sec.firemen': 'Pompiers',
+    'num.18.name': 'Pompiers (BNSP)',
+    'num.18.desc': 'Brigade Nationale · 6 groupements',
+    'num.caserne.name': 'Caserne Centrale Dakar',
+    'num.sec.medical': 'Urgences médicales',
+    'num.1515.name': 'SAMU National',
+    'num.1515.desc': 'Gratuit · régulation 24h/24',
+    'num.dakar': '33 839 50 00 · Dakar',
+    'num.grandyoff': '33 827 93 37 · Grand Yoff',
+    'num.sec.other': 'Autres',
+    'num.senelec.desc': '800 00 00 04 · panne électrique',
+    'num.116.name': 'Enfance en danger',
+    'num.116.desc': '116 · gratuit',
+    'num.btn.call': 'Appel',
+    'refus.card.title': 'Signaler un refus de soins',
+    'refus.card.desc': 'Un hôpital refuse une urgence ? Agissez maintenant.',
+    'refus.title': 'Refus de soins',
+    'refus.hero.title': 'Refus de prise en charge',
+    'refus.hero.sub': 'Signalement transmis au CNRD-221, au Ministère de la Santé et à l\'Ordre des Médecins.',
+    'refus.alert': 'En cas d\'urgence vitale, appelez <strong>le 221 en premier</strong>.',
+    'refus.now': 'Que faire maintenant',
+    'refus.step1.t': 'Appelez le 221 maintenant',
+    'refus.step1.d': 'L\'opérateur cherche une structure disponible immédiatement.',
+    'refus.step2.t': 'Documentez le refus',
+    'refus.step2.d': 'Heure, nom de l\'établissement, motif allégué. Photo si possible.',
+    'refus.step3.t': 'Signalez via ce formulaire',
+    'refus.step3.d': 'Signalement horodaté et géolocalisé transmis aux autorités.',
+    'refus.lbl.etab': 'Établissement concerné',
+    'refus.lbl.precision': 'Précision (si autre)',
+    'refus.lbl.nature': 'Nature de l\'urgence',
+    'refus.lbl.motif': 'Motif du refus allégué',
+    'refus.lbl.desc': 'Description (facultatif)',
+    'refus.opt.cs1': 'Centre de Santé Gueule Tapée',
+    'refus.opt.cs2': 'Centre de Santé Médina',
+    'refus.opt.clinic': 'Clinique privée (préciser)',
+    'refus.opt.other': 'Autre (préciser ci-dessous)',
+    'refus.urg1': 'Urgence médicale (malaise, douleur intense)',
+    'refus.urg2': 'Accident de la route / traumatisme',
+    'refus.urg3': 'Urgence obstétricale / accouchement',
+    'refus.urg4': 'Tentative de suicide / pendaison',
+    'refus.urg5': 'AVC / infarctus',
+    'refus.urg6': 'Enfant en détresse',
+    'refus.urg7': 'Autre urgence vitale',
+    'refus.motif1': '💰 Financier',
+    'refus.motif2': '📋 Administratif',
+    'refus.motif3': '🏥 Saturé',
+    'refus.motif4': '❓ Sans motif',
+    'refus.legal': 'Ce signalement est horodaté, géolocalisé et transmis simultanément au <strong>CNRD-221</strong>, au <strong>Ministère de la Santé</strong> et à l\'<strong>Ordre des Médecins</strong>. Un accusé de réception vous sera envoyé par SMS.',
+    'refus.submit': 'Envoyer le signalement',
+    'refus.gps': 'Position GPS et heure enregistrées automatiquement',
+    'refus.ph.nom': 'Nom et adresse de l\'établissement',
+    'refus.ph.desc': 'Décrivez ce qui s\'est passé : heure, interlocuteur, propos tenus...',
+    'refusok.title': 'Signalement envoyé',
+    'refusok.h3': 'Signalement reçu',
+    'refusok.p': 'Votre signalement a été transmis. Un SMS de confirmation avec votre numéro de dossier vous sera envoyé dans les prochaines minutes.',
+    'refusok.dest1': 'CNRD-221 — Dispatch immédiat',
+    'refusok.dest2': 'Ministère de la Santé',
+    'refusok.dest3': 'Ordre des Médecins du Sénégal',
+    'cyber.title': 'Cyber-Urgences',
+    'cyber.card.title': 'Cyber-Urgences',
+    'cyber.card.desc': 'Arnaque, piratage, sextorsion, contenu illicite',
+    'home.q9s': 'Arnaque, piratage, sextorsion...',
+    'cyber.hero.title': 'Signalement Cyber',
+    'cyber.hero.sub': 'Extension numérique du CNRD-221, en partenariat avec l\'ENCVR (École Nationale de Cybersécurité à Vocation Régionale). Documentez la menace : nous orientons vers l\'unité compétente.',
+    'cyber.ibox': '<strong>En cas de danger physique immédiat, appelez le 221.</strong> Pour les cas urgents (sextorsion active, menace physique en ligne), activez le bouton « Cas urgent » ci-dessous : une intervention en temps réel est déclenchée.',
+    'cyber.lbl.type': 'Type de cybermenace',
+    'cyber.cat.arnaques': 'Arnaques en ligne',
+    'cyber.cat.harcelement': 'Cyberharcèlement',
+    'cyber.cat.violences': 'Cyberviolences',
+    'cyber.cat.usurpation': 'Usurpation d\'identité',
+    'cyber.cat.cyberattaque': 'Cyberattaque critique',
+    'cyber.cat.escroquerie': 'Escroquerie tél.',
+    'cyber.lbl.plateforme': 'Plateforme concernée',
+    'cyber.plat.appel': 'Appel téléphonique',
+    'cyber.plat.site': 'Site web',
+    'cyber.lbl.prejudice': 'Préjudice subi',
+    'cyber.prej1': 'Perte financière',
+    'cyber.prej2': 'Perte d\'accès à un compte',
+    'cyber.prej3': 'Atteinte à la réputation / à l\'image',
+    'cyber.prej4': 'Détresse psychologique',
+    'cyber.prej5': 'Aucun préjudice à ce stade',
+    'cyber.lbl.auteur': 'Identité de l\'auteur, si connue',
+    'cyber.ph.auteur': 'Nom, pseudo, numéro de téléphone... (facultatif)',
+    'cyber.lbl.chrono': 'Chronologie des faits',
+    'cyber.ph.desc': 'Décrivez les faits dans l\'ordre : ce qui s\'est passé, quand, montants éventuels...',
+    'cyber.lbl.preuves': 'Preuves disponibles',
+    'cyber.urgent': 'Cas urgent — sextorsion active / menace physique',
+    'cyber.warn1': 'Ne partagez jamais vos mots de passe, codes OTP ou numéros de carte, même avec le 221. Aucun agent légitime ne vous les demandera.',
+    'cyber.warn2': 'Victime d\'une arnaque Mobile Money ? Bloquez votre compte immédiatement auprès de votre opérateur, en plus de ce signalement.',
+    'cyber.childbox': 'Si un enfant est concerné (contenu, sextorsion, sollicitation), signalez-le également au <strong>116 — Centre Ginddi, Protection de l\'enfance</strong>, gratuit et disponible 24h/24.',
+    'cyber.footer': 'Qualification guidée par un agent certifié ENCVR · dossier suivi, rappel automatique sous 48h',
+    'cyber.resources.title': 'Numéros et ressources utiles',
+    'cyber.res.221': 'Réception, qualification et orientation d\'urgence',
+    'cyber.res.dsc.name': 'Division Spéciale Cybercriminalité',
+    'cyber.res.encvr.name': 'École Nat. de Cybersécurité (ENCVR)',
+    'cyber.res.encvr.desc': 'Cyberattaques critiques · rattachée à la Présidence',
+    'cyber.res.ginddi.name': 'Centre Ginddi — Enfance en danger',
+    'cyber.res.ginddi.desc': '116 · gratuit · contenu ou sollicitation visant un enfant',
+    'cyberok.title': 'Dossier créé',
+    'cyberok.h3': 'Signalement qualifié et transmis',
+    'cyberok.p': 'Votre dossier a été créé. Un rappel automatique sera effectué sous <strong>48 heures</strong> pour vérifier votre prise en charge.',
+    'sang.title': 'Dons de Sang',
+    'sang.card.title': 'Dons de Sang',
+    'sang.card.desc1': 'Signaler un besoin urgent',
+    'sang.card.desc2': 'Signaler un besoin urgent, vérifié par le CNRD-221',
+    'sang.hero.title': 'Appel aux Dons de Sang',
+    'sang.hero.sub': 'Un besoin urgent et compatible peut sauver une vie en quelques heures. Chaque signalement est vérifié par le CNRD-221 avant toute diffusion aux donneurs.',
+    'sang.active.title': 'Demandes actives à proximité',
+    'sang.active1': '2 poches recherchées · Vérifié il y a 12 min',
+    'sang.active2': '1 poche recherchée · Vérifié il y a 40 min',
+    'sang.urgent': 'URGENT',
+    'sang.actif': 'ACTIF',
+    'sang.form.title': 'Signaler un besoin urgent',
+    'sang.abox': 'Ce signalement est transmis à un opérateur <strong>CNRD-221</strong> pour vérification. Il n\'est diffusé aux donneurs compatibles qu\'après validation — aucune diffusion automatique.',
+    'sang.lbl.etab': 'Établissement concerné',
+    'sang.cs': 'Centre de Santé',
+    'sang.lbl.groupe': 'Groupe sanguin recherché',
+    'sang.lbl.groupe2': 'Groupe sanguin',
+    'sang.lbl.qte': 'Quantité nécessaire (poches)',
+    'sang.qte1': '1 poche',
+    'sang.qte2': '2 poches',
+    'sang.qte3': '3 à 5 poches',
+    'sang.qte4': 'Plus de 5',
+    'sang.lbl.tel': 'Contact sur place',
+    'sang.lbl.contexte': 'Contexte (facultatif)',
+    'sang.ph.desc': 'Intervention chirurgicale, accouchement, accident, drépanocytose...',
+    'sang.complete': 'Compléter le formulaire',
+    'sang.donor.q': 'Vous êtes donneur ?',
+    'sang.donor.d': 'Complétez votre profil donneur dans Volontaires 221 pour être alerté(e) en cas de besoin compatible près de chez vous.',
+    'sang.donor.btn': 'Compléter mon profil donneur',
+    'sang.legal': 'Groupe sanguin : donnée de santé traitée conformément à la loi 2008-12',
+    'sangok.title': 'Signalement transmis',
+    'sangok.h3': 'En cours de vérification',
+    'sangok.p': 'Un opérateur CNRD-221 vérifie l\'information. Une fois validée, l\'alerte est diffusée aux donneurs compatibles à proximité. Vous recevrez une confirmation par SMS.',
+    'sangok.groupe': 'Groupe recherché',
+    'vol.title': 'Devenir Volontaire 221',
+    'vol.hero.title': 'Réseau 221 Volontaires',
+    'vol.hero.sub': 'Intervenez en premier. Chaque minute compte.',
+    'vol.lbl.nom': 'Prénom et Nom',
+    'vol.lbl.tel': 'Téléphone',
+    'vol.lbl.categorie': 'Catégorie',
+    'vol.cat.secouriste': 'Secouriste',
+    'vol.cat.medecin': 'Médecin/Infirmier',
+    'vol.cat.pompier': 'Pompier vol.',
+    'vol.cat.logisticien': 'Logisticien',
+    'vol.cat.psy': 'Psychologue',
+    'vol.lbl.diplome': 'Diplôme / Certification',
+    'vol.dip.medical': 'Diplôme médical',
+    'vol.dip.bnsp': 'Certification BNSP',
+    'vol.donor.toggle': '🩸 Je souhaite aussi être donneur de sang',
+    'vol.donor.ibox': 'Votre groupe sanguin est une donnée de santé, traitée conformément à la loi 2008-12 sur la protection des données personnelles. Il ne sert qu\'à vous alerter en cas de besoin compatible près de chez vous.',
+    'vol.donor.unknown': 'Je ne connais pas mon groupe',
+    'vol.donor.date': 'Date de mon dernier don (facultatif)',
+    'vol.donor.consent': 'J\'accepte d\'être contacté(e) en cas de besoin compatible à proximité',
+    'vol.submit': 'S\'inscrire comme Volontaire',
+    'vol.verif': 'Vérification par le CNRD-221 sous 5–10 jours',
+    'wit.tab.report': 'Signaler',
+    'wit.tab.wait': 'En attendant',
+    'wit.agression': 'Agression',
+    'wit.lbl.victimes': 'Nombre de victimes',
+    'wit.v1': '1 personne',
+    'wit.v2': '2 à 5',
+    'wit.v3': 'Plus de 5',
+    'wit.v4': 'Inconnu',
+    'wit.lbl.etat': 'État apparent',
+    'wit.e1': 'Conscient(e)',
+    'wit.e2': 'Inconscient(e)',
+    'wit.e3': 'Ne respire pas',
+    'wit.e4': 'Blessures visibles',
+    'wit.e5': 'Impossible à évaluer',
+    'wit.lbl.comp': 'Informations complémentaires',
+    'wit.alert': 'Alerter le 221',
+    'wit.wait.warn': 'Appelez d\'abord le 221. Ces conseils s\'appliquent uniquement en attendant les secours.',
+    'wit.step1.t': 'Sécurisez la zone',
+    'wit.step1.d': 'Ne déplacez pas les victimes. Éloignez les badauds.',
+    'wit.step2.t': 'Parlez à la victime',
+    'wit.step2.d': '"Vous m\'entendez ?" Rassurez. Ne laissez pas seule.',
+    'wit.step3.t': 'Contrôlez le saignement',
+    'wit.step3.d': 'Comprimez fort avec tissu propre jusqu\'aux secours.',
+    'wit.step4.t': 'Guidez les secours',
+    'wit.step4.d': 'Restez visible. Faites signe pour guider l\'ambulance.',
+    'guide.title': 'Guide Premiers Secours',
+    'guide.tab.cardiac': 'Arrêt cardiaque',
+    'guide.tab.noyade': 'Noyade',
+    'guide.tab.accident': 'Accident',
+    'guide.tab.incendie': 'Incendie',
+    'guide.tab.pendaison': 'Pendaison',
+    'sending.title': 'Connexion au CNRD-221',
+    'sending.sub': 'Votre alerte est transmise. Un opérateur vous prend en charge.',
+    'sending.gps': 'Position GPS transmise · Dakar',
+    'sending.dispatch': 'DISPATCH EN COURS',
+    'sending.eta': 'Arrivée estimée : &lt; 8 min',
+    'sending.end': 'Terminer la simulation',
+    'ci.dur15': '15 minutes',
+    'ci.dur30': '30 minutes',
+    'ci.dur60': '1 heure',
+    'ci.dur120': '2 heures',
+    'ci.dur240': '4 heures',
+    'ci.sosbtn': '🆘 SOS — J\'ai besoin d\'aide',
+  },
+  wo: {
+    'nav.home': 'Kër',
+    'nav.map': 'Karte',
+    'nav.numbers': 'Nimero',
+    'nav.volunteers': 'Volontaires',
+    'nav.rescue': 'Faju',
+    'common.cancel': 'Soppiku',
+    'common.select': '-- Tànnal --',
+    'common.other': 'Yeneen',
+    'common.selectType': 'Tànnal xeet',
+    'common.backhome': 'Dellu ci kër',
+    'common.call221': 'Woote 221',
+    'common.recipients': 'Ñi ko jot',
+    'common.category': 'Kategori',
+    'common.serviceoriented': 'Serwis bi ñu yebbi',
+    'common.dossier': 'Nimero dosye',
+    'common.medical': 'Wér-gi-yaram',
+    'common.incendie': 'Safara',
+    'common.inondation': 'Ndox',
+    'common.accident': 'Aksidaa',
+    'map.title': 'Serwis yi jege',
+    'map.chip.all': 'Lépp',
+    'map.chip.police': 'Polis',
+    'map.chip.firemen': 'Safara-jàppale',
+    'map.chip.hospitals': 'Opitaal yi',
+    'map.chip.health': 'Wér-gi-yaram',
+    'map.chip.pharmacies': 'Farmasi yi',
+    'map.chip.gendarmerie': 'Zandarmri',
+    'map.locate': 'Fa ma nekk',
+    'num.title': 'Nimero jafe-jafe',
+    'num.banner': '221 moo dëngël serwis yépp. Benn xalaat, faju yépp.',
+    'num.sec.security': 'Kaaraange',
+    'num.17.name': 'Polis Ndimbal',
+    'num.17.desc': 'Polis Nationale · dëkk yu mag',
+    'num.gendarmerie.name': 'Zandarmri Nationale',
+    'num.gendarmerie.desc': '800 00 20 20 · gox yu mbey',
+    'num.112.name': 'Nimero Européen bi',
+    'num.112.desc': 'Man nañu ko woote ci réseau bu nekk',
+    'num.sec.firemen': 'Safara-jàppale',
+    'num.18.name': 'Safara-jàppale (BNSP)',
+    'num.18.desc': 'Brigade Nationale · 6 gruup',
+    'num.caserne.name': 'Kaseer Bu Mag Dakar',
+    'num.sec.medical': 'Jafe-jafe wér-gi-yaram',
+    'num.1515.name': 'SAMU National',
+    'num.1515.desc': 'Amul njëg · 24u/24',
+    'num.dakar': '33 839 50 00 · Dakar',
+    'num.grandyoff': '33 827 93 37 · Grand Yoff',
+    'num.sec.other': 'Yeneen',
+    'num.senelec.desc': '800 00 00 04 · kuur eletriside',
+    'num.116.name': 'Xale bu ci Danger',
+    'num.116.desc': '116 · amul njëg',
+    'num.btn.call': 'Woote',
+    'refus.card.title': 'Wax refus faju',
+    'refus.card.desc': 'Opitaal bàyyi na jafe-jafe? Jëflante léegi.',
+    'refus.title': 'Refus faju',
+    'refus.hero.title': 'Bañ faju',
+    'refus.hero.sub': 'Wax bi dañu ko yónnee CNRD-221, Ministère Santé ak Ordre Médecins.',
+    'refus.alert': 'Su jafe-jafe bu bir la, woote <strong>221 bu jëkk</strong>.',
+    'refus.now': 'Lu war a def léegi',
+    'refus.step1.t': 'Woote 221 léegi',
+    'refus.step1.d': 'Operatër bi dina seet kër faju bu am léegi.',
+    'refus.step2.t': 'Bind refus bi',
+    'refus.step2.d': 'Waxtu, tur kër faju bi, lu ñu wax. Nataal su mën.',
+    'refus.step3.t': 'Wax ci fiche bii',
+    'refus.step3.d': 'Wax bi am na waxtu ak barab, yónnee ci ñi yor sañ-sañ.',
+    'refus.lbl.etab': 'Kër faju bi',
+    'refus.lbl.precision': 'Leeral (su nekk yeneen)',
+    'refus.lbl.nature': 'Xeet jafe-jafe bi',
+    'refus.lbl.motif': 'Lu ñu wax mu tax refus',
+    'refus.lbl.desc': 'Leeral (du war)',
+    'refus.opt.cs1': 'Sàntar Wér-gi-yaram Gueule Tapée',
+    'refus.opt.cs2': 'Sàntar Wér-gi-yaram Médina',
+    'refus.opt.clinic': 'Kilinig bu privé (leeral)',
+    'refus.opt.other': 'Yeneen (leeral ci suuf)',
+    'refus.urg1': 'Jafe-jafe wér-gi-yaram (feebar, metit bu tar)',
+    'refus.urg2': 'Aksidaa oto / metit',
+    'refus.urg3': 'Jafe-jafe wàllu jur / jur',
+    'refus.urg4': 'Jéem a rey boppam / dàqu',
+    'refus.urg5': 'AVC / feebar xol',
+    'refus.urg6': 'Xale bu ci jafe-jafe',
+    'refus.urg7': 'Yeneen jafe-jafe bu bir',
+    'refus.motif1': '💰 Xaalis',
+    'refus.motif2': '📋 Administratif',
+    'refus.motif3': '🏥 Fees na',
+    'refus.motif4': '❓ Amul lu ñu wax',
+    'refus.legal': 'Wax bii am na waxtu ak barab, yónnee ci <strong>CNRD-221</strong>, <strong>Ministère Santé</strong> ak <strong>Ordre Médecins</strong>. Dinañu la yónnee SMS ngir wone ñu ko jot.',
+    'refus.submit': 'Yónnee wax bi',
+    'refus.gps': 'Barab GPS ak waxtu bind nañu ci seen bopp',
+    'refus.ph.nom': 'Tur ak adrees kër faju bi',
+    'refus.ph.desc': 'Leeral lu xew: waxtu, kiy wax, lan ñu wax...',
+    'refusok.title': 'Wax bi yónnee na',
+    'refusok.h3': 'Wax bi jot na',
+    'refusok.p': 'Wax bi yónnee nañu ko. Dinañu la yónnee SMS ak nimero dosye bi ci ay simili.',
+    'refusok.dest1': 'CNRD-221 — Yebbi léegi',
+    'refusok.dest2': 'Ministère Santé',
+    'refusok.dest3': 'Ordre Médecins Sénégal',
+    'cyber.title': 'Cyber-Urgences',
+    'cyber.card.title': 'Cyber-Urgences',
+    'cyber.card.desc': 'Nax, piratage, sextorsion, kontenu bu bon',
+    'home.q9s': 'Nax, piratage, sextorsion...',
+    'cyber.hero.title': 'Wax Cyber',
+    'cyber.hero.sub': 'Jëfandikoo numerik CNRD-221, ak ENCVR (École Nationale de Cybersécurité). Leeral jafe-jafe bi: dananu la yebbi ci unite bi war.',
+    'cyber.ibox': '<strong>Su am danger léegi ci sa yaram, woote 221.</strong> Su jafe-jafe bu gaaw (sextorsion, menace ci yaram), jëloo bouton « Cas urgent » ci suuf: dinañu jëfante léegi léegi.',
+    'cyber.lbl.type': 'Xeet cyber-jafe-jafe',
+    'cyber.cat.arnaques': 'Nax ci internet',
+    'cyber.cat.harcelement': 'Tuñi ci internet',
+    'cyber.cat.violences': 'Fitna ci internet',
+    'cyber.cat.usurpation': 'Sace sa identité',
+    'cyber.cat.cyberattaque': 'Cyberattaque bu tar',
+    'cyber.cat.escroquerie': 'Nax ci telefon',
+    'cyber.lbl.plateforme': 'Plateforme bi',
+    'cyber.plat.appel': 'Woote telefon',
+    'cyber.plat.site': 'Setal internet',
+    'cyber.lbl.prejudice': 'Lu la dane',
+    'cyber.prej1': 'Xaalis bu wàcc',
+    'cyber.prej2': 'Compte bu dañu ko',
+    'cyber.prej3': 'Tur bu bon',
+    'cyber.prej4': 'Metit ci xel',
+    'cyber.prej5': 'Amul lu la dane léegi',
+    'cyber.lbl.auteur': 'Ku ko def, su xam nga',
+    'cyber.ph.auteur': 'Tur, pseudo, nimero telefon... (du war)',
+    'cyber.lbl.chrono': 'Xew-xew yi ci ndajem',
+    'cyber.ph.desc': 'Leeral xew-xew yi ci ndajem: lu xew, kañ, xaalis su am...',
+    'cyber.lbl.preuves': 'Firnde yi am',
+    'cyber.urgent': 'Cas urgent — sextorsion / menace ci yaram',
+    'cyber.warn1': 'Bul jox sa mot de passe, code OTP walla nimero carte, du ak 221. Benn agent bu dëggu du la ko laaj.',
+    'cyber.warn2': 'Nax nañu la ci Mobile Money? Téer sa compte léegi ci sa opérateur, ak wax bii itam.',
+    'cyber.childbox': 'Su xale ci lëkkalool (kontenu, sextorsion, laaj), wax ko itam ci <strong>116 — Sàntar Ginddi</strong>, amul njëg, 24u/24.',
+    'cyber.footer': 'Agent ENCVR dina la topatoo · dosye suivi, rappel ci 48h',
+    'cyber.resources.title': 'Nimero ak ressources yu am solo',
+    'cyber.res.221': 'Jot, topatoo ak yebbi jafe-jafe',
+    'cyber.res.dsc.name': 'Division Spéciale Cybercriminalité',
+    'cyber.res.encvr.name': 'École Nat. Cybersécurité (ENCVR)',
+    'cyber.res.encvr.desc': 'Cyberattaques bu tar · ci Présidence',
+    'cyber.res.ginddi.name': 'Sàntar Ginddi — Xale ci Danger',
+    'cyber.res.ginddi.desc': '116 · amul njëg · kontenu walla laaj ci xale',
+    'cyberok.title': 'Dosye bind na',
+    'cyberok.h3': 'Wax bi topatoo te yónnee',
+    'cyberok.p': 'Dosye bi bind nañu ko. Dinañu la woote ci <strong>48 waxtu</strong> ngir seet sa faju.',
+    'sang.title': 'Dons de Sang',
+    'sang.card.title': 'Dons de Sang',
+    'sang.card.desc1': 'Wax laaj bu gaaw',
+    'sang.card.desc2': 'Wax laaj bu gaaw, CNRD-221 dina ko seet',
+    'sang.hero.title': 'Woote ngir Dons de Sang',
+    'sang.hero.sub': 'Laaj bu gaaw te compatible mën na musal bakkan ci ay waxtu. Wax bu nekk CNRD-221 dina ko seet balaa mu yebbi ci ñi may deret.',
+    'sang.active.title': 'Laaj yu ci jamono jege',
+    'sang.active1': '2 poch yu ñu di seet · Seet 12 min ci ginaaw',
+    'sang.active2': '1 poch bu ñu di seet · Seet 40 min ci ginaaw',
+    'sang.urgent': 'URGENT',
+    'sang.actif': 'ACTIF',
+    'sang.form.title': 'Wax laaj bu gaaw',
+    'sang.abox': 'Wax bii dañu ko yónnee benn operatër <strong>CNRD-221</strong> ngir seet ko. Du yebbi ci ñi may deret li mu am compatible li validation baa xam-xam — amul diffusion ci sa bopp.',
+    'sang.lbl.etab': 'Kër faju bi',
+    'sang.cs': 'Sàntar Wér-gi-yaram',
+    'sang.lbl.groupe': 'Xeet deret bu ñu di seet',
+    'sang.lbl.groupe2': 'Xeet deret',
+    'sang.lbl.qte': 'Lim bu war (poch)',
+    'sang.qte1': '1 poch',
+    'sang.qte2': '2 poch',
+    'sang.qte3': '3 ba 5 poch',
+    'sang.qte4': 'Gën 5',
+    'sang.lbl.tel': 'Nimero ci barab bi',
+    'sang.lbl.contexte': 'Context (du war)',
+    'sang.ph.desc': 'Operation, jur, aksidaa, drépanocytose...',
+    'sang.complete': 'Dogal fiche bi',
+    'sang.donor.q': 'Yaw danga may deret?',
+    'sang.donor.d': 'Dogal sa profil donneur ci Volontaires 221 ngir am xibaar su am laaj compatible jege sa kër.',
+    'sang.donor.btn': 'Dogal sama profil donneur',
+    'sang.legal': 'Xeet deret: xibaar wér-gi-yaram, ci loi 2008-12',
+    'sangok.title': 'Wax bi yónnee na',
+    'sangok.h3': 'Ci seet',
+    'sangok.p': 'Benn operatër CNRD-221 dafay seet xibaar bi. Su validé, alerte bi dina yebbi ci ñi may deret yu compatible yu jege. Dinga jot SMS ngir wone.',
+    'sangok.groupe': 'Xeet deret bu ñu di seet',
+    'vol.title': 'Nekk Volontaire 221',
+    'vol.hero.title': 'Réseau 221 Volontaires',
+    'vol.hero.sub': 'Jëkk a jëfe. Miniit bu nekk am na solo.',
+    'vol.lbl.nom': 'Tur ak Sant',
+    'vol.lbl.tel': 'Telefon',
+    'vol.lbl.categorie': 'Kategori',
+    'vol.cat.secouriste': 'Secouriste',
+    'vol.cat.medecin': 'Doktoor/Infirmier',
+    'vol.cat.pompier': 'Safara-jàppale',
+    'vol.cat.logisticien': 'Logisticien',
+    'vol.cat.psy': 'Psychologue',
+    'vol.lbl.diplome': 'Diplom / Sertifika',
+    'vol.dip.medical': 'Diplom wér-gi-yaram',
+    'vol.dip.bnsp': 'Sertifika BNSP',
+    'vol.donor.toggle': '🩸 Bëgg naa nekk itam donneur deret',
+    'vol.donor.ibox': 'Sa xeet deret xibaar wér-gi-yaram la, ci loi 2008-12. Du jëfandikoo lu dul ngir xamal la su am laaj compatible jege sa kër.',
+    'vol.donor.unknown': 'Xamuma sama xeet deret',
+    'vol.donor.date': 'Bees bu sama mujj don (du war)',
+    'vol.donor.consent': 'Nangu naa ñu ma woote su am laaj compatible jege',
+    'vol.submit': 'Bind sama tur Volontaire',
+    'vol.verif': 'CNRD-221 dina seet ci 5–10 fan',
+    'wit.tab.report': 'Wax',
+    'wit.tab.wait': 'Ci ndogoo',
+    'wit.agression': 'Fitna',
+    'wit.lbl.victimes': 'Lim ñi ci dane',
+    'wit.v1': '1 nit',
+    'wit.v2': '2 ba 5',
+    'wit.v3': 'Gën 5',
+    'wit.v4': 'Xamuñu',
+    'wit.lbl.etat': 'Nàn mu mel',
+    'wit.e1': 'Xam boppam',
+    'wit.e2': 'Xamul boppam',
+    'wit.e3': 'Duul nafas',
+    'wit.e4': 'Am pot yu leer',
+    'wit.e5': 'Manuma koo xam',
+    'wit.lbl.comp': 'Yeneen xibaar',
+    'wit.alert': 'Yëgal 221',
+    'wit.wait.warn': 'Woote jëkk 221. Xalaat yii du dara lu dul ci ndogoo faju.',
+    'wit.step1.t': 'Aar barab bi',
+    'wit.step1.d': 'Bul yeewu ñi dane. Fàggu ñi taxaw di xool.',
+    'wit.step2.t': 'Wax ak ki dane',
+    'wit.step2.d': '"Danga ma dégg?" Dëgëral ko. Bul ko bàyyi ci boppam.',
+    'wit.step3.t': 'Téer deret bi',
+    'wit.step3.d': 'Téer bu metti ak tuub bu set ba faju gis.',
+    'wit.step4.t': 'Yóbbu faju yi',
+    'wit.step4.d': 'Nekk fu ñu la gis. Simal loxo ngir yóbbu ambulaas bi.',
+    'guide.title': 'Guide Faju bu Njëkk',
+    'guide.tab.cardiac': 'Xol bi Taxaw',
+    'guide.tab.noyade': 'Suux ci ndox',
+    'guide.tab.accident': 'Aksidaa',
+    'guide.tab.incendie': 'Safara',
+    'guide.tab.pendaison': 'Dàqu',
+    'sending.title': 'Jokkoo ak CNRD-221',
+    'sending.sub': 'Alert bi yónnee na. Benn operatër dina la topatoo.',
+    'sending.gps': 'Barab GPS yónnee · Dakar',
+    'sending.dispatch': 'YEBBI CI JAMONO',
+    'sending.eta': 'Ñëw ci lu tollu 8 min',
+    'sending.end': 'Jeexal simulation bi',
+    'ci.dur15': '15 miniit',
+    'ci.dur30': '30 miniit',
+    'ci.dur60': '1 waxtu',
+    'ci.dur120': '2 waxtu',
+    'ci.dur240': '4 waxtu',
+    'ci.sosbtn': '🆘 SOS — Dama soxla ndimbal',
+  },
+  en: {
+    'nav.home': 'Home',
+    'nav.map': 'Map',
+    'nav.numbers': 'Numbers',
+    'nav.volunteers': 'Volunteers',
+    'nav.rescue': 'Rescue',
+    'common.cancel': 'Cancel',
+    'common.select': '-- Select --',
+    'common.other': 'Other',
+    'common.selectType': 'Select a type',
+    'common.backhome': 'Back to home',
+    'common.call221': 'Call 221',
+    'common.recipients': 'Recipients',
+    'common.category': 'Category',
+    'common.serviceoriented': 'Service directed to',
+    'common.dossier': 'Case number',
+    'common.medical': 'Medical',
+    'common.incendie': 'Fire',
+    'common.inondation': 'Flood',
+    'common.accident': 'Accident',
+    'map.title': 'Nearby services',
+    'map.chip.all': 'All',
+    'map.chip.police': 'Police',
+    'map.chip.firemen': 'Firefighters',
+    'map.chip.hospitals': 'Hospitals',
+    'map.chip.health': 'Health',
+    'map.chip.pharmacies': 'Pharmacies',
+    'map.chip.gendarmerie': 'Gendarmerie',
+    'map.locate': 'My location',
+    'num.title': 'Emergency numbers',
+    'num.banner': '221 connects all these services. One reflex, every rescue service.',
+    'num.sec.security': 'Security',
+    'num.17.name': 'Police Rescue',
+    'num.17.desc': 'National Police · urban areas',
+    'num.gendarmerie.name': 'National Gendarmerie',
+    'num.gendarmerie.desc': '800 00 20 20 · rural areas',
+    'num.112.name': 'European number',
+    'num.112.desc': 'Reachable from any network',
+    'num.sec.firemen': 'Firefighters',
+    'num.18.name': 'Firefighters (BNSP)',
+    'num.18.desc': 'National Brigade · 6 units',
+    'num.caserne.name': 'Central Fire Station Dakar',
+    'num.sec.medical': 'Medical emergencies',
+    'num.1515.name': 'National SAMU',
+    'num.1515.desc': 'Free · 24/7 regulation',
+    'num.dakar': '33 839 50 00 · Dakar',
+    'num.grandyoff': '33 827 93 37 · Grand Yoff',
+    'num.sec.other': 'Others',
+    'num.senelec.desc': '800 00 00 04 · power outage',
+    'num.116.name': 'Children in danger',
+    'num.116.desc': '116 · free',
+    'num.btn.call': 'Call',
+    'refus.card.title': 'Report a care refusal',
+    'refus.card.desc': 'A hospital refusing an emergency? Act now.',
+    'refus.title': 'Care refusal',
+    'refus.hero.title': 'Refusal of care',
+    'refus.hero.sub': 'Report sent to the CNRD-221, the Ministry of Health and the Medical Board.',
+    'refus.alert': 'In a life-threatening emergency, call <strong>221 first</strong>.',
+    'refus.now': 'What to do now',
+    'refus.step1.t': 'Call 221 now',
+    'refus.step1.d': 'The operator immediately looks for an available facility.',
+    'refus.step2.t': 'Document the refusal',
+    'refus.step2.d': 'Time, facility name, stated reason. Photo if possible.',
+    'refus.step3.t': 'Report via this form',
+    'refus.step3.d': 'Time-stamped, geolocated report sent to the authorities.',
+    'refus.lbl.etab': 'Facility concerned',
+    'refus.lbl.precision': 'Details (if other)',
+    'refus.lbl.nature': 'Nature of the emergency',
+    'refus.lbl.motif': 'Stated reason for the refusal',
+    'refus.lbl.desc': 'Description (optional)',
+    'refus.opt.cs1': 'Gueule Tapée Health Center',
+    'refus.opt.cs2': 'Médina Health Center',
+    'refus.opt.clinic': 'Private clinic (specify)',
+    'refus.opt.other': 'Other (specify below)',
+    'refus.urg1': 'Medical emergency (illness, severe pain)',
+    'refus.urg2': 'Road accident / trauma',
+    'refus.urg3': 'Obstetric emergency / childbirth',
+    'refus.urg4': 'Suicide attempt / hanging',
+    'refus.urg5': 'Stroke / heart attack',
+    'refus.urg6': 'Child in distress',
+    'refus.urg7': 'Other life-threatening emergency',
+    'refus.motif1': '💰 Financial',
+    'refus.motif2': '📋 Administrative',
+    'refus.motif3': '🏥 Overcrowded',
+    'refus.motif4': '❓ No reason given',
+    'refus.legal': 'This report is time-stamped, geolocated, and sent simultaneously to the <strong>CNRD-221</strong>, the <strong>Ministry of Health</strong> and the <strong>Medical Board</strong>. An acknowledgement will be sent to you by SMS.',
+    'refus.submit': 'Send the report',
+    'refus.gps': 'GPS location and time recorded automatically',
+    'refus.ph.nom': 'Name and address of the facility',
+    'refus.ph.desc': 'Describe what happened: time, who you spoke to, what was said...',
+    'refusok.title': 'Report sent',
+    'refusok.h3': 'Report received',
+    'refusok.p': 'Your report has been sent. A confirmation SMS with your case number will be sent to you within minutes.',
+    'refusok.dest1': 'CNRD-221 — Immediate dispatch',
+    'refusok.dest2': 'Ministry of Health',
+    'refusok.dest3': 'Senegal Medical Board',
+    'cyber.title': 'Cyber-Emergencies',
+    'cyber.card.title': 'Cyber-Emergencies',
+    'cyber.card.desc': 'Scams, hacking, sextortion, illicit content',
+    'home.q9s': 'Scams, hacking, sextortion...',
+    'cyber.hero.title': 'Cyber Report',
+    'cyber.hero.sub': 'A digital extension of the CNRD-221, in partnership with ENCVR (National Cybersecurity School). Document the threat: we route it to the right unit.',
+    'cyber.ibox': '<strong>If there is immediate physical danger, call 221.</strong> For urgent cases (active sextortion, physical threat online), activate the "Urgent case" button below: a real-time response is triggered.',
+    'cyber.lbl.type': 'Type of cyber threat',
+    'cyber.cat.arnaques': 'Online scams',
+    'cyber.cat.harcelement': 'Cyberharassment',
+    'cyber.cat.violences': 'Cyberviolence',
+    'cyber.cat.usurpation': 'Identity theft',
+    'cyber.cat.cyberattaque': 'Critical cyberattack',
+    'cyber.cat.escroquerie': 'Phone scam',
+    'cyber.lbl.plateforme': 'Platform involved',
+    'cyber.plat.appel': 'Phone call',
+    'cyber.plat.site': 'Website',
+    'cyber.lbl.prejudice': 'Harm suffered',
+    'cyber.prej1': 'Financial loss',
+    'cyber.prej2': 'Loss of account access',
+    'cyber.prej3': 'Damage to reputation / image',
+    'cyber.prej4': 'Psychological distress',
+    'cyber.prej5': 'No harm at this stage',
+    'cyber.lbl.auteur': 'Identity of the author, if known',
+    'cyber.ph.auteur': 'Name, alias, phone number... (optional)',
+    'cyber.lbl.chrono': 'Timeline of events',
+    'cyber.ph.desc': 'Describe the events in order: what happened, when, any amounts...',
+    'cyber.lbl.preuves': 'Available evidence',
+    'cyber.urgent': 'Urgent case — active sextortion / physical threat',
+    'cyber.warn1': 'Never share your passwords, OTP codes, or card numbers, even with 221. No legitimate agent will ever ask for them.',
+    'cyber.warn2': 'Victim of a Mobile Money scam? Block your account immediately with your operator, in addition to this report.',
+    'cyber.childbox': 'If a child is involved (content, sextortion, solicitation), also report it to <strong>116 — Centre Ginddi, Child Protection</strong>, free and available 24/7.',
+    'cyber.footer': 'Guided by an ENCVR-certified agent · case tracked, automatic callback within 48h',
+    'cyber.resources.title': 'Useful numbers and resources',
+    'cyber.res.221': 'Reception, assessment and emergency routing',
+    'cyber.res.dsc.name': 'Special Cybercrime Division',
+    'cyber.res.encvr.name': 'National Cybersecurity School (ENCVR)',
+    'cyber.res.encvr.desc': 'Critical cyberattacks · under the Presidency',
+    'cyber.res.ginddi.name': 'Centre Ginddi — Children in danger',
+    'cyber.res.ginddi.desc': '116 · free · content or solicitation targeting a child',
+    'cyberok.title': 'Case created',
+    'cyberok.h3': 'Report assessed and sent',
+    'cyberok.p': 'Your case has been created. An automatic callback will be made within <strong>48 hours</strong> to verify your follow-up.',
+    'sang.title': 'Blood Donations',
+    'sang.card.title': 'Blood Donations',
+    'sang.card.desc1': 'Report an urgent need',
+    'sang.card.desc2': 'Report an urgent need, verified by the CNRD-221',
+    'sang.hero.title': 'Call for Blood Donations',
+    'sang.hero.sub': 'An urgent and compatible need can save a life within hours. Every report is verified by the CNRD-221 before being sent to donors.',
+    'sang.active.title': 'Active nearby requests',
+    'sang.active1': '2 units needed · Verified 12 min ago',
+    'sang.active2': '1 unit needed · Verified 40 min ago',
+    'sang.urgent': 'URGENT',
+    'sang.actif': 'ACTIVE',
+    'sang.form.title': 'Report an urgent need',
+    'sang.abox': 'This report is sent to a <strong>CNRD-221</strong> operator for verification. It is only sent to compatible donors after validation — never automatically.',
+    'sang.lbl.etab': 'Facility concerned',
+    'sang.cs': 'Health Center',
+    'sang.lbl.groupe': 'Blood type needed',
+    'sang.lbl.groupe2': 'Blood type',
+    'sang.lbl.qte': 'Quantity needed (units)',
+    'sang.qte1': '1 unit',
+    'sang.qte2': '2 units',
+    'sang.qte3': '3 to 5 units',
+    'sang.qte4': 'More than 5',
+    'sang.lbl.tel': 'Contact on site',
+    'sang.lbl.contexte': 'Context (optional)',
+    'sang.ph.desc': 'Surgery, childbirth, accident, sickle cell disease...',
+    'sang.complete': 'Complete the form',
+    'sang.donor.q': 'Are you a donor?',
+    'sang.donor.d': 'Complete your donor profile in Volontaires 221 to be alerted when a compatible need is nearby.',
+    'sang.donor.btn': 'Complete my donor profile',
+    'sang.legal': 'Blood type: health data processed in accordance with law 2008-12',
+    'sangok.title': 'Report sent',
+    'sangok.h3': 'Under verification',
+    'sangok.p': 'A CNRD-221 operator is verifying the information. Once validated, the alert is sent to nearby compatible donors. You will receive an SMS confirmation.',
+    'sangok.groupe': 'Blood type needed',
+    'vol.title': 'Become a Volontaire 221',
+    'vol.hero.title': '221 Volunteers Network',
+    'vol.hero.sub': 'Be first to respond. Every minute counts.',
+    'vol.lbl.nom': 'First and last name',
+    'vol.lbl.tel': 'Phone',
+    'vol.lbl.categorie': 'Category',
+    'vol.cat.secouriste': 'First responder',
+    'vol.cat.medecin': 'Doctor/Nurse',
+    'vol.cat.pompier': 'Firefighter',
+    'vol.cat.logisticien': 'Logistics',
+    'vol.cat.psy': 'Psychologist',
+    'vol.lbl.diplome': 'Diploma / Certification',
+    'vol.dip.medical': 'Medical diploma',
+    'vol.dip.bnsp': 'BNSP certification',
+    'vol.donor.toggle': '🩸 I also want to be a blood donor',
+    'vol.donor.ibox': 'Your blood type is health data, processed in accordance with law 2008-12 on personal data protection. It is only used to alert you to a compatible need near you.',
+    'vol.donor.unknown': 'I don\'t know my blood type',
+    'vol.donor.date': 'Date of my last donation (optional)',
+    'vol.donor.consent': 'I agree to be contacted in case of a compatible need nearby',
+    'vol.submit': 'Register as a Volunteer',
+    'vol.verif': 'Verification by the CNRD-221 within 5–10 days',
+    'wit.tab.report': 'Report',
+    'wit.tab.wait': 'While waiting',
+    'wit.agression': 'Assault',
+    'wit.lbl.victimes': 'Number of victims',
+    'wit.v1': '1 person',
+    'wit.v2': '2 to 5',
+    'wit.v3': 'More than 5',
+    'wit.v4': 'Unknown',
+    'wit.lbl.etat': 'Apparent condition',
+    'wit.e1': 'Conscious',
+    'wit.e2': 'Unconscious',
+    'wit.e3': 'Not breathing',
+    'wit.e4': 'Visible injuries',
+    'wit.e5': 'Unable to assess',
+    'wit.lbl.comp': 'Additional information',
+    'wit.alert': 'Alert 221',
+    'wit.wait.warn': 'Call 221 first. This advice only applies while waiting for help.',
+    'wit.step1.t': 'Secure the area',
+    'wit.step1.d': 'Do not move the victims. Keep bystanders away.',
+    'wit.step2.t': 'Talk to the victim',
+    'wit.step2.d': '"Can you hear me?" Reassure them. Do not leave them alone.',
+    'wit.step3.t': 'Control the bleeding',
+    'wit.step3.d': 'Press firmly with clean cloth until help arrives.',
+    'wit.step4.t': 'Guide the rescuers',
+    'wit.step4.d': 'Stay visible. Wave to guide the ambulance.',
+    'guide.title': 'First Aid Guide',
+    'guide.tab.cardiac': 'Cardiac arrest',
+    'guide.tab.noyade': 'Drowning',
+    'guide.tab.accident': 'Accident',
+    'guide.tab.incendie': 'Fire',
+    'guide.tab.pendaison': 'Hanging',
+    'sending.title': 'Connecting to CNRD-221',
+    'sending.sub': 'Your alert has been sent. An operator is taking care of you.',
+    'sending.gps': 'GPS location sent · Dakar',
+    'sending.dispatch': 'DISPATCH IN PROGRESS',
+    'sending.eta': 'Estimated arrival: &lt; 8 min',
+    'sending.end': 'End the simulation',
+    'ci.dur15': '15 minutes',
+    'ci.dur30': '30 minutes',
+    'ci.dur60': '1 hour',
+    'ci.dur120': '2 hours',
+    'ci.dur240': '4 hours',
+    'ci.sosbtn': '🆘 SOS — I need help',
+  },
+};
+
 const LANGS = {
   fr: {
     'nav-sub':'Numéro d\'Urgence National Unique',
@@ -3689,7 +4406,10 @@ const LANGS = {
   }
 };
 
+let currentLang = 'fr';
+
 function setLang(l){
+  currentLang = l;
   document.querySelectorAll('.lang-btn').forEach(b=>{
     b.classList.remove('active');
     b.setAttribute('aria-pressed','false');
@@ -3701,6 +4421,29 @@ function setLang(l){
     const el = document.getElementById(id);
     if(el) el.textContent = val;
   });
+
+  // Nouveau système data-i18n (couverture complète des écrans)
+  const t2 = I18N[l] || I18N.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(t2[key] !== undefined) el.innerHTML = t2[key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-ph');
+    if(t2[key] !== undefined) el.setAttribute('placeholder', t2[key]);
+  });
+
+  // Rafraîchir le contenu généré dynamiquement en JS
+  const activeGuideTab = document.querySelector('.gtab.active');
+  if(activeGuideTab){
+    const idx = Array.from(document.querySelectorAll('.gtab')).indexOf(activeGuideTab);
+    const keys = ['cardiac','noyade','accident','incendie','pendaison'];
+    if(idx>=0) setGuide(keys[idx], activeGuideTab);
+  }
+  if(typeof renderNearby === 'function') renderNearby();
+  if(typeof leafletMap !== 'undefined' && leafletMap) renderLeafletPins();
+  const selSosBtn = document.querySelector('#scr-sos .tbtn.sel, #scr-silent .tbtn.sel');
+  if(selSosBtn && selSosBtn.getAttribute('data-dispatch-key')) selSOS(selSosBtn, selSosBtn.getAttribute('data-dispatch-key'));
 }
 
 // ── CARTE LEAFLET + OVERPASS API ───────────────────────────────────────────────
@@ -3767,14 +4510,32 @@ function makeDivIcon(color, emoji) {
   });
 }
 
+const MAP_VOCAB_I18N = {
+  fr: { 'Voir sur place':'Voir sur place', 'Fermé':'Fermé', 'Ouvert 24h/24':'Ouvert 24h/24', 'Urgences 24h/24':'Urgences 24h/24',
+    'Garde cette nuit':'Garde cette nuit', 'Pharmacie':'Pharmacie', 'Centre de santé':'Centre de santé', 'Hôpital':'Hôpital',
+    'Police Nationale':'Police Nationale', 'Gendarmerie Nat.':'Gendarmerie Nat.', 'Pompiers BNSP':'Pompiers BNSP' },
+  wo: { 'Voir sur place':'Xool ci barab bi', 'Fermé':'Tëju na', 'Ouvert 24h/24':'Ubbi 24u/24', 'Urgences 24h/24':'Jafe-jafe 24u/24',
+    'Garde cette nuit':'Garde ci guddi gii', 'Pharmacie':'Farmasi', 'Centre de santé':'Sàntar Wér-gi-yaram', 'Hôpital':'Opitaal',
+    'Police Nationale':'Polis Nationale', 'Gendarmerie Nat.':'Zandarmri Nationale', 'Pompiers BNSP':'Safara-jàppale BNSP' },
+  en: { 'Voir sur place':'See on site', 'Fermé':'Closed', 'Ouvert 24h/24':'Open 24/7', 'Urgences 24h/24':'Emergencies 24/7',
+    'Garde cette nuit':'On duty tonight', 'Pharmacie':'Pharmacy', 'Centre de santé':'Health Center', 'Hôpital':'Hospital',
+    'Police Nationale':'National Police', 'Gendarmerie Nat.':'National Gendarmerie', 'Pompiers BNSP':'Firefighters BNSP' },
+};
+function trVocab(v){
+  if(!v) return v;
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'fr';
+  const m = MAP_VOCAB_I18N[lang] || MAP_VOCAB_I18N.fr;
+  return m[v] || v;
+}
+
 function popupContent(p) {
   const isOpen = p.status && !p.status.toLowerCase().includes('fermé');
   const sc = isOpen ? '#006633' : '#CC0000';
   return `
     <div class="lf-popup-title">${p.name}</div>
-    <div class="lf-popup-type">${p.type}</div>
+    <div class="lf-popup-type">${trVocab(p.type)}</div>
     ${p.num !== '—' ? `<div class="lf-popup-num">${p.num}</div>` : ''}
-    <div class="lf-popup-status" style="color:${sc}">${p.status}</div>
+    <div class="lf-popup-status" style="color:${sc}">${trVocab(p.status)}</div>
     <button class="lf-popup-btn" onclick="goTo('scr-sos')" aria-label="Appeler le 221 pour ce service">📞 Appeler via 221</button>`;
 }
 
@@ -3905,18 +4666,25 @@ function filterMap(cat, btn) {
   renderNearby(src);
 }
 
+const LOCATE_STRINGS = {
+  fr: { locating:'Localisation…', mypos:'Ma position', located:'Localisé !', noGeo:"La géolocalisation n'est pas disponible sur cet appareil.", youAreHere:'📍 Votre position' },
+  wo: { locating:'Ci seet barab bi…', mypos:'Fa ma nekk', located:'Gis nañu la !', noGeo:"Géolocalisation amul ci jumtukaay bii.", youAreHere:'📍 Sa barab' },
+  en: { locating:'Locating…', mypos:'My location', located:'Located!', noGeo:'Geolocation is not available on this device.', youAreHere:'📍 Your location' },
+};
 function locateUser() {
   const btn = document.getElementById('btn-locate');
   if (!leafletMap) return;
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'fr';
+  const ls = LOCATE_STRINGS[lang] || LOCATE_STRINGS.fr;
 
   // Indicateur visuel de chargement
-  btn.innerHTML = '<i class="ti ti-loader" aria-hidden="true" style="animation:spin .8s linear infinite"></i>Localisation…';
+  btn.innerHTML = `<i class="ti ti-loader" aria-hidden="true" style="animation:spin .8s linear infinite"></i>${ls.locating}`;
   btn.disabled = true;
 
   if (!navigator.geolocation) {
-    btn.innerHTML = '<i class="ti ti-current-location" aria-hidden="true"></i>Ma position';
+    btn.innerHTML = `<i class="ti ti-current-location" aria-hidden="true"></i>${ls.mypos}`;
     btn.disabled = false;
-    alert('La géolocalisation n\'est pas disponible sur cet appareil.');
+    alert(ls.noGeo);
     return;
   }
 
@@ -3940,17 +4708,17 @@ function locateUser() {
         });
         userMarker = L.marker([lat, lng], { icon: userIcon, zIndexOffset: 1000 })
           .addTo(leafletMap)
-          .bindPopup('<b>📍 Votre position</b>', { closeButton: false });
+          .bindPopup(`<b>${ls.youAreHere}</b>`, { closeButton: false });
       }
       userMarker.openPopup();
 
       // Rétablit le bouton avec confirmation visuelle
-      btn.innerHTML = '<i class="ti ti-circle-check" aria-hidden="true"></i>Localisé !';
+      btn.innerHTML = `<i class="ti ti-circle-check" aria-hidden="true"></i>${ls.located}`;
       btn.style.background = '#E8F5E9';
       btn.style.borderColor = '#006633';
       btn.style.color = '#006633';
       setTimeout(() => {
-        btn.innerHTML = '<i class="ti ti-current-location" aria-hidden="true"></i>Ma position';
+        btn.innerHTML = `<i class="ti ti-current-location" aria-hidden="true"></i>${ls.mypos}`;
         btn.style.background = '#EEF2FF';
         btn.style.borderColor = '#534AB7';
         btn.style.color = '#534AB7';
@@ -3976,26 +4744,60 @@ function renderNearby(src) {
   const filtered = activeFilter === 'all' ? data : data.filter(p => p.cat === activeFilter);
   document.getElementById('nlist').innerHTML = filtered.map(p => `
     <div class="nitem" role="listitem" tabindex="0"
-      aria-label="${p.name} — ${p.type} — ${p.status}"
+      aria-label="${p.name} — ${trVocab(p.type)} — ${trVocab(p.status)}"
       onclick="leafletMap && leafletMap.setView([${p.lat},${p.lng}],16)"
       onkeydown="if(event.key==='Enter') leafletMap && leafletMap.setView([${p.lat},${p.lng}],16)">
       <div class="nicon" style="background:${p.color}18;font-size:18px;display:flex;align-items:center;justify-content:center" aria-hidden="true">${p.emoji || '📍'}</div>
       <div class="ninfo">
-        <h4>${p.name}</h4><p>${p.type}</p>
-        <p class="${(p.status||'').toLowerCase().includes('fermé')?'cl':'op'}">${p.status||'—'}</p>
+        <h4>${p.name}</h4><p>${trVocab(p.type)}</p>
+        <p class="${(p.status||'').toLowerCase().includes('fermé')?'cl':'op'}">${trVocab(p.status)||'—'}</p>
         <p class="nm">${p.num||'—'}</p>
       </div>
     </div>`).join('');
 }
 
 // ── SOS ────────────────────────────────────────────────────────────────────────
-function selSOS(btn,dispatch){
+const DISPATCH_I18N = {
+  fr: {
+    med_samu:'Urgence médicale → SAMU', incendie_pompiers:'Incendie → Pompiers',
+    securite_police:'Sécurité → Police', accident_multi:'Accident → Pompiers + SAMU',
+    inondation_pc:'Inondation → Protection Civile', autre_cnrd:'Urgence → CNRD-221',
+    sil_medical:'Urgence médicale', sil_agression:'Agression',
+    sil_violence:'Violence domestique', sil_autre:'Autre urgence',
+    lbl_call:'Appeler 221 · ', lbl_send:'Envoyer · ',
+    aria_call:'Appeler le 221 — ', aria_send:'Envoyer alerte silencieuse — ',
+  },
+  wo: {
+    med_samu:'Jafe-jafe wér-gi-yaram → SAMU', incendie_pompiers:'Safara → Safara-jàppale',
+    securite_police:'Kaaraange → Polis', accident_multi:'Aksidaa → Safara-jàppale + SAMU',
+    inondation_pc:'Ndox → Protection Civile', autre_cnrd:'Jafe-jafe → CNRD-221',
+    sil_medical:'Jafe-jafe wér-gi-yaram', sil_agression:'Fitna',
+    sil_violence:'Fitna ci kër', sil_autre:'Yeneen jafe-jafe',
+    lbl_call:'Woote 221 · ', lbl_send:'Yónnee · ',
+    aria_call:'Woote 221 — ', aria_send:'Yónnee alerte bu dëkk — ',
+  },
+  en: {
+    med_samu:'Medical emergency → SAMU', incendie_pompiers:'Fire → Firefighters',
+    securite_police:'Security → Police', accident_multi:'Accident → Firefighters + SAMU',
+    inondation_pc:'Flood → Civil Protection', autre_cnrd:'Emergency → CNRD-221',
+    sil_medical:'Medical emergency', sil_agression:'Assault',
+    sil_violence:'Domestic violence', sil_autre:'Other emergency',
+    lbl_call:'Call 221 · ', lbl_send:'Send · ',
+    aria_call:'Call 221 — ', aria_send:'Send silent alert — ',
+  },
+};
+
+function selSOS(btn,dispatchKey){
   document.querySelectorAll('#scr-sos .tbtn,#scr-silent .tbtn').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
+  btn.setAttribute('data-dispatch-key', dispatchKey);
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'fr';
+  const d = DISPATCH_I18N[lang] || DISPATCH_I18N.fr;
+  const dispatch = d[dispatchKey] || dispatchKey;
   const s=document.getElementById('btn-sos-send'), l=document.getElementById('sos-send-lbl');
   const ss=document.getElementById('btn-sil-send'), sl=document.getElementById('sil-send-lbl');
-  if(s){ s.disabled=false; s.setAttribute('aria-disabled','false'); s.setAttribute('aria-label',`Appeler le 221 — ${dispatch}`); l.textContent='Appeler 221 · '+dispatch; }
-  if(ss){ ss.disabled=false; ss.setAttribute('aria-disabled','false'); ss.setAttribute('aria-label',`Envoyer alerte silencieuse — ${dispatch}`); sl.textContent='Envoyer · '+dispatch; }
+  if(s){ s.disabled=false; s.setAttribute('aria-disabled','false'); s.setAttribute('aria-label',`${d.aria_call}${dispatch}`); l.textContent=d.lbl_call+dispatch; }
+  if(ss){ ss.disabled=false; ss.setAttribute('aria-disabled','false'); ss.setAttribute('aria-label',`${d.aria_send}${dispatch}`); sl.textContent=d.lbl_send+dispatch; }
   document.getElementById('dispatch-lbl').textContent=dispatch;
 }
 
@@ -4029,13 +4831,19 @@ function submitRefus(){
 
 // ── CYBER-URGENCES ─────────────────────────────────────────────────────────────
 // Taxonomie et orientation conformes au dossier projet v10.6 (partenariat ENCVR)
+// Les noms de service (DSC, ENCVR, Parquet...) sont des sigles institutionnels invariants ; seul le libellé de catégorie suit la langue active.
 const CYBER_CATEGORIES = {
-  arnaques:        { label: 'Arnaques en ligne',                service: 'DSC Police / Gendarmerie' },
-  harcelement:      { label: 'Cyberharcèlement',                 service: 'DSC Police / ENCVR' },
-  violences:        { label: 'Cyberviolences (sextorsion)',      service: 'DSC Police / Parquet' },
-  usurpation:       { label: "Usurpation d'identité",            service: 'DSC Police / Gendarmerie' },
-  cyberattaque:     { label: 'Cyberattaque critique',            service: 'ENCVR / ADIE' },
-  escroquerie_tel:  { label: 'Escroquerie téléphonique',         service: 'DSC Police / Opérateurs télécom' },
+  arnaques:        { i18nKey: 'cyber.cat.arnaques',    service: 'DSC Police / Gendarmerie' },
+  harcelement:      { i18nKey: 'cyber.cat.harcelement', service: 'DSC Police / ENCVR' },
+  violences:        { i18nKey: 'cyber.cat.violences',   service: 'DSC Police / Parquet' },
+  usurpation:       { i18nKey: 'cyber.cat.usurpation',  service: 'DSC Police / Gendarmerie' },
+  cyberattaque:     { i18nKey: 'cyber.cat.cyberattaque',service: 'ENCVR / ADIE' },
+  escroquerie_tel:  { i18nKey: 'cyber.cat.escroquerie', service: 'DSC Police / Opérateurs télécom' },
+};
+const CYBER_STRINGS = {
+  fr: { preview:'Orientation prévue : ', ariaSend:'Envoyer le signalement cyber — ', orientation:', orientation vers ', send:'Envoyer le signalement', urgentSuffix:' (urgent) → ' },
+  wo: { preview:'Yebbi ci: ', ariaSend:'Yónnee wax cyber — ', orientation:', yebbi ci ', send:'Yónnee wax bi', urgentSuffix:' (urgent) → ' },
+  en: { preview:'Routed to: ', ariaSend:'Send cyber report — ', orientation:', routed to ', send:'Send the report', urgentSuffix:' (urgent) → ' },
 };
 let cyberCategory = null;
 let cyberUrgent = false;
@@ -4045,13 +4853,16 @@ function selCyber(btn, key){
   btn.classList.add('sel');
   cyberCategory = key;
   const info = CYBER_CATEGORIES[key];
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'fr';
+  const label = (I18N[lang]||I18N.fr)[info.i18nKey] || info.i18nKey;
+  const cs = CYBER_STRINGS[lang] || CYBER_STRINGS.fr;
   const prev = document.getElementById('cy-service-preview');
   prev.style.display = 'block';
-  prev.textContent = 'Orientation prévue : ' + info.service;
+  prev.textContent = cs.preview + info.service;
   const s=document.getElementById('btn-cyber-send'), l=document.getElementById('cyber-send-lbl');
   s.disabled=false; s.setAttribute('aria-disabled','false');
-  s.setAttribute('aria-label',`Envoyer le signalement cyber — ${info.label}, orientation vers ${info.service}`);
-  l.textContent = 'Envoyer le signalement';
+  s.setAttribute('aria-label',`${cs.ariaSend}${label}${cs.orientation}${info.service}`);
+  l.textContent = cs.send;
 }
 
 function toggleCyberUrgent(btn){
@@ -4063,16 +4874,19 @@ function toggleCyberUrgent(btn){
 function submitCyber(){
   if(!cyberCategory) return;
   const info = CYBER_CATEGORIES[cyberCategory];
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'fr';
+  const label = (I18N[lang]||I18N.fr)[info.i18nKey] || info.i18nKey;
+  const cs = CYBER_STRINGS[lang] || CYBER_STRINGS.fr;
   if(cyberUrgent){
     // Cas urgent (sextorsion active, menace physique en ligne) → intervention en temps réel
-    document.getElementById('dispatch-lbl').textContent = info.label + ' (urgent) → ' + info.service;
+    document.getElementById('dispatch-lbl').textContent = label + cs.urgentSuffix + info.service;
     goTo('scr-sending');
     return;
   }
   // Cas standard → dossier documenté + suivi avec rappel automatique sous 48h
   const num = 'CYBER-' + Math.floor(100000 + Math.random()*900000);
   document.getElementById('cy-dossier-num').textContent = num;
-  document.getElementById('cy-dossier-cat').textContent = info.label;
+  document.getElementById('cy-dossier-cat').textContent = label;
   document.getElementById('cy-dossier-service').textContent = info.service;
   goTo('scr-cyber-ok');
 }
@@ -4142,13 +4956,15 @@ function submitVol(){
 // ── DONS DE SANG ───────────────────────────────────────────────────────────────
 let sangGroupe = null;
 
+const SANG_STRINGS = { fr:'Transmettre pour vérification · ', wo:'Yónnee ngir seet · ', en:'Send for verification · ' };
 function selGroupe(btn){
   document.querySelectorAll('#scr-sang .catbtn').forEach(b=>{ b.classList.remove('sel'); b.setAttribute('aria-pressed','false'); });
   btn.classList.add('sel'); btn.setAttribute('aria-pressed','true');
   sangGroupe = btn.textContent.trim();
   const s=document.getElementById('btn-sang-send'), l=document.getElementById('sang-send-lbl');
   s.disabled=false; s.setAttribute('aria-disabled','false');
-  l.textContent = 'Transmettre pour vérification · ' + sangGroupe;
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'fr';
+  l.textContent = (SANG_STRINGS[lang]||SANG_STRINGS.fr) + sangGroupe;
 }
 
 function submitSang(){
@@ -4162,49 +4978,133 @@ function submitSang(){
 }
 
 // ── GUIDES PREMIERS SECOURS ───────────────────────────────────────────────────
-const GUIDES={
-  cardiac:[
-    {t:'Appelez le 221 immédiatement',c:'Dites "arrêt cardiaque", donnez votre position. Ne raccrochez pas.',g:''},
-    {t:'Vérifiez la conscience',c:'Appelez, secouez doucement. Pas de réponse → étape suivante.',g:'g'},
-    {t:'Libérez les voies aériennes',c:'Tête en arrière, menton soulevé. Regardez, écoutez, sentez.',g:'b'},
-    {t:'Compressions cardiaques',c:'30 compressions, 5–6 cm, 100–120/min. Puis 2 insufflations. Répétez.',g:''},
-    {t:'Utilisez le défibrillateur (DEA)',c:'Suivez les instructions. N\'arrêtez pas sauf pour le choc.',g:'g'}
-  ],
-  noyade:[
-    {t:'N\'entrez pas sans équipement',c:'Corde, bouée ou perche. Votre sécurité d\'abord.',g:''},
-    {t:'Appelez le 221',c:'Signalez la noyade et la position exacte.',g:'g'},
-    {t:'Sortez la victime de l\'eau',c:'Sur le dos sur surface ferme. Attention à la colonne.',g:'b'},
-    {t:'Vérifiez la respiration',c:'Si elle ne respire pas : 30 compressions + 2 insufflations.',g:''},
-    {t:'Position latérale (PLS)',c:'Si elle respire mais inconsciente, jusqu\'aux secours.',g:'g'}
-  ],
-  accident:[
-    {t:'Sécurisez la zone',c:'Ne bougez pas les victimes. Warnings, triangles à 50m.',g:''},
-    {t:'Appelez le 221',c:'Route, véhicules, nombre de victimes, personnes coincées.',g:'g'},
-    {t:'Évaluez les victimes',c:'Parlez à chacune. Rassurez. Ne déplacez pas sans nécessité.',g:'b'},
-    {t:'Contrôlez les hémorragies',c:'Comprimez fort avec tissu propre. Maintenez sans relâcher.',g:''},
-    {t:'Ne donnez rien à boire',c:'Risque chirurgical même si la victime demande.',g:'g'}
-  ],
-  incendie:[
-    {t:'Alertez et évacuez',c:'Criez "AU FEU !". Déclenchez l\'alarme. Évacuez avant tout.',g:''},
-    {t:'Appelez le 221',c:'Adresse, type de bâtiment, personnes bloquées.',g:'g'},
-    {t:'Pas d\'ascenseur',c:'Fermez les portes derrière vous. Escaliers uniquement.',g:'b'},
-    {t:'Si vous êtes bloqué',c:'Colmatez avec tissus humides. Signalez-vous à la fenêtre.',g:''},
-    {t:'Point de rassemblement',c:'Ne retournez jamais dans un bâtiment en feu.',g:'g'}
-  ],
-  pendaison:[
-    {t:'Appelez le 221 immédiatement',c:'Dites "tentative de pendaison", donnez la position.',g:''},
-    {t:'Décrochez en soutenant le corps',c:'Soutenez le corps AVANT de couper le lien. Allongez doucement.',g:'g'},
-    {t:'Vérifiez la respiration',c:'Oreille près de la bouche. Regardez si la poitrine se soulève.',g:'b'},
-    {t:'Si elle ne respire pas : RCP',c:'30 compressions + 2 insufflations. Continuez jusqu\'aux secours.',g:''},
-    {t:'Si elle respire : PLS',c:'Desserrez tout vêtement autour du cou. Surveillez.',g:'g'}
-  ],
+const GUIDES_INTRO = {
+  fr: 'Appelez le 221 en premier. Ces gestes s\'appliquent en attendant les secours professionnels.',
+  wo: 'Woote 221 bu jëkk. Jëf yii dañu jëfe rekk ci ndogoo faju yu wóor.',
+  en: 'Call 221 first. These steps apply while waiting for professional help.',
+};
+const GUIDES = {
+  fr: {
+    cardiac:[
+      {t:'Appelez le 221 immédiatement',c:'Dites "arrêt cardiaque", donnez votre position. Ne raccrochez pas.',g:''},
+      {t:'Vérifiez la conscience',c:'Appelez, secouez doucement. Pas de réponse → étape suivante.',g:'g'},
+      {t:'Libérez les voies aériennes',c:'Tête en arrière, menton soulevé. Regardez, écoutez, sentez.',g:'b'},
+      {t:'Compressions cardiaques',c:'30 compressions, 5–6 cm, 100–120/min. Puis 2 insufflations. Répétez.',g:''},
+      {t:'Utilisez le défibrillateur (DEA)',c:'Suivez les instructions. N\'arrêtez pas sauf pour le choc.',g:'g'},
+    ],
+    noyade:[
+      {t:'N\'entrez pas sans équipement',c:'Corde, bouée ou perche. Votre sécurité d\'abord.',g:''},
+      {t:'Appelez le 221',c:'Signalez la noyade et la position exacte.',g:'g'},
+      {t:'Sortez la victime de l\'eau',c:'Sur le dos sur surface ferme. Attention à la colonne.',g:'b'},
+      {t:'Vérifiez la respiration',c:'Si elle ne respire pas : 30 compressions + 2 insufflations.',g:''},
+      {t:'Position latérale (PLS)',c:'Si elle respire mais inconsciente, jusqu\'aux secours.',g:'g'},
+    ],
+    accident:[
+      {t:'Sécurisez la zone',c:'Ne bougez pas les victimes. Warnings, triangles à 50m.',g:''},
+      {t:'Appelez le 221',c:'Route, véhicules, nombre de victimes, personnes coincées.',g:'g'},
+      {t:'Évaluez les victimes',c:'Parlez à chacune. Rassurez. Ne déplacez pas sans nécessité.',g:'b'},
+      {t:'Contrôlez les hémorragies',c:'Comprimez fort avec tissu propre. Maintenez sans relâcher.',g:''},
+      {t:'Ne donnez rien à boire',c:'Risque chirurgical même si la victime demande.',g:'g'},
+    ],
+    incendie:[
+      {t:'Alertez et évacuez',c:'Criez "AU FEU !". Déclenchez l\'alarme. Évacuez avant tout.',g:''},
+      {t:'Appelez le 221',c:'Adresse, type de bâtiment, personnes bloquées.',g:'g'},
+      {t:'Pas d\'ascenseur',c:'Fermez les portes derrière vous. Escaliers uniquement.',g:'b'},
+      {t:'Si vous êtes bloqué',c:'Colmatez avec tissus humides. Signalez-vous à la fenêtre.',g:''},
+      {t:'Point de rassemblement',c:'Ne retournez jamais dans un bâtiment en feu.',g:'g'},
+    ],
+    pendaison:[
+      {t:'Appelez le 221 immédiatement',c:'Dites "tentative de pendaison", donnez la position.',g:''},
+      {t:'Décrochez en soutenant le corps',c:'Soutenez le corps AVANT de couper le lien. Allongez doucement.',g:'g'},
+      {t:'Vérifiez la respiration',c:'Oreille près de la bouche. Regardez si la poitrine se soulève.',g:'b'},
+      {t:'Si elle ne respire pas : RCP',c:'30 compressions + 2 insufflations. Continuez jusqu\'aux secours.',g:''},
+      {t:'Si elle respire : PLS',c:'Desserrez tout vêtement autour du cou. Surveillez.',g:'g'},
+    ],
+  },
+  wo: {
+    cardiac:[
+      {t:'Woote 221 léegi-léegi',c:'Wax "xol bi taxaw na", jox sa barab. Bul dindi telefon bi.',g:''},
+      {t:'Seetal su xam boppam',c:'Wooye ko, yëngal ko ndànk. Su tontuwul → yokk ci topp.',g:'g'},
+      {t:'Ubbi yoon ngelaw',c:'Bopp ci ginnaaw, sëriñ yékkati. Xool, dégg, gis.',g:'b'},
+      {t:'Xëcc ëttub xol',c:'30 xëcc, 5–6 cm, 100–120/miniit. Topp 2 ngelaw. Def ko ay yoon.',g:''},
+      {t:'Jëfandikoo défibrillateur (DEA) bi',c:'Toppal ay ndigal yi. Bul taxaw ba mu jox choc bi.',g:'g'},
+    ],
+    noyade:[
+      {t:'Bul dugg ci ndox su amul jumtukaay',c:'Kayit, bouée walla bant. Sa kaaraange bu jëkk.',g:''},
+      {t:'Woote 221',c:'Wax suux bi ak barab bi.',g:'g'},
+      {t:'Génne ki dane ci ndox',c:'Ci ginnaaw ci suuf bu wóor. Moytul manqiin.',g:'b'},
+      {t:'Seetal nafas',c:'Su duul nafas: 30 xëcc + 2 ngelaw.',g:''},
+      {t:'Position ci wet (PLS)',c:'Su nafasoo waaye xamul boppam, ba faju ñëw.',g:'g'},
+    ],
+    accident:[
+      {t:'Aar barab bi',c:'Bul yeewu ñi dane. Feux warning, triangle ci 50m.',g:''},
+      {t:'Woote 221',c:'Yoon wi, oto yi, lim ñi dane, ñi fa fekk.',g:'g'},
+      {t:'Seetal ñi dane',c:'Wax ak kenn ku nekk. Dëgëral leen. Bul leen yeewu su amul solo.',g:'b'},
+      {t:'Téer deret bi',c:'Téer bu metti ak tuub bu set. Bul ko bàyyi.',g:''},
+      {t:'Bul leen jox lu ñu naan',c:'Am na risque su la ñu laaj it.',g:'g'},
+    ],
+    incendie:[
+      {t:'Yëgal te génn',c:'Yuuxu "SAFARA!". Jëkk alarm bi. Génn bu jëkk lépp.',g:''},
+      {t:'Woote 221',c:'Adrees, xeet kër gi, ñi fa fekk.',g:'g'},
+      {t:'Bul jëfandikoo ascenseur',c:'Tëj bunt yi ci ginnaaw. Escalier rekk.',g:'b'},
+      {t:'Su fekkee dangaa fa fekk',c:'Tëj ak tuub yu leen. Wone sa bopp ci palanteer bi.',g:''},
+      {t:'Barab dajaloo',c:'Bul dellusi ci kër gu safara.',g:'g'},
+    ],
+    pendaison:[
+      {t:'Woote 221 léegi-léegi',c:'Wax "jéem a dàqu", jox barab bi.',g:''},
+      {t:'Dindi ko ci kaymoo bi ci sopp yaram bi',c:'Sopp yaram bi lu jëkk ci dàggu kaymoo bi. Tëdd ko ndànk.',g:'g'},
+      {t:'Seetal nafas',c:'Nopp jege gémmiñ. Xool su denc bi di yékkati.',g:'b'},
+      {t:'Su duul nafas: RCP',c:'30 xëcc + 2 ngelaw. Toppal ba faju ñëw.',g:''},
+      {t:'Su nafasoo: PLS',c:'Yiwi lépp lu nekk ci baat. Wottu ko.',g:'g'},
+    ],
+  },
+  en: {
+    cardiac:[
+      {t:'Call 221 immediately',c:'Say "cardiac arrest", give your location. Do not hang up.',g:''},
+      {t:'Check consciousness',c:'Call out, shake gently. No response → next step.',g:'g'},
+      {t:'Open the airway',c:'Tilt the head back, lift the chin. Look, listen, feel.',g:'b'},
+      {t:'Chest compressions',c:'30 compressions, 5–6 cm deep, 100–120/min. Then 2 breaths. Repeat.',g:''},
+      {t:'Use the defibrillator (AED)',c:'Follow the instructions. Do not stop except for the shock.',g:'g'},
+    ],
+    noyade:[
+      {t:'Do not enter without equipment',c:'Rope, buoy, or pole. Your safety first.',g:''},
+      {t:'Call 221',c:'Report the drowning and the exact location.',g:'g'},
+      {t:'Get the victim out of the water',c:'On their back on a firm surface. Watch the spine.',g:'b'},
+      {t:'Check breathing',c:'If not breathing: 30 compressions + 2 breaths.',g:''},
+      {t:'Recovery position',c:'If breathing but unconscious, until help arrives.',g:'g'},
+    ],
+    accident:[
+      {t:'Secure the area',c:'Do not move the victims. Hazard lights, warning triangles at 50m.',g:''},
+      {t:'Call 221',c:'Road, vehicles, number of victims, trapped people.',g:'g'},
+      {t:'Assess the victims',c:'Talk to each one. Reassure them. Do not move them unless necessary.',g:'b'},
+      {t:'Control the bleeding',c:'Press firmly with clean cloth. Maintain pressure without releasing.',g:''},
+      {t:'Do not give anything to drink',c:'Surgical risk even if the victim asks.',g:'g'},
+    ],
+    incendie:[
+      {t:'Alert and evacuate',c:'Shout "FIRE!". Trigger the alarm. Evacuate before anything else.',g:''},
+      {t:'Call 221',c:'Address, building type, trapped people.',g:'g'},
+      {t:'No elevator',c:'Close doors behind you. Stairs only.',g:'b'},
+      {t:'If trapped',c:'Seal gaps with wet cloth. Signal from the window.',g:''},
+      {t:'Meeting point',c:'Never go back into a burning building.',g:'g'},
+    ],
+    pendaison:[
+      {t:'Call 221 immediately',c:'Say "hanging attempt", give the location.',g:''},
+      {t:'Cut them down while supporting the body',c:'Support the body BEFORE cutting the rope. Lay down gently.',g:'g'},
+      {t:'Check breathing',c:'Ear close to the mouth. Watch if the chest rises.',g:'b'},
+      {t:'If not breathing: CPR',c:'30 compressions + 2 breaths. Continue until help arrives.',g:''},
+      {t:'If breathing: recovery position',c:'Loosen anything around the neck. Monitor.',g:'g'},
+    ],
+  },
 };
 
 function setGuide(key,tab){
   document.querySelectorAll('.gtab').forEach(t=>{ t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
   tab.classList.add('active'); tab.setAttribute('aria-selected','true');
-  let h=`<div class="wbox"><i class="ti ti-alert-triangle" aria-hidden="true"></i><p>Appelez le 221 en premier. Ces gestes s'appliquent en attendant les secours professionnels.</p></div>`;
-  (GUIDES[key]||GUIDES.cardiac).forEach((s,i)=>{
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'fr';
+  const intro = (GUIDES_INTRO[lang]||GUIDES_INTRO.fr);
+  const data = (GUIDES[lang]||GUIDES.fr);
+  let h=`<div class="wbox"><i class="ti ti-alert-triangle" aria-hidden="true"></i><p>${intro}</p></div>`;
+  (data[key]||data.cardiac).forEach((s,i)=>{
     h+=`<div class="gstep"><div class="gnum ${s.g}" aria-hidden="true">${i+1}</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a">${s.t}</p><p style="font-size:10px;color:#666;margin-top:2px;line-height:1.5">${s.c}</p></div></div>`;
   });
   document.getElementById('guide-body').innerHTML=h;
