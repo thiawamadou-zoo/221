@@ -30,6 +30,22 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
 .bni span{font-size:9px;color:#999;font-weight:500}
 .bni.active i,.bni.active span{color:var(--g)}
 .beta{position:fixed;top:52px;right:8px;background:var(--amb);color:#fff;font-size:9px;font-weight:700;padding:3px 7px;border-radius:10px;z-index:50;letter-spacing:.5px}
+/* BOUTON FLOTTANT MESSAGE VOCAL */
+.voice-fab{position:fixed;right:16px;bottom:86px;width:54px;height:54px;border-radius:50%;background:var(--pur);color:#fff;border:none;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 6px 16px rgba(83,74,183,.45);cursor:pointer;z-index:45;transition:transform .15s}
+.voice-fab:active{transform:scale(.92)}
+.voice-panel{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;align-items:flex-end;justify-content:center}
+.voice-panel.open{display:flex}
+.voice-panel-card{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:430px;padding:20px 20px 26px;text-align:center}
+.voice-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.voice-panel-header span{font-size:15px;font-weight:700;color:#1a1a1a}
+.voice-close{background:none;border:none;font-size:20px;color:#999;cursor:pointer;padding:4px;line-height:1}
+.voice-hint{font-size:12px;color:#666;line-height:1.5;margin-bottom:14px;min-height:34px}
+.voice-timer{font-size:28px;font-weight:700;color:var(--pur);margin-bottom:14px;letter-spacing:1px}
+.voice-actions{display:flex;justify-content:center;margin-bottom:12px}
+.voice-btn{width:72px;height:72px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;cursor:pointer}
+.voice-record{background:var(--pur);box-shadow:0 0 0 8px rgba(83,74,183,.15)}
+.voice-stop{background:var(--r);animation:voicePulse 1.2s infinite}
+@keyframes voicePulse{0%,100%{box-shadow:0 0 0 0 rgba(204,0,0,.35)}50%{box-shadow:0 0 0 14px rgba(204,0,0,0)}}
 /* HOME */
 .sos-zone{background:var(--g);padding:20px 20px 24px;display:flex;flex-direction:column;align-items:center;gap:11px}
 .lang-bar{display:flex;gap:7px}
@@ -160,6 +176,36 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
 
 <div class="phone" id="app" style="display:none">
 <div class="beta" aria-label="Version bêta 4">BÊTA v4</div>
+
+<!-- BOUTON FLOTTANT — MESSAGE VOCAL D'URGENCE -->
+<button class="voice-fab" id="voice-fab" onclick="toggleVoicePanel(true)" aria-label="Envoyer un message vocal d'urgence au CNRD-221, sans avoir à lire ni écrire">
+  <i class="ti ti-microphone" aria-hidden="true"></i>
+</button>
+<div class="voice-panel" id="voice-panel" role="dialog" aria-modal="true" aria-labelledby="voice-panel-title">
+  <div class="voice-panel-card">
+    <div class="voice-panel-header">
+      <span id="voice-panel-title" data-i18n="voice.title">Message vocal d'urgence</span>
+      <button class="voice-close" onclick="toggleVoicePanel(false)" aria-label="Fermer">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </div>
+    <p class="voice-hint" id="voice-status" data-i18n="voice.hint">Appuyez sur le micro pour enregistrer, sans avoir à lire ni écrire.</p>
+    <div class="voice-timer" id="voice-timer">00:00</div>
+    <div class="voice-actions">
+      <button class="voice-btn voice-record" id="voice-record-btn" onclick="startVoiceRecording()" aria-label="Démarrer l'enregistrement du message vocal">
+        <i class="ti ti-microphone" aria-hidden="true"></i>
+      </button>
+      <button class="voice-btn voice-stop" id="voice-stop-btn" onclick="stopVoiceRecording()" style="display:none" aria-label="Arrêter l'enregistrement">
+        <i class="ti ti-player-stop-filled" aria-hidden="true"></i>
+      </button>
+    </div>
+    <button class="btn-p" id="voice-send-btn" style="display:none;background:var(--pur)" onclick="sendVoiceMessage()" aria-label="Envoyer le message vocal au CNRD-221">
+      <i class="ti ti-send" aria-hidden="true"></i> <span data-i18n="voice.send">Envoyer au 221</span>
+    </button>
+    <button class="btn-s" id="voice-cancel-btn" onclick="toggleVoicePanel(false)" aria-label="Annuler" data-i18n="common.cancel">Annuler</button>
+  </div>
+</div>
+
 
 <!-- HOME -->
 <div class="screen active" id="scr-home" role="main">
@@ -3831,6 +3877,9 @@ const I18N = {
     'ci.dur120': '2 heures',
     'ci.dur240': '4 heures',
     'ci.sosbtn': '🆘 SOS — J\'ai besoin d\'aide',
+    'voice.title': 'Message vocal d\'urgence',
+    'voice.hint': 'Appuyez sur le micro pour enregistrer, sans avoir à lire ni écrire.',
+    'voice.send': 'Envoyer au 221',
   },
   wo: {
     'nav.home': 'Kër',
@@ -4069,6 +4118,9 @@ const I18N = {
     'ci.dur120': '2 waxtu',
     'ci.dur240': '4 waxtu',
     'ci.sosbtn': '🆘 SOS — Dama soxla ndimbal',
+    'voice.title': 'Wax bu waxu bu gaaw',
+    'voice.hint': 'Waaj micro bi ngir bind, du war a jàng walla bind.',
+    'voice.send': 'Yónnee ci 221',
   },
   en: {
     'nav.home': 'Home',
@@ -4307,6 +4359,9 @@ const I18N = {
     'ci.dur120': '2 hours',
     'ci.dur240': '4 hours',
     'ci.sosbtn': '🆘 SOS — I need help',
+    'voice.title': 'Emergency voice message',
+    'voice.hint': 'Tap the microphone to record, no need to read or write.',
+    'voice.send': 'Send to 221',
   },
 };
 
@@ -4444,6 +4499,10 @@ function setLang(l){
   if(typeof leafletMap !== 'undefined' && leafletMap) renderLeafletPins();
   const selSosBtn = document.querySelector('#scr-sos .tbtn.sel, #scr-silent .tbtn.sel');
   if(selSosBtn && selSosBtn.getAttribute('data-dispatch-key')) selSOS(selSosBtn, selSosBtn.getAttribute('data-dispatch-key'));
+  if(typeof voiceRecording !== 'undefined' && document.getElementById('voice-panel').classList.contains('open') && typeof setVoiceHint === 'function'){
+    const sendVisible = document.getElementById('voice-send-btn').style.display === 'block';
+    setVoiceHint(voiceRecording ? 'hintRecording' : (sendVisible ? 'hintReady' : 'hintIdle'));
+  }
 }
 
 // ── CARTE LEAFLET + OVERPASS API ───────────────────────────────────────────────
@@ -5108,6 +5167,89 @@ function setGuide(key,tab){
     h+=`<div class="gstep"><div class="gnum ${s.g}" aria-hidden="true">${i+1}</div><div><p style="font-size:11px;font-weight:700;color:#1a1a1a">${s.t}</p><p style="font-size:10px;color:#666;margin-top:2px;line-height:1.5">${s.c}</p></div></div>`;
   });
   document.getElementById('guide-body').innerHTML=h;
+}
+
+// ── MESSAGE VOCAL D'URGENCE (bouton flottant) ─────────────────────────────────
+const VOICE_STRINGS = {
+  fr: { hintIdle:"Appuyez sur le micro pour enregistrer, sans avoir à lire ni écrire.", hintRecording:"Enregistrement en cours... Appuyez sur le carré pour arrêter.", hintReady:"Message prêt. Envoyez-le au CNRD-221 ou recommencez.", dispatch:"Message vocal → CNRD-221" },
+  wo: { hintIdle:"Waaj micro bi ngir bind, du war a jàng walla bind.", hintRecording:"Bind bi dafay dox... Waaj ëttub bi ngir taxaw.", hintReady:"Wax bi waaj na. Yónnee ko ci CNRD-221 walla def ko ay yoon.", dispatch:"Wax bu waxu → CNRD-221" },
+  en: { hintIdle:"Tap the microphone to record, no need to read or write.", hintRecording:"Recording... Tap the square to stop.", hintReady:"Message ready. Send it to the CNRD-221 or record again.", dispatch:"Voice message → CNRD-221" },
+};
+let voiceRecording = false, voiceTimerInt = null, voiceSeconds = 0;
+let voiceStream = null, voiceRecorder = null;
+
+function toggleVoicePanel(show){
+  const panel = document.getElementById('voice-panel');
+  if(show){
+    panel.classList.add('open');
+    resetVoicePanel();
+  } else {
+    if(voiceRecording) stopVoiceRecording();
+    if(voiceStream){ voiceStream.getTracks().forEach(t=>t.stop()); voiceStream=null; }
+    panel.classList.remove('open');
+  }
+}
+
+function resetVoicePanel(){
+  voiceSeconds = 0;
+  updateVoiceTimerDisplay();
+  document.getElementById('voice-record-btn').style.display = 'flex';
+  document.getElementById('voice-stop-btn').style.display = 'none';
+  document.getElementById('voice-send-btn').style.display = 'none';
+  document.getElementById('voice-cancel-btn').style.display = 'block';
+  setVoiceHint('hintIdle');
+}
+
+function setVoiceHint(stateKey){
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'fr';
+  const vs = VOICE_STRINGS[lang] || VOICE_STRINGS.fr;
+  const el = document.getElementById('voice-status');
+  el.removeAttribute('data-i18n'); // état dynamique : on ne le laisse plus gérer par setLang()
+  el.textContent = vs[stateKey];
+}
+
+async function startVoiceRecording(){
+  voiceRecording = true;
+  voiceSeconds = 0;
+  document.getElementById('voice-record-btn').style.display = 'none';
+  document.getElementById('voice-stop-btn').style.display = 'flex';
+  setVoiceHint('hintRecording');
+  if(voiceTimerInt) clearInterval(voiceTimerInt);
+  voiceTimerInt = setInterval(()=>{ voiceSeconds++; updateVoiceTimerDisplay(); }, 1000);
+
+  try {
+    if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
+      voiceStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+      voiceRecorder = new MediaRecorder(voiceStream);
+      voiceRecorder.start();
+    }
+  } catch(err){
+    // Micro indisponible ou refusé : le minuteur continue en mode démo
+    voiceRecorder = null;
+  }
+}
+
+function stopVoiceRecording(){
+  voiceRecording = false;
+  if(voiceTimerInt) clearInterval(voiceTimerInt);
+  document.getElementById('voice-stop-btn').style.display = 'none';
+  document.getElementById('voice-send-btn').style.display = 'block';
+  document.getElementById('voice-cancel-btn').style.display = 'none';
+  setVoiceHint('hintReady');
+  if(voiceRecorder){ try{ voiceRecorder.stop(); }catch(e){} }
+  if(voiceStream){ voiceStream.getTracks().forEach(t=>t.stop()); voiceStream=null; }
+}
+
+function updateVoiceTimerDisplay(){
+  const m = Math.floor(voiceSeconds/60), s = voiceSeconds%60;
+  document.getElementById('voice-timer').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function sendVoiceMessage(){
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'fr';
+  document.getElementById('dispatch-lbl').textContent = (VOICE_STRINGS[lang]||VOICE_STRINGS.fr).dispatch;
+  toggleVoicePanel(false);
+  goTo('scr-sending');
 }
 
 // ── INIT ───────────────────────────────────────────────────────────────────────
