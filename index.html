@@ -41,7 +41,7 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
 .voice-close{background:none;border:none;font-size:20px;color:#999;cursor:pointer;padding:4px;line-height:1}
 .voice-hint{font-size:12px;color:#666;line-height:1.5;margin-bottom:14px;min-height:34px}
 .voice-timer{font-size:28px;font-weight:700;color:var(--pur);margin-bottom:14px;letter-spacing:1px}
-.voice-actions{display:flex;justify-content:center;margin-bottom:12px}
+.voice-actions{display:flex;justify-content:center;align-items:center;gap:16px;margin-bottom:12px}
 .voice-btn{width:72px;height:72px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;cursor:pointer}
 .voice-record{background:var(--pur);box-shadow:0 0 0 8px rgba(83,74,183,.15)}
 .voice-stop{background:var(--r);animation:voicePulse 1.2s infinite}
@@ -198,7 +198,14 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
       <button class="voice-btn voice-stop" id="voice-stop-btn" onclick="stopVoiceRecording()" style="display:none" aria-label="Arrêter l'enregistrement">
         <i class="ti ti-player-stop-filled" aria-hidden="true"></i>
       </button>
+      <button class="voice-btn voice-play" id="voice-play-btn" onclick="toggleVoicePlayback()" style="display:none;background:var(--b)" aria-label="Écouter le message avant envoi">
+        <i class="ti ti-player-play-filled" id="voice-play-icon" aria-hidden="true"></i>
+      </button>
+      <button class="voice-btn voice-redo" id="voice-redo-btn" onclick="startVoiceRecording()" style="display:none;background:#9a9a9a" aria-label="Recommencer l'enregistrement">
+        <i class="ti ti-repeat" aria-hidden="true"></i>
+      </button>
     </div>
+    <audio id="voice-audio-player" style="display:none"></audio>
     <button class="btn-p" id="voice-send-btn" style="display:none;background:var(--pur)" onclick="sendVoiceMessage()" aria-label="Envoyer le message vocal au CNRD-221">
       <i class="ti ti-send" aria-hidden="true"></i> <span data-i18n="voice.send">Envoyer au 221</span>
     </button>
@@ -4501,7 +4508,9 @@ function setLang(l){
   if(selSosBtn && selSosBtn.getAttribute('data-dispatch-key')) selSOS(selSosBtn, selSosBtn.getAttribute('data-dispatch-key'));
   if(typeof voiceRecording !== 'undefined' && document.getElementById('voice-panel').classList.contains('open') && typeof setVoiceHint === 'function'){
     const sendVisible = document.getElementById('voice-send-btn').style.display === 'block';
-    setVoiceHint(voiceRecording ? 'hintRecording' : (sendVisible ? 'hintReady' : 'hintIdle'));
+    if(voiceRecording) setVoiceHint('hintRecording');
+    else if(sendVisible) setVoiceHint(voiceHasAudio ? 'hintReady' : 'hintReadyNoAudio');
+    else setVoiceHint('hintIdle');
   }
 }
 
@@ -5171,12 +5180,12 @@ function setGuide(key,tab){
 
 // ── MESSAGE VOCAL D'URGENCE (bouton flottant) ─────────────────────────────────
 const VOICE_STRINGS = {
-  fr: { hintIdle:"Appuyez sur le micro pour enregistrer, sans avoir à lire ni écrire.", hintRecording:"Enregistrement en cours... Appuyez sur le carré pour arrêter.", hintReady:"Message prêt. Envoyez-le au CNRD-221 ou recommencez.", dispatch:"Message vocal → CNRD-221" },
-  wo: { hintIdle:"Waaj micro bi ngir bind, du war a jàng walla bind.", hintRecording:"Bind bi dafay dox... Waaj ëttub bi ngir taxaw.", hintReady:"Wax bi waaj na. Yónnee ko ci CNRD-221 walla def ko ay yoon.", dispatch:"Wax bu waxu → CNRD-221" },
-  en: { hintIdle:"Tap the microphone to record, no need to read or write.", hintRecording:"Recording... Tap the square to stop.", hintReady:"Message ready. Send it to the CNRD-221 or record again.", dispatch:"Voice message → CNRD-221" },
+  fr: { hintIdle:"Appuyez sur le micro pour enregistrer, sans avoir à lire ni écrire.", hintRecording:"Enregistrement en cours... Appuyez sur le carré pour arrêter.", hintReady:"Message prêt. Écoutez-le, puis envoyez-le au CNRD-221.", hintReadyNoAudio:"Message prêt (aperçu audio indisponible). Envoyez-le ou recommencez.", dispatch:"Message vocal → CNRD-221" },
+  wo: { hintIdle:"Waaj micro bi ngir bind, du war a jàng walla bind.", hintRecording:"Bind bi dafay dox... Waaj ëttub bi ngir taxaw.", hintReady:"Wax bi waaj na. Dégluji ko, yónnee ko ci CNRD-221.", hintReadyNoAudio:"Wax bi waaj na (mënuñu koo dégluji). Yónnee ko walla def ko ay yoon.", dispatch:"Wax bu waxu → CNRD-221" },
+  en: { hintIdle:"Tap the microphone to record, no need to read or write.", hintRecording:"Recording... Tap the square to stop.", hintReady:"Message ready. Listen to it, then send it to the CNRD-221.", hintReadyNoAudio:"Message ready (audio preview unavailable). Send it or record again.", dispatch:"Voice message → CNRD-221" },
 };
 let voiceRecording = false, voiceTimerInt = null, voiceSeconds = 0;
-let voiceStream = null, voiceRecorder = null;
+let voiceStream = null, voiceRecorder = null, voiceChunks = [], voiceAudioURL = null, voiceHasAudio = false, voicePlaying = false;
 
 function toggleVoicePanel(show){
   const panel = document.getElementById('voice-panel');
@@ -5186,15 +5195,26 @@ function toggleVoicePanel(show){
   } else {
     if(voiceRecording) stopVoiceRecording();
     if(voiceStream){ voiceStream.getTracks().forEach(t=>t.stop()); voiceStream=null; }
+    const audioEl = document.getElementById('voice-audio-player');
+    audioEl.pause();
     panel.classList.remove('open');
   }
 }
 
 function resetVoicePanel(){
   voiceSeconds = 0;
+  voiceHasAudio = false;
+  voicePlaying = false;
+  voiceChunks = [];
+  if(voiceAudioURL){ URL.revokeObjectURL(voiceAudioURL); voiceAudioURL = null; }
+  const audioEl = document.getElementById('voice-audio-player');
+  audioEl.pause(); audioEl.removeAttribute('src');
   updateVoiceTimerDisplay();
   document.getElementById('voice-record-btn').style.display = 'flex';
   document.getElementById('voice-stop-btn').style.display = 'none';
+  document.getElementById('voice-play-btn').style.display = 'none';
+  document.getElementById('voice-redo-btn').style.display = 'none';
+  document.getElementById('voice-play-icon').className = 'ti ti-player-play-filled';
   document.getElementById('voice-send-btn').style.display = 'none';
   document.getElementById('voice-cancel-btn').style.display = 'block';
   setVoiceHint('hintIdle');
@@ -5211,8 +5231,15 @@ function setVoiceHint(stateKey){
 async function startVoiceRecording(){
   voiceRecording = true;
   voiceSeconds = 0;
+  voiceHasAudio = false;
+  voiceChunks = [];
+  if(voiceAudioURL){ URL.revokeObjectURL(voiceAudioURL); voiceAudioURL = null; }
   document.getElementById('voice-record-btn').style.display = 'none';
   document.getElementById('voice-stop-btn').style.display = 'flex';
+  document.getElementById('voice-play-btn').style.display = 'none';
+  document.getElementById('voice-redo-btn').style.display = 'none';
+  document.getElementById('voice-send-btn').style.display = 'none';
+  document.getElementById('voice-cancel-btn').style.display = 'none';
   setVoiceHint('hintRecording');
   if(voiceTimerInt) clearInterval(voiceTimerInt);
   voiceTimerInt = setInterval(()=>{ voiceSeconds++; updateVoiceTimerDisplay(); }, 1000);
@@ -5221,10 +5248,20 @@ async function startVoiceRecording(){
     if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
       voiceStream = await navigator.mediaDevices.getUserMedia({ audio:true });
       voiceRecorder = new MediaRecorder(voiceStream);
+      voiceRecorder.ondataavailable = e => { if(e.data && e.data.size > 0) voiceChunks.push(e.data); };
+      voiceRecorder.onstop = () => {
+        if(voiceChunks.length){
+          const blob = new Blob(voiceChunks, { type: voiceRecorder.mimeType || 'audio/webm' });
+          voiceAudioURL = URL.createObjectURL(blob);
+          document.getElementById('voice-audio-player').src = voiceAudioURL;
+          voiceHasAudio = true;
+        }
+        updateVoiceReadyUI();
+      };
       voiceRecorder.start();
     }
   } catch(err){
-    // Micro indisponible ou refusé : le minuteur continue en mode démo
+    // Micro indisponible ou refusé : le minuteur continue en mode démo, sans aperçu audio
     voiceRecorder = null;
   }
 }
@@ -5233,11 +5270,34 @@ function stopVoiceRecording(){
   voiceRecording = false;
   if(voiceTimerInt) clearInterval(voiceTimerInt);
   document.getElementById('voice-stop-btn').style.display = 'none';
-  document.getElementById('voice-send-btn').style.display = 'block';
-  document.getElementById('voice-cancel-btn').style.display = 'none';
-  setVoiceHint('hintReady');
-  if(voiceRecorder){ try{ voiceRecorder.stop(); }catch(e){} }
+  if(voiceRecorder){
+    try{ voiceRecorder.stop(); }catch(e){ updateVoiceReadyUI(); }
+  } else {
+    updateVoiceReadyUI(); // mode démo sans micro : pas d'événement onstop à attendre
+  }
   if(voiceStream){ voiceStream.getTracks().forEach(t=>t.stop()); voiceStream=null; }
+}
+
+function updateVoiceReadyUI(){
+  document.getElementById('voice-send-btn').style.display = 'block';
+  document.getElementById('voice-redo-btn').style.display = 'flex';
+  document.getElementById('voice-play-btn').style.display = voiceHasAudio ? 'flex' : 'none';
+  document.getElementById('voice-cancel-btn').style.display = 'none';
+  setVoiceHint(voiceHasAudio ? 'hintReady' : 'hintReadyNoAudio');
+}
+
+function toggleVoicePlayback(){
+  const audioEl = document.getElementById('voice-audio-player');
+  const icon = document.getElementById('voice-play-icon');
+  if(audioEl.paused){
+    audioEl.play();
+    icon.className = 'ti ti-player-pause-filled';
+    voicePlaying = true;
+  } else {
+    audioEl.pause();
+    icon.className = 'ti ti-player-play-filled';
+    voicePlaying = false;
+  }
 }
 
 function updateVoiceTimerDisplay(){
@@ -5250,6 +5310,15 @@ function sendVoiceMessage(){
   document.getElementById('dispatch-lbl').textContent = (VOICE_STRINGS[lang]||VOICE_STRINGS.fr).dispatch;
   toggleVoicePanel(false);
   goTo('scr-sending');
+}
+
+const voiceAudioEl = document.getElementById('voice-audio-player');
+if(voiceAudioEl){
+  voiceAudioEl.addEventListener('ended', () => {
+    voicePlaying = false;
+    const icon = document.getElementById('voice-play-icon');
+    if(icon) icon.className = 'ti ti-player-play-filled';
+  });
 }
 
 // ── INIT ───────────────────────────────────────────────────────────────────────
