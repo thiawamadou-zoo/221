@@ -59,8 +59,12 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
 .photo-choice-btn{flex:1;padding:16px 8px;border-radius:12px;border:2px dashed #e0b84d;background:#fff8e6;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font-family:inherit}
 .photo-choice-btn i{font-size:26px;color:var(--amb)}
 .photo-choice-btn span{font-size:11px;font-weight:600;color:#6b5200}
+.photo-choice-btn-wide{width:100%;flex-direction:row;justify-content:center;padding:12px 8px;margin-bottom:14px}
+.photo-choice-btn-wide i{font-size:20px}
+.photo-choice-btn-wide span{font-size:12px}
 .photo-preview-wrap{position:relative;margin-bottom:12px;border-radius:12px;overflow:hidden;background:#000}
 .photo-preview-wrap img{width:100%;max-height:260px;object-fit:contain;display:block}
+.photo-preview-wrap video{width:100%;max-height:260px;object-fit:contain;display:block}
 .photo-remove-btn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer}
 .photo-analysis-box{background:#fff8e6;border-radius:9px;padding:11px;border-left:3px solid var(--amb);margin-bottom:12px;display:none}
 .photo-analysis-box.show{display:block}
@@ -256,32 +260,39 @@ html,body{height:100%;background:#f0f2f5;font-family:-apple-system,BlinkMacSyste
 <div class="photo-panel" id="photo-panel" role="dialog" aria-modal="true" aria-labelledby="photo-panel-title">
   <div class="photo-panel-card">
     <div class="photo-panel-header">
-      <span id="photo-panel-title" data-i18n="photo.title">Photo d'urgence</span>
+      <span id="photo-panel-title" data-i18n="photo.title">Photo ou vidéo d'urgence</span>
       <button class="voice-close" onclick="togglePhotoPanel(false)" aria-label="Fermer">
         <i class="ti ti-x" aria-hidden="true"></i>
       </button>
     </div>
-    <p class="photo-hint" id="photo-hint" data-i18n="photo.hint">Prenez une photo de la situation, ou choisissez-en une existante. Elle sera analysée automatiquement pour décrire l'urgence au CNRD-221.</p>
+    <p class="photo-hint" id="photo-hint" data-i18n="photo.hint">Prenez une photo ou une courte vidéo de la situation, ou choisissez-en une existante. Elle sera analysée automatiquement pour décrire l'urgence au CNRD-221.</p>
 
     <div class="photo-choice-row" id="photo-choice-row">
       <button class="photo-choice-btn" onclick="document.getElementById('photo-input-camera').click()" aria-label="Prendre une photo avec l'appareil photo">
         <i class="ti ti-camera" aria-hidden="true"></i>
         <span data-i18n="photo.take">Prendre une photo</span>
       </button>
-      <button class="photo-choice-btn" onclick="document.getElementById('photo-input-gallery').click()" aria-label="Choisir une photo depuis la galerie">
-        <i class="ti ti-photo" aria-hidden="true"></i>
-        <span data-i18n="photo.upload">Depuis la galerie</span>
+      <button class="photo-choice-btn" onclick="document.getElementById('video-input-camera').click()" aria-label="Filmer une courte vidéo de la situation">
+        <i class="ti ti-video" aria-hidden="true"></i>
+        <span data-i18n="photo.filmvideo">Filmer une vidéo</span>
       </button>
     </div>
+    <button class="photo-choice-btn photo-choice-btn-wide" id="photo-gallery-btn" onclick="document.getElementById('photo-input-gallery').click()" aria-label="Choisir une photo ou une vidéo depuis la galerie">
+      <i class="ti ti-folder" aria-hidden="true"></i>
+      <span data-i18n="photo.upload">Depuis la galerie (photo ou vidéo)</span>
+    </button>
     <input type="file" id="photo-input-camera" accept="image/*" capture="environment" style="display:none" onchange="handlePhotoSelect(event)">
-    <input type="file" id="photo-input-gallery" accept="image/*" style="display:none" onchange="handlePhotoSelect(event)">
+    <input type="file" id="video-input-camera" accept="video/*" capture="environment" style="display:none" onchange="handlePhotoSelect(event)">
+    <input type="file" id="photo-input-gallery" accept="image/*,video/*" style="display:none" onchange="handlePhotoSelect(event)">
 
     <div class="photo-preview-wrap" id="photo-preview-wrap" style="display:none">
       <img id="photo-preview-img" alt="Aperçu de la photo sélectionnée">
-      <button class="photo-remove-btn" onclick="resetPhotoPanel()" aria-label="Retirer la photo">✕</button>
+      <video id="photo-preview-video" style="display:none" controls playsinline muted></video>
+      <button class="photo-remove-btn" onclick="resetPhotoPanel()" aria-label="Retirer le média">✕</button>
     </div>
+    <canvas id="photo-video-canvas" style="display:none"></canvas>
 
-    <button class="btn-p" id="photo-analyze-btn" style="display:none;background:var(--amb)" onclick="analyzePhotoWithAI()" aria-label="Analyser la photo avec l'IA pour décrire la situation">
+    <button class="btn-p" id="photo-analyze-btn" style="display:none;background:var(--amb)" onclick="analyzePhotoWithAI()" aria-label="Analyser avec l'IA pour décrire la situation">
       <i class="ti ti-sparkles" aria-hidden="true"></i> <span id="photo-analyze-lbl" data-i18n="photo.analyze">Analyser avec l'IA</span>
     </button>
 
@@ -1565,10 +1576,11 @@ const I18N = {
     'voice.title': 'Message vocal d\'urgence',
     'voice.hint': 'Appuyez sur le micro pour enregistrer, sans avoir à lire ni écrire.',
     'voice.send': 'Envoyer au 221',
-    'photo.title': 'Photo d\'urgence',
-    'photo.hint': 'Prenez une photo de la situation, ou choisissez-en une existante. Elle sera analysée automatiquement pour décrire l\'urgence au CNRD-221.',
+    'photo.title': 'Photo ou vidéo d\'urgence',
+    'photo.hint': 'Prenez une photo ou une courte vidéo de la situation, ou choisissez-en une existante. Elle sera analysée automatiquement pour décrire l\'urgence au CNRD-221.',
     'photo.take': 'Prendre une photo',
-    'photo.upload': 'Depuis la galerie',
+    'photo.filmvideo': 'Filmer une vidéo',
+    'photo.upload': 'Depuis la galerie (photo ou vidéo)',
     'photo.analyze': 'Analyser avec l\'IA',
     'photo.analyzing': 'Analyse en cours...',
     'photo.analysis.label': 'Description générée (modifiable)',
@@ -1576,6 +1588,8 @@ const I18N = {
     'photo.send': 'Envoyer au 221',
     'photo.dispatch': 'Photo analysée → CNRD-221',
     'photo.dispatch.voice': 'Photo + note vocale → CNRD-221',
+    'photo.dispatch.video': 'Vidéo analysée → CNRD-221',
+    'photo.dispatch.video.voice': 'Vidéo + note vocale → CNRD-221',
     'photo.voice.or': 'ou',
     'photo.voice.label': 'Vous préférez décrire la situation à la voix ?',
     'photo.voice.hint': 'Appuyez pour enregistrer',
@@ -1822,10 +1836,11 @@ const I18N = {
     'voice.title': 'Wax bu waxu bu gaaw',
     'voice.hint': 'Waaj micro bi ngir bind, du war a jàng walla bind.',
     'voice.send': 'Yónnee ci 221',
-    'photo.title': 'Nataal bu gaaw',
-    'photo.hint': 'Nataal jafe-jafe bi, walla tànnal beneen nataal bu am. Dinañu ko seet ak IA ngir leeral jafe-jafe bi ci CNRD-221.',
+    'photo.title': 'Nataal walla wideyo bu gaaw',
+    'photo.hint': 'Nataal jafe-jafe bi walla filmal ko ci wideyo bu gàtt, walla tànnal beneen bu am. Dinañu ko seet ak IA ngir leeral jafe-jafe bi ci CNRD-221.',
     'photo.take': 'Nataal',
-    'photo.upload': 'Ci galerie bi',
+    'photo.filmvideo': 'Filmal wideyo',
+    'photo.upload': 'Ci galerie bi (nataal walla wideyo)',
     'photo.analyze': 'Seet ak IA',
     'photo.analyzing': 'Ci seet...',
     'photo.analysis.label': 'Leeral bi IA def (mën nga ko soppi)',
@@ -1833,6 +1848,8 @@ const I18N = {
     'photo.send': 'Yónnee ci 221',
     'photo.dispatch': 'Nataal seet → CNRD-221',
     'photo.dispatch.voice': 'Nataal + wax bu waxu → CNRD-221',
+    'photo.dispatch.video': 'Wideyo seet → CNRD-221',
+    'photo.dispatch.video.voice': 'Wideyo + wax bu waxu → CNRD-221',
     'photo.voice.or': 'walla',
     'photo.voice.label': 'Bëgg nga leeral jafe-jafe bi ci sa kàddu?',
     'photo.voice.hint': 'Waaj ngir bind',
@@ -2079,10 +2096,11 @@ const I18N = {
     'voice.title': 'Emergency voice message',
     'voice.hint': 'Tap the microphone to record, no need to read or write.',
     'voice.send': 'Send to 221',
-    'photo.title': 'Emergency photo',
-    'photo.hint': 'Take a photo of the situation, or choose an existing one. It will be analyzed automatically to describe the emergency to the CNRD-221.',
+    'photo.title': 'Emergency photo or video',
+    'photo.hint': 'Take a photo or a short video of the situation, or choose an existing one. It will be analyzed automatically to describe the emergency to the CNRD-221.',
     'photo.take': 'Take a photo',
-    'photo.upload': 'From gallery',
+    'photo.filmvideo': 'Film a video',
+    'photo.upload': 'From gallery (photo or video)',
     'photo.analyze': 'Analyze with AI',
     'photo.analyzing': 'Analyzing...',
     'photo.analysis.label': 'Generated description (editable)',
@@ -2090,6 +2108,8 @@ const I18N = {
     'photo.send': 'Send to 221',
     'photo.dispatch': 'Analyzed photo → CNRD-221',
     'photo.dispatch.voice': 'Photo + voice note → CNRD-221',
+    'photo.dispatch.video': 'Analyzed video → CNRD-221',
+    'photo.dispatch.video.voice': 'Video + voice note → CNRD-221',
     'photo.voice.or': 'or',
     'photo.voice.label': 'Would you rather describe the situation by voice?',
     'photo.voice.hint': 'Tap to record',
@@ -3047,6 +3067,10 @@ let photoVoiceAudioURL = null;
 let photoVoiceHasAudio = false;
 let photoVoicePlaying = false;
 
+// Type de média sélectionné : 'photo' ou 'video'
+let mediaKind = 'photo';
+let videoFrameExtracted = false;
+
 function togglePhotoPanel(show){
   const panel = document.getElementById('photo-panel');
   if(show){
@@ -3061,12 +3085,21 @@ function resetPhotoPanel(){
   photoAnalyzing = false;
   photoImageBase64 = null;
   photoImageMediaType = null;
+  mediaKind = 'photo';
+  videoFrameExtracted = false;
   if(photoObjectURL){ URL.revokeObjectURL(photoObjectURL); photoObjectURL = null; }
   document.getElementById('photo-input-camera').value = '';
+  document.getElementById('video-input-camera').value = '';
   document.getElementById('photo-input-gallery').value = '';
   document.getElementById('photo-choice-row').style.display = 'flex';
+  document.getElementById('photo-gallery-btn').style.display = 'flex';
   document.getElementById('photo-preview-wrap').style.display = 'none';
   document.getElementById('photo-preview-img').removeAttribute('src');
+  document.getElementById('photo-preview-img').style.display = 'block';
+  const videoEl = document.getElementById('photo-preview-video');
+  videoEl.pause();
+  videoEl.removeAttribute('src');
+  videoEl.style.display = 'none';
   document.getElementById('photo-analyze-btn').style.display = 'none';
   document.getElementById('photo-analysis-box').classList.remove('show');
   document.getElementById('photo-desc-txt').value = '';
@@ -3111,25 +3144,88 @@ function handlePhotoSelect(event){
 
   if(photoObjectURL){ URL.revokeObjectURL(photoObjectURL); }
   photoObjectURL = URL.createObjectURL(file);
-  document.getElementById('photo-preview-img').src = photoObjectURL;
+  const isVideo = (file.type || '').startsWith('video/');
+  mediaKind = isVideo ? 'video' : 'photo';
+  videoFrameExtracted = false;
+  photoImageBase64 = null;
+
+  const imgEl = document.getElementById('photo-preview-img');
+  const videoEl = document.getElementById('photo-preview-video');
+  if(isVideo){
+    imgEl.style.display = 'none';
+    imgEl.removeAttribute('src');
+    videoEl.style.display = 'block';
+    videoEl.src = photoObjectURL;
+    photoImageMediaType = 'image/jpeg'; // type de la trame extraite, pas du fichier vidéo
+  } else {
+    videoEl.style.display = 'none';
+    videoEl.removeAttribute('src');
+    imgEl.style.display = 'block';
+    imgEl.src = photoObjectURL;
+    photoImageMediaType = file.type || 'image/jpeg';
+  }
+
   document.getElementById('photo-preview-wrap').style.display = 'block';
   document.getElementById('photo-choice-row').style.display = 'none';
+  document.getElementById('photo-gallery-btn').style.display = 'none';
   document.getElementById('photo-analyze-btn').style.display = 'flex';
   document.getElementById('photo-analysis-box').classList.remove('show');
   document.getElementById('photo-send-btn').style.display = 'none';
   document.getElementById('photo-voice-section').style.display = 'block';
 
-  photoImageMediaType = file.type || 'image/jpeg';
-  const reader = new FileReader();
-  reader.onload = () => {
-    const dataUrl = reader.result;
-    photoImageBase64 = dataUrl.split(',')[1] || null;
-  };
-  reader.readAsDataURL(file);
+  if(!isVideo){
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result;
+      photoImageBase64 = dataUrl.split(',')[1] || null;
+    };
+    reader.readAsDataURL(file);
+  }
+  // Pour une vidéo, la trame (image) sera extraite au moment de l'analyse (voir extractVideoFrame)
+}
+
+// Extrait une image représentative de la vidéo (milieu de la séquence) pour l'analyse IA.
+// La vidéo complète reste jointe comme aperçu ; seule cette trame est envoyée à l'IA (l'API vision ne lit pas la vidéo).
+function extractVideoFrame(){
+  return new Promise((resolve, reject) => {
+    const videoEl = document.getElementById('photo-preview-video');
+    const canvas = document.getElementById('photo-video-canvas');
+    if(!videoEl.src) { reject(new Error('Aucune vidéo chargée')); return; }
+
+    const doCapture = () => {
+      try{
+        canvas.width = videoEl.videoWidth || 640;
+        canvas.height = videoEl.videoHeight || 360;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        photoImageBase64 = dataUrl.split(',')[1] || null;
+        photoImageMediaType = 'image/jpeg';
+        videoFrameExtracted = true;
+        resolve();
+      } catch(e){ reject(e); }
+    };
+
+    if(videoEl.readyState >= 2){
+      const target = isFinite(videoEl.duration) ? videoEl.duration / 2 : 0.5;
+      const onSeeked = () => { videoEl.removeEventListener('seeked', onSeeked); doCapture(); };
+      videoEl.addEventListener('seeked', onSeeked);
+      videoEl.currentTime = target;
+    } else {
+      const onLoaded = () => {
+        videoEl.removeEventListener('loadeddata', onLoaded);
+        const target = isFinite(videoEl.duration) ? videoEl.duration / 2 : 0.5;
+        const onSeeked = () => { videoEl.removeEventListener('seeked', onSeeked); doCapture(); };
+        videoEl.addEventListener('seeked', onSeeked);
+        videoEl.currentTime = target;
+      };
+      videoEl.addEventListener('loadeddata', onLoaded);
+    }
+  });
 }
 
 async function analyzePhotoWithAI(){
-  if(!photoImageBase64){ return; }
+  if(mediaKind === 'photo' && !photoImageBase64){ return; }
   photoAnalyzing = true;
   const lang = (typeof currentLang !== 'undefined') ? currentLang : 'fr';
   const t = I18N[lang] || I18N.fr;
@@ -3139,6 +3235,12 @@ async function analyzePhotoWithAI(){
   lbl.innerHTML = `<span class="photo-spinner" aria-hidden="true"></span>${t['photo.analyzing']}`;
 
   try {
+    if(mediaKind === 'video' && !videoFrameExtracted){
+      await extractVideoFrame();
+    }
+    if(!photoImageBase64){
+      throw new Error('Aucune image à analyser');
+    }
     if(PHOTO_ANALYSIS_ENDPOINT.includes('REMPLACER-PAR-VOTRE-WORKER')){
       throw new Error('Endpoint du relais non configuré');
     }
@@ -3258,7 +3360,12 @@ if(photoVoiceAudioEl){
 
 function sendPhotoMessage(){
   const lang = (typeof currentLang !== 'undefined') ? currentLang : 'fr';
-  const key = photoVoiceHasAudio ? 'photo.dispatch.voice' : 'photo.dispatch';
+  let key;
+  if(mediaKind === 'video'){
+    key = photoVoiceHasAudio ? 'photo.dispatch.video.voice' : 'photo.dispatch.video';
+  } else {
+    key = photoVoiceHasAudio ? 'photo.dispatch.voice' : 'photo.dispatch';
+  }
   document.getElementById('dispatch-lbl').textContent = (I18N[lang]||I18N.fr)[key];
   togglePhotoPanel(false);
   goTo('scr-sending');
