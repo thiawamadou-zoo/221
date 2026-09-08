@@ -2970,9 +2970,10 @@ if(voiceAudioEl){
 </script>
 <script>
 // ── SIGNALEMENT PHOTO ANALYSÉ PAR IA (NOUVEAU) ──────────────────────────────────
-const PHOTO_ANALYSIS_PROMPT = {
-  fr: "Tu es un assistant qui aide un centre d'urgence sénégalais (CNRD-221) à qualifier rapidement une situation à partir d'une photo envoyée par un citoyen. Décris en français, en 2 à 4 phrases courtes et factuelles, ce que tu vois : nature probable de l'urgence (accident, incendie, inondation, agression, problème médical, autre), éléments de danger visibles, présence apparente de victimes et leur nombre approximatif si visible. Ne fais aucune supposition non visible sur la photo. N'ajoute aucun préambule ni recommandation, uniquement la description factuelle destinée à un opérateur de dispatch.",
-};
+// URL du relais sécurisé (Cloudflare Worker) qui garde la clé API Anthropic côté serveur.
+// Remplacez cette valeur par l'URL obtenue après déploiement du Worker (voir INSTRUCTIONS.md).
+// Tant qu'elle n'est pas configurée, l'analyse échoue proprement et l'utilisateur peut décrire la situation lui-même.
+const PHOTO_ANALYSIS_ENDPOINT = 'https://projet221-photo-analyse.thiaw-amadou.workers.dev';
 let photoAnalyzing = false;
 let photoImageBase64 = null;
 let photoImageMediaType = null;
@@ -3041,25 +3042,18 @@ async function analyzePhotoWithAI(){
   lbl.innerHTML = `<span class="photo-spinner" aria-hidden="true"></span>${t['photo.analyzing']}`;
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    if(PHOTO_ANALYSIS_ENDPOINT.includes('REMPLACER-PAR-VOTRE-WORKER')){
+      throw new Error('Endpoint du relais non configuré');
+    }
+    const response = await fetch(PHOTO_ANALYSIS_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 300,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: photoImageMediaType, data: photoImageBase64 } },
-            { type: 'text', text: PHOTO_ANALYSIS_PROMPT.fr }
-          ]
-        }]
-      })
+      body: JSON.stringify({ media_type: photoImageMediaType, data: photoImageBase64 })
     });
     if(!response.ok) throw new Error('HTTP ' + response.status);
     const data = await response.json();
-    const textBlock = (data.content || []).find(b => b.type === 'text');
-    const description = textBlock ? textBlock.text.trim() : '';
+    if(data.error) throw new Error(data.error);
+    const description = (data.description || '').trim();
     document.getElementById('photo-desc-txt').value = description || '';
     document.getElementById('photo-analysis-box').classList.add('show');
     document.getElementById('photo-send-btn').style.display = 'flex';
